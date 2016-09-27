@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".Activity.MainActivity">
+
+    <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+        <RadioButton
+                android:id="@+id/rb_info"
+                android:checked="true"
+                android:text="@string/info"
+                android:drawableTop="@drawable/rb_info"
+                style="@style/style_RadioButton"/>
+
+        <RadioButton
+                android:id="@+id/rb_suject"
+                android:text="@string/subject"
+                android:drawableTop="@drawable/rb_subject"
+                style="@style/style_RadioButton"/>
+
+        <RadioButton
+                android:id="@+id/rb_pin"
+                android:text="@string/pin"
+                android:drawableTop="@drawable/rb_pin"
+                style="@style/style_RadioButton"/>
+
+        <RadioButton
+                android:id="@+id/rb_analysis"
+                android:text="@string/analysis"
+                android:drawableTop="@drawable/rb_analysis"
+                style="@style/style_RadioButton"/>
+    </RadioGroup>
+
+    <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:layout_above="@id/radioGroup"
+            android:layout_below="@+id/titlebar"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/titlebar"
+            style="@style/title_bar">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:text="@string/app_name"
+
+                    android:id="@+id/appnamestring"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginStart="14dp"/>
+
+            <ImageButton
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/titlebar_photo"
+                    android:src="@drawable/titlebar_photo"
+                    android:scaleType="fitCenter"
+                    android:background="@color/green"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/titlebar_camrec"
+                    android:layout_toStartOf="@+id/titlebar_camrec"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+            <ImageButton
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/titlebar_camrec"
+                    android:src="@drawable/titlebar_camrec"
+                    android:scaleType="fitCenter"
+                    android:background="@color/green"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/titlebar_addrec"
+                    android:layout_toStartOf="@+id/titlebar_addrec"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginEnd="14dp"/>
+
+            <ImageButton
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/titlebar_addrec"
+                    android:src="@drawable/titlebar_addrec"
+                    android:scaleType="fitCenter"
+                    android:background="@color/green"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

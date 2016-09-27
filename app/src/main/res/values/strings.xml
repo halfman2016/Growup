@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">GROWUP</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_uid">账号</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_uid">账号不合法</string>
+    <string name="error_invalid_password">密码太短</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">请输入有效信息</string>
+    <string name="permission_rationale">权限问题</string>
+    <string name="title_activity_main">艳阳成长系统</string>
+    <string name="action_settings">设置</string>
+    <string name="section_format">提示： %1$d</string>
+
+    <string name="info">最新</string>
+    <string name="subject">专题</string>
+    <string name="pin">标定</string>
+    <string name="analysis">分析</string>
+
+    <string name="subject_list">最新</string>
+    <string name="subject_details">详细</string>
+    <string name="subject_announce">通告</string>
+    <string name="subject_partake">参与</string>
+    <string name="subject_pin">标定</string>
+</resources>

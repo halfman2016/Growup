@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_subject_detail_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.yper.feng.growup.Activity.SubjectDetailMain">
+
+    <RadioGroup
+        android:id="@+id/radioGroupsubject"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+       >
+
+        <RadioButton
+            android:id="@+id/rb_subject_list"
+            android:checked="true"
+            android:text="@string/subject_list"
+            android:drawableTop="@drawable/rb_subject_list"
+            style="@style/style_RadioButton"/>
+
+        <RadioButton
+            android:id="@+id/rb_subject_details"
+            android:text="@string/subject_details"
+            android:drawableTop="@drawable/rb_subject_details"
+            style="@style/style_RadioButton"/>
+
+        <RadioButton
+            android:id="@+id/rb_subject_annouce"
+            android:text="@string/subject_announce"
+            android:drawableTop="@drawable/rb_subject_announce"
+            style="@style/style_RadioButton"/>
+
+        <RadioButton
+            android:id="@+id/rb_subject_partake"
+            android:text="@string/subject_partake"
+            android:drawableTop="@drawable/rb_subject_partake"
+            style="@style/style_RadioButton"/>
+        <RadioButton
+            android:id="@+id/rb_subject_pin"
+            android:text="@string/subject_pin"
+            android:drawableTop="@drawable/rb_subject_pin"
+            style="@style/style_RadioButton"/>
+    </RadioGroup>
+    <android.support.v4.view.ViewPager
+
+        android:id="@+id/subjectPagers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:layout_above="@id/radioGroup"
+        android:layout_below="@+id/titlebar" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/titlebar"
+        style="@style/title_bar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"
+                android:id="@+id/titile_subjectName"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="14dp"
+                android:layout_marginStart="14dp"/>
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/titlebar_photo"
+                android:src="@drawable/titlebar_photo"
+                android:scaleType="fitCenter"
+                android:background="@color/green"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/titlebar_camrec"
+                android:layout_toStartOf="@+id/titlebar_camrec"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@mipmap/subject_photo" />
+
+            <ImageButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/titlebar_camrec"
+                android:src="@drawable/titlebar_camrec"
+                android:scaleType="fitCenter"
+                android:background="@color/green"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@mipmap/subject_rec" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
