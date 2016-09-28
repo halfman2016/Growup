@@ -11,6 +11,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.yper.feng.growup.Adapter.MySubjectMainFragmentAdapter;
+import com.yper.feng.growup.Fragment.SubjectAnnouceFragment;
+import com.yper.feng.growup.Fragment.SubjectDetailFragment;
+import com.yper.feng.growup.Fragment.SubjectListFragment;
+import com.yper.feng.growup.Fragment.SubjectPartakeFragment;
+import com.yper.feng.growup.Fragment.SubjectPinFragment;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
@@ -60,6 +65,10 @@ public class SubjectDetailMain extends AppCompatActivity {
     }
 
         private void initViews(){
+
+            viewPager= (ViewPager) findViewById(R.id.subjectPagers);
+            List<Fragment> allfragment=new ArrayList<>();
+
             radioGroup= (RadioGroup) findViewById(R.id.radioGroupsubject);
             rbSubjectlist= (RadioButton) findViewById(R.id.rb_subject_list);
             rbSubjectdetail= (RadioButton) findViewById(R.id.rb_subject_details);
@@ -68,7 +77,10 @@ public class SubjectDetailMain extends AppCompatActivity {
             rbSubjectpin=(RadioButton)findViewById(R.id.rb_subject_pin);
             //radiogroup
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+
                 @Override
+
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     switch (checkedId) {
                         case R.id.rb_subject_list:
@@ -94,13 +106,22 @@ public class SubjectDetailMain extends AppCompatActivity {
                 }
             });
 
-            viewPager= (ViewPager) findViewById(R.id.subjectPagers);
-            List<Fragment> allfragment=new ArrayList<>();
+
 
             //每个界面
 
+            SubjectListFragment subjectListFragment=new SubjectListFragment();
+            SubjectDetailFragment subjectDetailFragment=new SubjectDetailFragment();
+            SubjectAnnouceFragment subjectAnnouceFragment=new SubjectAnnouceFragment();
+            SubjectPartakeFragment subjectPartakeFragment=new SubjectPartakeFragment();
+            SubjectPinFragment subjectPinFragment=new SubjectPinFragment();
 
 
+            allfragment.add(subjectListFragment);
+            allfragment.add(subjectDetailFragment);
+            allfragment.add(subjectAnnouceFragment);
+            allfragment.add(subjectPartakeFragment);
+            allfragment.add(subjectPinFragment);
 
             //ViewPager设置适配器
             viewPager.setAdapter(new MySubjectMainFragmentAdapter(getSupportFragmentManager(), allfragment));
@@ -143,6 +164,8 @@ public class SubjectDetailMain extends AppCompatActivity {
 
         }
         private void initEvents(){
+
+
 
         }
     }

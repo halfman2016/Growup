@@ -55,9 +55,11 @@
         android:id="@+id/subjectPagers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        android:layout_above="@id/radioGroup"
-        android:layout_below="@+id/titlebar" />
+        android:layout_below="@+id/titlebar"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_above="@+id/radioGroupsubject" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -96,7 +98,8 @@
                 android:layout_toStartOf="@+id/titlebar_camrec"
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
-                app:srcCompat="@mipmap/subject_photo" />
+                app:srcCompat="@mipmap/subject_photo"
+                android:contentDescription="" />
 
             <ImageButton
                 android:layout_width="35dp"

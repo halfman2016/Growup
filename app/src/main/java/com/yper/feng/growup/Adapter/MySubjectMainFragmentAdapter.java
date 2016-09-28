@@ -12,6 +12,7 @@ import java.util.List;
 
 public class MySubjectMainFragmentAdapter extends FragmentPagerAdapter {
     private List<Fragment> list;
+
     public MySubjectMainFragmentAdapter(FragmentManager fm,List<Fragment> list) {
         super(fm);
         this.list=list;

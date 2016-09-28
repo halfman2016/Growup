@@ -1,7 +1,7 @@
 package com.yper.feng.growup.Fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,4 +21,12 @@ public class SubjectListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_subject_list, container, false);
         return view;
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+
 }
