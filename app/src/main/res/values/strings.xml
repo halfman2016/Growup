@@ -25,4 +25,10 @@
     <string name="subject_announce">通告</string>
     <string name="subject_partake">参与</string>
     <string name="subject_pin">标定</string>
+    
+    <string name="txt_subject_title">专题名称</string>
+    <string name="txt_subject_info">专题简介</string>
+    <string name="txt_subject_time">专题时间</string>
+    <string name="txt_subject_starttime">开始时间</string>
+    <string name="txt_subject_endtime">结束时间</string>
 </resources>
