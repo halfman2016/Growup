@@ -15,7 +15,16 @@ public class People extends Object {
 
     private UUID _id=UUID.randomUUID();
 
-    public People() {
+    public People(String name) {
+        this.name=name;
+    }
+
+    public UUID get_id() {
+        return _id;
+    }
+
+    public void set_id(UUID _id) {
+        this._id = _id;
     }
 
     public String getName() {

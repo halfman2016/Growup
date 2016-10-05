@@ -24,14 +24,14 @@ import java.util.Map;
 /**
  * Created by Feng on 2016/7/10.
  */
-public class InfoItemAdapter extends BaseAdapter {
+public class MainInfoListAdapter extends BaseAdapter {
 
 
     private List<BaseInfoItem> items = new ArrayList<>();
     private LayoutInflater layoutInflater = null;
     private Context context;
 
-    public InfoItemAdapter(List<BaseInfoItem> items, Context context) {
+    public MainInfoListAdapter(List<BaseInfoItem> items, Context context) {
         this.items = items;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

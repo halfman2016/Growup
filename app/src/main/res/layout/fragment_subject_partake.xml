@@ -3,4 +3,185 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="119dp">
+
+        <TextView
+            android:text="@string/promptliketotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/textView26"
+            android:layout_alignStart="@+id/textView26"
+            android:id="@+id/textView27" />
+
+        <TextView
+            android:text="@string/promptjoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/textView27"
+            android:layout_alignStart="@+id/textView27"
+            android:layout_marginBottom="14dp"
+            android:id="@+id/textView28" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView26"
+            android:layout_toRightOf="@+id/textView26"
+            android:layout_toEndOf="@+id/textView26"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:id="@+id/txtOrginTotal" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView27"
+            android:layout_alignRight="@+id/txtOrginTotal"
+            android:layout_alignEnd="@+id/txtOrginTotal"
+            android:id="@+id/txtlikeTotal" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView28"
+            android:layout_alignLeft="@+id/txtlikeTotal"
+            android:layout_alignStart="@+id/txtlikeTotal"
+            android:id="@+id/txtjoinmost" />
+
+        <TextView
+            android:text="@string/promptlikemost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/textView32"
+            android:layout_alignStart="@+id/textView32"
+            android:id="@+id/textView33" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView33"
+            android:layout_alignLeft="@+id/txtOrginMost"
+            android:layout_alignStart="@+id/txtOrginMost"
+            android:id="@+id/txtlikemost" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView34"
+            android:layout_alignLeft="@+id/txtlikemost"
+            android:layout_alignStart="@+id/txtlikemost"
+            android:id="@+id/txtjoinless" />
+
+        <TextView
+            android:text="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtOrginMost"
+            android:layout_toRightOf="@+id/txtOrginMost"
+            android:layout_toEndOf="@+id/txtOrginMost"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:id="@+id/txtOrgincount" />
+
+        <TextView
+            android:text="12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtlikemost"
+            android:layout_alignLeft="@+id/txtOrgincount"
+            android:layout_alignStart="@+id/txtOrgincount"
+            android:id="@+id/txtlikemostcount" />
+
+        <TextView
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtjoinless"
+            android:layout_alignLeft="@+id/txtlikemostcount"
+            android:layout_alignStart="@+id/txtlikemostcount"
+            android:id="@+id/txtjoinlesscount" />
+
+        <TextView
+            android:text="@string/promptjoinless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView34"
+            android:layout_alignBaseline="@+id/txtjoinmost"
+            android:layout_alignBottom="@+id/txtjoinmost"
+            android:layout_alignLeft="@+id/textView33"
+            android:layout_alignStart="@+id/textView33" />
+
+        <TextView
+            android:text="@string/promptorginmost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginStart="33dp"
+            android:id="@+id/textView32"
+            android:layout_alignBaseline="@+id/txtOrginTotal"
+            android:layout_alignBottom="@+id/txtOrginTotal"
+            android:layout_toRightOf="@+id/txtOrginTotal"
+            android:layout_toEndOf="@+id/txtOrginTotal" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:id="@+id/txtOrginMost"
+            android:layout_alignBaseline="@+id/textView32"
+            android:layout_alignBottom="@+id/textView32"
+            android:layout_toRightOf="@+id/textView34"
+            android:layout_toEndOf="@+id/textView34" />
+
+        <TextView
+            android:text="@string/promptorgintotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="16dp"
+            android:id="@+id/textView26"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/promptorginno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView41"
+            android:layout_marginLeft="10dp" />
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </LinearLayout>

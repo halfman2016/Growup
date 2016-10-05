@@ -1,32 +1,31 @@
-package com.yper.feng.growup.Fragment;
+package com.yper.feng.growup.Activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
+import android.support.v4.app.ListFragment;
+import android.support.v4.media.RatingCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.yper.feng.growup.Activity.SubjectMain;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.MDBTools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Feng on 2016/9/26.
- */
+public class PinPhotoActivity extends AppCompatActivity {
+    private HashMap<String,Integer> defaultValues=new HashMap<>();
+    private MDBTools mdb=new MDBTools();
 
-public class SubjectDetailFragment extends Fragment {
     private List<Student> allstudents =new ArrayList<>();
     private List<Student> stus1 =new ArrayList<>();
     private List<Student> stus2 =new ArrayList<>();
@@ -50,86 +49,21 @@ public class SubjectDetailFragment extends Fragment {
 
     private GridView gridView;
     private ArrayList<HashMap<String,Object>> lstNameItem=new ArrayList<HashMap<String,Object>>();
+    private final String [] mStrings={"个人卫生不合格","文明用语","上课走神","积极回答问题","做操认真"};
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        // return super.onCreateView(inflater, container, savedInstanceState);
-        FragmentActivity activity=getActivity();
-        if(activity instanceof SubjectMain)
-        {
-            SubjectMain subjectMain =(SubjectMain) activity;
-
-            subjectname= subjectMain.subjectname;
-            subjectid= subjectMain.subjectid;
-
-        }
-
-
-
-        final View view=inflater.inflate(R.layout.fragment_subject_details,container,false);
-
-        final LinearLayout linearLayout= (LinearLayout) view.findViewById(R.id.classlist);
-        linearLayout.removeAllViews();
-
-        for(int i=0;i<gradeClassList.size();i++){
-        TextView txt = new TextView(getContext());
-        txt.setText(gradeClassList.get(i).getName());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-        txt.setLayoutParams(lp);
-      //  txt.setButtonDrawable(R.color.colorAccent);
-        linearLayout.addView(txt);
-            txt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   TextView tmp=(TextView) v;
-                    for(int i=0;i<gradeClassList.size();i++)
-                    {
-                        if (gradeClassList.get(i).getName()==tmp.getText())
-                        {
-                            setGridView(gradeClassList.get(i).getStus(),view);
-                        }
-                    }
-                }
-            });
-
-        }
-
-
-        return  view;
-    }
-
-    private void setGridView(List<Student> tempstulist,View view){
-
-        gridView= (GridView) view.findViewById(R.id.mygridview);
-        //gridView.setEmptyView(new View(getContext()));
-        lstNameItem.clear();
-        for(int i=0;i<tempstulist.size();i++){
-            HashMap<String,Object> map=new HashMap<String, Object>();
-            map.put("stuname",tempstulist.get(i).getName());
-            lstNameItem.add(map);
-        }
-
-        SimpleAdapter adapter=new SimpleAdapter(getContext(),lstNameItem,
-                R.layout.subject_item_grid_student,new String[]{"stuname"},new int[]{R.id.stuname});
-        gridView.setAdapter(adapter);
-
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pin_photo);
 
+        initdata();
+        initView();
+
+
+    }
+    private  void initdata(){
         //班级清单
-
+       // defaultValues= (HashMap<String, Integer>) mdb.getDefaultValues();
 
         gradeClassList.add(gc1);
         gradeClassList.add(gc2);
@@ -205,10 +139,55 @@ public class SubjectDetailFragment extends Fragment {
         stus3.add(stu937);
 
         gc3.setStus(stus3);
+    }
 
+    private  void initView(){
+
+        final LinearLayout linearLayout= (LinearLayout) findViewById(R.id.classlist);
+        linearLayout.removeAllViews();
+
+        for(int i=0;i<gradeClassList.size();i++){
+            TextView txt = new TextView(getBaseContext());
+            txt.setText(gradeClassList.get(i).getName());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            txt.setLayoutParams(lp);
+            txt.setTextColor(this.getResources().getColor(R.color.green));
+            linearLayout.addView(txt);
+            txt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView tmp=(TextView) v;
+                    for(int i=0;i<gradeClassList.size();i++)
+                    {
+                        if (gradeClassList.get(i).getName()==tmp.getText())
+                        {
+                            setGridView(gradeClassList.get(i).getStus());
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+    private void setGridView(List<Student> tempstulist){
+
+        gridView= (GridView) findViewById(R.id.mygridview);
+        //gridView.setEmptyView(new View(getContext()));
+        lstNameItem.clear();
+        for(int i=0;i<tempstulist.size();i++){
+            HashMap<String,Object> map=new HashMap<String, Object>();
+            map.put("stuname",tempstulist.get(i).getName());
+            lstNameItem.add(map);
+        }
+
+        SimpleAdapter adapter=new SimpleAdapter(getBaseContext(),lstNameItem,
+                R.layout.subject_item_grid_student,new String[]{"stuname"},new int[]{R.id.stuname});
+        gridView.setAdapter(adapter);
 
 
     }
+
 
 
 }

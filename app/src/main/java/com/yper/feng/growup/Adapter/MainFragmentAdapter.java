@@ -7,16 +7,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 /**
- * Created by Feng on 2016/9/25.
+ * Created by Feng on 2016/7/10.
  */
-
-public class MySubjectMainFragmentAdapter extends FragmentPagerAdapter {
+public class MainFragmentAdapter extends FragmentPagerAdapter {
     private List<Fragment> list;
 
-    public MySubjectMainFragmentAdapter(FragmentManager fm,List<Fragment> list) {
+    public MainFragmentAdapter(FragmentManager fm, List<Fragment> list) {
         super(fm);
-        this.list=list;
-        }
+        this.list = list;
+    }
 
     @Override
     public Fragment getItem(int position) {

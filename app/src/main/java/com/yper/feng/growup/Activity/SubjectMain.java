@@ -1,16 +1,15 @@
 package com.yper.feng.growup.Activity;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.yper.feng.growup.Adapter.MySubjectMainFragmentAdapter;
+import com.yper.feng.growup.Adapter.SubjectMainFragmentAdapter;
 import com.yper.feng.growup.Fragment.SubjectAnnouceFragment;
 import com.yper.feng.growup.Fragment.SubjectDetailFragment;
 import com.yper.feng.growup.Fragment.SubjectListFragment;
@@ -23,11 +22,14 @@ import com.yper.feng.growup.Util.MDBTools;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-public class SubjectDetailMain extends AppCompatActivity {
+public class SubjectMain extends FragmentActivity {
 
     private HashMap<String,Integer> defaultValues=new HashMap<>();
 
+    public String subjectname;
+    public String subjectid;
     //list subjectActions
 
 
@@ -46,6 +48,10 @@ public class SubjectDetailMain extends AppCompatActivity {
         setContentView(R.layout.activity_subject_detail_main);
         Intent intent = getIntent();
         String name = intent.getStringExtra("subjectname");
+        UUID _id=UUID.fromString(intent.getStringExtra("subjectid"));
+
+        subjectname=name;
+        subjectid=_id.toString();
 
         TextView title = (TextView) findViewById(R.id.titile_subjectName);
         title.setText(name);
@@ -53,6 +59,7 @@ public class SubjectDetailMain extends AppCompatActivity {
         initDatas();
         initViews();
         initEvents();
+
 
         MyApplication myApplication = MyApplication.getInstance();
         // Log.d("myapp","NOw is who is" + myApplication.getUsername());
@@ -124,7 +131,7 @@ public class SubjectDetailMain extends AppCompatActivity {
             allfragment.add(subjectPinFragment);
 
             //ViewPager设置适配器
-            viewPager.setAdapter(new MySubjectMainFragmentAdapter(getSupportFragmentManager(), allfragment));
+            viewPager.setAdapter(new SubjectMainFragmentAdapter(getSupportFragmentManager(), allfragment));
             //ViewPager显示第一个Fragment
             viewPager.setCurrentItem(0);
             //ViewPager页面切换监听

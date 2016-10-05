@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,7 +18,9 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/txtSubject_info"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:text="@string/txt_subject_time"
@@ -55,7 +56,84 @@
             android:layout_marginTop="20dp"
             android:id="@+id/textView9" />
 
+
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:id="@+id/classlist"
+        android:layout_marginLeft="5dp">
+
+
+        <TextView
+            android:text="@string/qixin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/txtclass1" />
+
+        <TextView
+            android:text="@string/class81"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass2"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/class82"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass3"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/class83"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass4"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/class91"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass5"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/class92"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass6"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="@string/class93"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtclass7"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <GridView
+        android:id="@+id/mygridview"
+        android:numColumns="3"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stretchMode="columnWidth"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+</RelativeLayout>
 
 
 </LinearLayout>

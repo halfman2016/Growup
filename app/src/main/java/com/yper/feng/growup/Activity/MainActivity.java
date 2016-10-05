@@ -14,15 +14,17 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.yper.feng.growup.Adapter.InfoItemAdapter;
-import com.yper.feng.growup.Adapter.MyMainFragmentAdapter;
-import com.yper.feng.growup.Adapter.SubjectListAdapter;
-import com.yper.feng.growup.Fragment.AnalysisMainFragment;
-import com.yper.feng.growup.Fragment.InfoMainFragment;
-import com.yper.feng.growup.Fragment.PinMainFragment;
-import com.yper.feng.growup.Fragment.SubjectMainFragment;
+import com.yper.feng.growup.Adapter.MainInfoListAdapter;
+import com.yper.feng.growup.Adapter.MainFragmentAdapter;
+import com.yper.feng.growup.Adapter.MainPinListAdapter;
+import com.yper.feng.growup.Adapter.MainSubjectListAdapter;
+import com.yper.feng.growup.Fragment.MainAnalysisFragment;
+import com.yper.feng.growup.Fragment.MainInfoFragment;
+import com.yper.feng.growup.Fragment.MainPinFragment;
+import com.yper.feng.growup.Fragment.MainSubjectFragment;
 import com.yper.feng.growup.Module.BaseInfoItem;
 import com.yper.feng.growup.Module.DayCommonAction;
+import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.SubjectPinAction;
 import com.yper.feng.growup.Module.WeekReport;
@@ -31,6 +33,7 @@ import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +44,7 @@ public class MainActivity extends FragmentActivity {
     private HashMap<String,Integer> defaultValues=new HashMap<>();
     private List<BaseInfoItem> items = new ArrayList<>();
     private List<Subject> subjectItems=new ArrayList<>();
+    private List<Photopic> photopics=new ArrayList<>();
 
     private ViewPager viewPager;
     private RadioGroup radioGroup;
@@ -127,16 +131,17 @@ public class MainActivity extends FragmentActivity {
             //照相
             Intent intent=new Intent(MainActivity.this,TakePhoto.class);
             intent.setData(fileUri);
-            startActivity(intent);
+            startActivityForResult(intent,103);
         }
         else if(requestCode==200)
         {
             //摄像
             Intent intent=new Intent(this,TakeCam.class);
             intent.setData(fileUri);
-            startActivity(intent);
+            startActivityForResult(intent,104);
 
         }
+
 
     }
 
@@ -179,8 +184,10 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initDatas() {
-        defaultValues.put("name",1);
+
+
         MyApplication.getInstance().setDefaultValues(defaultValues);
+
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String datetime = "2016-03-12 09:3:2";
         DayCommonAction ac1 = new DayCommonAction("检查卫生合格", "日常规", 2);
@@ -214,11 +221,40 @@ public class MainActivity extends FragmentActivity {
 
         Subject s1=new Subject("黄陂游学活动");
         Subject s2=new Subject("参观科技馆");
-        s1.setStartTime(new Date());
-        s2.setEndTime(new Date(2016,9,28));
 
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            s1.setStartTime(simpleDateFormat.parse("2016-10-1"));
+            s1.setEndTime(simpleDateFormat.parse("2016-10-4"));
+            s2.setStartTime(simpleDateFormat.parse("2016-10-1"));
+            s2.setEndTime(simpleDateFormat.parse("2016-10-3"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        s1.setSubjectInfo("我们组织去黄陂游学,住在大余湾,4天时间。从小伙伴身上学习必须学习到的东西。大家努力!");
+        s2.setSubjectInfo("去江滩的武汉科技馆,3天时间,大家学习新技术,脑子里存在的问题,现场钻研琢磨。");
         subjectItems.add(s1);
         subjectItems.add(s2);
+
+        //pinphoto数据初始化
+
+        Photopic photopic1=new Photopic();
+        Photopic photopic2=new Photopic();
+
+        photopic1.setPhotomemo("抓拍一下");
+        photopic1.setPhotodate(new Date());
+        //photopic1.setPhotopic();
+        photopic2.setPhotomemo("做的真棒");
+        photopic2.setPhotodate(new Date());
+        photopic1.setPhotoauthor("王强");
+        photopic2.setPhotoauthor("李老师");
+
+        photopics.add(photopic1);
+        photopics.add(photopic2);
+
 
     }
 
@@ -259,26 +295,29 @@ public class MainActivity extends FragmentActivity {
          */
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        InfoMainFragment infoMainFragment = new InfoMainFragment();
-        SubjectMainFragment subjectMainFragment = new SubjectMainFragment();
-        PinMainFragment pinMainFragment = new PinMainFragment();
-        AnalysisMainFragment analysisMainFragment = new AnalysisMainFragment();
+        MainInfoFragment mainInfoFragment = new MainInfoFragment();
+        MainSubjectFragment mainSubjectFragment = new MainSubjectFragment();
+        MainPinFragment mainPinFragment = new MainPinFragment();
+        MainAnalysisFragment mainAnalysisFragment = new MainAnalysisFragment();
 
         List<Fragment> alFragment = new ArrayList<>();
 
 
-        InfoItemAdapter infoItemAdapter = new InfoItemAdapter(items, getBaseContext());
-        infoMainFragment.setListAdapter(infoItemAdapter);
+        MainInfoListAdapter mainInfoListAdapter = new MainInfoListAdapter(items, getBaseContext());
+        mainInfoFragment.setListAdapter(mainInfoListAdapter);
 
-        SubjectListAdapter  subjectListAdapter=new SubjectListAdapter(subjectItems,getBaseContext());
-        subjectMainFragment.setListAdapter(subjectListAdapter);
+        MainSubjectListAdapter mainSubjectListAdapter =new MainSubjectListAdapter(subjectItems,getBaseContext());
+        mainSubjectFragment.setListAdapter(mainSubjectListAdapter);
 
-        alFragment.add(infoMainFragment);
-        alFragment.add(subjectMainFragment);
-        alFragment.add(pinMainFragment);
-        alFragment.add(analysisMainFragment);
+        MainPinListAdapter mainPinListAdapter=new MainPinListAdapter(photopics,getBaseContext());
+        mainPinFragment.setListAdapter(mainPinListAdapter);
+
+        alFragment.add(mainInfoFragment);
+        alFragment.add(mainSubjectFragment);
+        alFragment.add(mainPinFragment);
+        alFragment.add(mainAnalysisFragment);
         //ViewPager设置适配器
-        viewPager.setAdapter(new MyMainFragmentAdapter(getSupportFragmentManager(), alFragment));
+        viewPager.setAdapter(new MainFragmentAdapter(getSupportFragmentManager(), alFragment));
         //ViewPager显示第一个Fragment
         viewPager.setCurrentItem(0);
         //ViewPager页面切换监听

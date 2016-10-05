@@ -33,7 +33,9 @@
         <activity android:name=".Activity.TakePhoto" />
         <activity android:name=".Activity.TakeCam" />
         <activity android:name=".Activity.Add_rec" />
-        <activity android:name=".Activity.SubjectDetailMain"></activity>
+        <activity android:name=".Activity.SubjectMain" />
+        <activity android:name=".Activity.PinPhotoActivity" />
+        <activity android:name=".Activity.AddSubjectActivity"></activity>
     </application>
 
 </manifest>

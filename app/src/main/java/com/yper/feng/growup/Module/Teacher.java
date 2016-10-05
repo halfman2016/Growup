@@ -11,7 +11,9 @@ public class Teacher extends People {
 
 
 
-    public Teacher() {
+
+    public Teacher(String name) {
+        super(name);
     }
 
     public String getTid() {

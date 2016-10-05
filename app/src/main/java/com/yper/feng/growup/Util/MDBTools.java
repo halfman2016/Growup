@@ -100,9 +100,9 @@ public class MDBTools {
     }
 
 
-    public ArrayList<GradeClass> getGradeClasses() {
+    public List<GradeClass> getGradeClasses() {
         ArrayList<GradeClass> gradeClasses = new ArrayList<>();
-        GradeClass gradeClass = new GradeClass();
+        GradeClass gradeClass ;
 
         mongoCollection=mongoDatabase.getCollection("classes");
         FindIterable<Document> iterable=mongoCollection.find();

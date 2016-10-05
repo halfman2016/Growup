@@ -15,6 +15,10 @@ public class Student extends People {
 
     private String QQ;
 
+    public Student(String name) {
+        super(name);
+    }
+
 
     public String getRankname() {
         return rankname;

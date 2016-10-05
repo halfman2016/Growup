@@ -1,6 +1,7 @@
 package com.yper.feng.growup.Module;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by Feng on 2016/9/20.
@@ -11,6 +12,8 @@ public class Subject  {
     private String SubjectInfo;
     private Date startTime;
     private Date endTime;
+    private UUID _id=UUID.randomUUID();
+
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
@@ -42,6 +45,10 @@ public class Subject  {
 
     public Date getEndTime() {
         return endTime;
+    }
+
+    public UUID get_id() {
+        return _id;
     }
 
     public void setEndTime(Date endTime) {

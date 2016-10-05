@@ -1,18 +1,12 @@
 package com.yper.feng.growup.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.yper.feng.growup.Activity.MainActivity;
-import com.yper.feng.growup.Activity.SubjectDetailMain;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.R;
 
@@ -24,13 +18,13 @@ import java.util.List;
  * Created by Feng on 2016/9/20.
  */
 
-public class SubjectListAdapter extends BaseAdapter {
+public class MainSubjectListAdapter extends BaseAdapter {
 
-    private List<Subject> items = new ArrayList<>();
+    public List<Subject> items = new ArrayList<>();
     private LayoutInflater layoutInflater = null;
     private Context context;
 
-    public SubjectListAdapter(List<Subject> items, Context context) {
+    public MainSubjectListAdapter(List<Subject> items, Context context) {
         this.items = items;
         this.context = context;
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

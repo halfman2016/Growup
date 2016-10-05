@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GROWUP</string>
+    <string name="app_name">补天成长</string>
 
     <!-- Strings related to login -->
     <string name="prompt_uid">账号</string>
@@ -25,10 +25,38 @@
     <string name="subject_announce">通告</string>
     <string name="subject_partake">参与</string>
     <string name="subject_pin">标定</string>
-    
+
     <string name="txt_subject_title">专题名称</string>
     <string name="txt_subject_info">专题简介</string>
     <string name="txt_subject_time">专题时间</string>
     <string name="txt_subject_starttime">开始时间</string>
     <string name="txt_subject_endtime">结束时间</string>
+    <string name="class91">九1班</string>
+    <string name="class92">九2班</string>
+    <string name="class93">九3班</string>
+    <string name="class81">八1班</string>
+    <string name="class82">八2班</string>
+    <string name="class83">八3班</string>
+    <string name="qixin">启新班</string>
+
+    <string name="promptstarttime">开始时间</string>
+    <string name="promptendtime">结束时间</string>
+    <string name="promptannouce">通告</string>
+
+    <string name="promptpinto">第一步:选择标定给谁?</string>
+    <string name="promptpinaction">第二步:检索标定行为,结果显示在下表</string>
+    <string name="promptannoucepeople">发布人</string>
+    <string name="promptannoucetime">发布时间</string>
+    <string name="btnannoucesubmit">发布通告</string>
+    <string name="promptorgintotal">原创发布总计</string>
+    <string name="promptliketotal">点赞总计</string>
+    <string name="promptjoin">参与度最高</string>
+    <string name="promptorginmost">原创最多</string>
+    <string name="promptlikemost">点赞最多</string>
+    <string name="promptjoinless">参与度最低</string>
+
+    <string name="promptorginno">缺失原创</string>
+
+
+
 </resources>

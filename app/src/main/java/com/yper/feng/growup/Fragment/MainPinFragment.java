@@ -10,12 +10,10 @@ import com.yper.feng.growup.R;
 /**
  * Created by Feng on 2016/7/10.
  */
-public class InfoMainFragment extends ListFragment {
-
+public class MainPinFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_pin, container, false);
         return view;
     }
 }

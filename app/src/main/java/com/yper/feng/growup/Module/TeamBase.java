@@ -8,7 +8,7 @@ import java.util.*;
 public class TeamBase extends Object {
 
     private String Name;
-    private ArrayList<Student> stus;
+    private List<Student> stus;
     private Map<String,Teacher> teaOnDuty;
     private UUID _id=UUID.randomUUID();
     private Date createTime;
@@ -16,14 +16,14 @@ public class TeamBase extends Object {
     private String Stats;
     private boolean isActive;  //是否有效
 
-    public TeamBase() {
-
+    public TeamBase(String name) {
+        this.Name=name;
         isActive=true;  //默认有效，从创建时候
         createTime=new Date();  //默认现在创建
         endTime=new Date();
         Calendar cal=Calendar.getInstance();
         cal.setTime(endTime);
-        cal.add(Calendar.YEAR,1);
+        cal.add(Calendar.YEAR,1);  //默认时间1年
         endTime=cal.getTime();
 
     }
@@ -36,11 +36,11 @@ public class TeamBase extends Object {
         Name = name;
     }
 
-    public ArrayList<Student> getStus() {
+    public List<Student> getStus() {
         return stus;
     }
 
-    public void setStus(ArrayList<Student> stus) {
+    public void setStus(List<Student> stus) {
         this.stus = stus;
     }
 

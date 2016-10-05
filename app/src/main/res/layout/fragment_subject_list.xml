@@ -4,10 +4,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="TextView"
+        android:text="@string/promptannouce"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtStartTime" />
+        android:id="@+id/txtAnnouceprompt"
+        android:textAlignment="center" />
 
 
     <EditText
@@ -16,7 +17,8 @@
         android:inputType="text"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/txtAnnouce" />
+        android:id="@+id/txtAnnouce"
+        android:focusable="false" />
 
     <ListView
         android:layout_width="match_parent"

@@ -5,12 +5,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 /**
- * Created by Feng on 2016/9/25.
+ * Created by jiangfeng on 2016/10/5.
  */
 
-public class PinListAdapter extends BaseAdapter {
-
-
+public class AlreadyPinAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return 0;
