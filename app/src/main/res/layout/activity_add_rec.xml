@@ -15,5 +15,8 @@
         android:id="@+id/listrec"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+android:divider="@color/colorPrimaryDark"
+        android:dividerHeight="3dp"
+        />
 </RelativeLayout>

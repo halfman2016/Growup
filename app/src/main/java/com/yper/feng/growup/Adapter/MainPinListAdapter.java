@@ -2,6 +2,7 @@ package com.yper.feng.growup.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +75,7 @@ public class MainPinListAdapter extends BaseAdapter {
             vh= (viewHolder) convertView.getTag();
         }
 
-        vh.photopic.setImageResource(R.mipmap.no_pic);
+        vh.photopic.setImageBitmap(BitmapFactory.decodeByteArray(item.getPhotopreview(), 0, item.getPhotopreview().length));
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");

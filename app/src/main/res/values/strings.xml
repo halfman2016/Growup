@@ -56,7 +56,16 @@
     <string name="promptjoinless">参与度最低</string>
 
     <string name="promptorginno">缺失原创</string>
+    <string name="btnpinAction">标定</string>
 
+    <string name="titleday">日常规</string>
+    <string name="promptdaypic">拍摄附注图片</string>
+    <string name="promptsave">保存</string>
+    <string name="promptcancel">取消</string>
+
+    <string name="photodate">拍摄日期</string>
+    <string name="photoauthor">拍摄人</string>
+    <string name="photomemo">拍摄说明</string>
 
 
 </resources>

@@ -2,10 +2,15 @@ package com.yper.feng.growup.Util;
 import android.os.Handler;
 
 import com.google.gson.reflect.TypeToken;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndDeleteOptions;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
+import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Rank;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,6 +20,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.yper.feng.growup.Module.Student;
+import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
 import org.bson.BsonDocument;
 import org.bson.Document;
@@ -31,12 +37,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Feng on 2016/7/17.
  */
 public class MDBTools {
-    private static final MongoClient mongoClient = new MongoClient("boteteam.com", 27017);
+    private static final MongoClient mongoClient = new MongoClient("114.215.124.13", 27017);
     private MongoDatabase mongoDatabase;
     private MongoCollection<Document> mongoCollection = null;
 
@@ -44,6 +51,74 @@ public class MDBTools {
     public MDBTools() {
         mongoDatabase = mongoClient.getDatabase("lizhi");
     }
+
+    public boolean teacherLogin(String Tid,String pwd){
+
+        mongoCollection=mongoDatabase.getCollection("teachers");
+
+        List<BasicDBObject> objects = new ArrayList<BasicDBObject>();
+        objects.add(new BasicDBObject("Tid", Tid));
+        objects.add(new BasicDBObject("pwd",pwd));
+
+        BasicDBObject query=new BasicDBObject();
+
+        query.put("$and",objects);
+
+        MongoCursor cursor = mongoCollection.find(query).iterator();
+
+
+        while (cursor.hasNext()) {
+
+        return true;
+
+        }
+
+        return false;
+    }
+
+    public Teacher getTeacher(String Tid){
+
+        Teacher teacher=null;
+        mongoCollection =mongoDatabase.getCollection("teachers");
+        BasicDBObject basicDBObject=new BasicDBObject("Tid",Tid);
+        MongoCursor cursor=mongoCollection.find(basicDBObject).iterator();
+
+        while (cursor.hasNext())
+        {
+
+
+            Document doc=(Document) cursor.next();
+
+            Gson gson=new GsonBuilder().create();
+            teacher=gson.fromJson(doc.toJson(),Teacher.class);
+
+        }
+
+        return teacher;
+    }
+
+    public Subject getSubject(String _id){
+        Subject subject=null;
+        mongoCollection=mongoDatabase.getCollection("subjects");
+        BasicDBObject basicDBObject=new BasicDBObject("_id",_id);
+        MongoCursor cursor=mongoCollection.find(basicDBObject).iterator();
+        while (cursor.hasNext())
+        {
+            Document doc=(Document) cursor.next();
+            Gson gson=new GsonBuilder().create();
+            subject=gson.fromJson(doc.toJson(),Subject.class);
+        }
+        return subject;
+    }
+    public void saveSubject(Subject subject){
+        mongoCollection=mongoDatabase.getCollection("subjects");
+        Gson gson=new GsonBuilder().create();
+        String json=gson.toJson(subject);
+        mongoCollection.insertOne(Document.parse(json));
+
+    }
+
+
 
     public void addStu(Student student) {
         mongoCollection = mongoDatabase.getCollection("students");
@@ -78,8 +153,25 @@ public class MDBTools {
             stu=gson.fromJson(json,Student.class);
             stus.add(stu);
         }
-        //   Log.d("myapp",books.toString());
         return stus;
+    }
+
+    public  ArrayList<Subject> getSubjects(){
+        ArrayList<Subject> subjects=new ArrayList<>();
+        Subject subject;
+        mongoCollection=mongoDatabase.getCollection("subjects");
+        FindIterable<Document> iterable=mongoCollection.find().sort(new BasicDBObject("startTime",-1));
+        MongoCursor mongoCursor=iterable.iterator();
+        Gson gson=new GsonBuilder().create();
+        while (mongoCursor.hasNext())
+        {
+            Document doc=(Document) mongoCursor.next();
+
+            subject=gson.fromJson(doc.toJson(),Subject.class);
+            subjects.add(subject);
+
+        }
+        return  subjects;
     }
 
     public ArrayList<Teacher> getTeas()
@@ -221,49 +313,44 @@ public class MDBTools {
     }
 
 
-    public boolean addPhoto(String photoaddr) {
+    public boolean addPhoto(Photopic photopic) {
         mongoCollection=mongoDatabase.getCollection("photos");
-        final String title=photoaddr.substring(photoaddr.lastIndexOf("/")+1,photoaddr.length());
-        File file = new File(photoaddr);
-        if (file.isFile() && file.exists()) {
-
-            try {
-                FileChannel fc=new RandomAccessFile(file,"r").getChannel();
-                MappedByteBuffer byteBuffer=fc.map(FileChannel.MapMode.READ_ONLY,0,fc.size()).load();
-                final byte[] result=new byte[(int) fc.size()];
-                if(byteBuffer.remaining()>0)
-                {
-                    byteBuffer.get(result,0,byteBuffer.remaining());
-                }
-
+        Gson gson=new GsonBuilder().create();
         Document doc = new Document();
-        doc.put("title", title);
-        doc.put("photofile", result);
-        mongoCollection.insertOne(doc);
-       // System.out.println(result.toString());
+        mongoCollection.insertOne(Document.parse(gson.toJson(photopic)));
+        return true;
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return true;
-
-        } else {
-            return false;
-
-        }
     }
 
-    public byte[] getPhoto(String photoName){
+    public Photopic  getPhoto(UUID photoid){
+        mongoCollection=mongoDatabase.getCollection("photos");
+        Photopic photopic=null;
+        Document filer=new Document();
+        filer.put("_id",photoid.toString());  //查询必须是 string 类型,否则就是找不到哦
+
+        MongoCursor cursor =mongoCollection.find(filer).iterator();
+        while (cursor.hasNext()) {
+
+            Document doc= (Document) cursor.next();
+            Gson gson=new GsonBuilder().create();
+             photopic=gson.fromJson(doc.toJson(),Photopic.class);
+        }
+            return photopic;
+    }
+
+    public List<Photopic>  getfreePhotopic(){
+        List<Photopic> photopics=new ArrayList<>();
+        Photopic photopic;
+        Gson gson=new GsonBuilder().create();
         mongoCollection=mongoDatabase.getCollection("photos");
 
-        Document filer=new Document();
-        filer.put("title",photoName);
-        Document document=mongoCollection.find(filer).first();
-        Binary bs=(Binary) document.get("photofile");
-        return bs.getData();
+        MongoCursor cursor=mongoCollection.find().iterator();
+        while (cursor.hasNext()){
+            Document doc=(Document)cursor.next();
+            photopic=gson.fromJson(doc.toJson(),Photopic.class);
+            photopics.add(photopic);
+        }
+        return photopics;
     }
 
     public static File putFileFromBytes(byte[] b, String outputFile) {
@@ -334,7 +421,6 @@ public class MDBTools {
             result.add(dayca);
 
         }
-
 
         return result;
     }

@@ -19,6 +19,7 @@ public class ScoreAction extends BaseAction {
     private int actionValue;     //行为分值，为正加分，为负减分 //默认分值，通过actionName查map出来
     private Date actionPinTime;  //行为记录时间
     private Date actionOccurTime;  //行为发生时间
+    private UUID _id=UUID.randomUUID();
 
 
     //最小构造函数，必须有分值

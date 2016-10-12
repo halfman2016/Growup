@@ -12,8 +12,9 @@ public class People extends Object {
     private String pwd;
     private String phoneNum;
     private String email;
-
     private UUID _id=UUID.randomUUID();
+
+
 
     public People(String name) {
         this.name=name;

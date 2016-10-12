@@ -1,13 +1,17 @@
 package com.yper.feng.growup.Fragment;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
@@ -16,11 +20,17 @@ import android.widget.TextView;
 import com.yper.feng.growup.Activity.SubjectMain;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Student;
+import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Feng on 2016/9/26.
@@ -43,10 +53,21 @@ public class SubjectDetailFragment extends Fragment {
     private GradeClass gc6=new GradeClass("八3班");
     private GradeClass gc7=new GradeClass("启新班");
 
+
+    private TextView sdate=null;
+    private TextView edate=null;
+
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+
+    private  int which;
+    static final int DATE_DIALOG_ID=0;
+
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     private List<GradeClass> gradeClassList =new ArrayList<>();
 
-    private String subjectname;
-    private String subjectid;
+    private Subject subject;
 
     private GridView gridView;
     private ArrayList<HashMap<String,Object>> lstNameItem=new ArrayList<HashMap<String,Object>>();
@@ -59,9 +80,7 @@ public class SubjectDetailFragment extends Fragment {
         if(activity instanceof SubjectMain)
         {
             SubjectMain subjectMain =(SubjectMain) activity;
-
-            subjectname= subjectMain.subjectname;
-            subjectid= subjectMain.subjectid;
+            subject= subjectMain.subject;
 
         }
 
@@ -69,12 +88,113 @@ public class SubjectDetailFragment extends Fragment {
 
         final View view=inflater.inflate(R.layout.fragment_subject_details,container,false);
 
+
+        sdate=(TextView)view.findViewById(R.id.txtsdate);
+        edate=(TextView)view.findViewById(R.id.txtedate);
+
+        sdate.setText( sdf.format(subject.getStartTime()));
+        edate.setText(sdf.format(subject.getEndTime()));
+
+        sdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar d = Calendar.getInstance(Locale.CHINA);
+//创建一个日历引用d，通过静态方法getInstance() 从指定时区 Locale.CHINA 获得一个日期实例
+                Date myDate= null;
+                try {
+                    myDate = sdf.parse(sdate.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+//创建一个Date实例
+                d.setTime(myDate);
+//设置日历的时间，把一个新建Date实例myDate传入
+                int year=d.get(Calendar.YEAR);
+                int month=d.get(Calendar.MONTH);
+                int day=d.get(Calendar.DAY_OF_MONTH);
+//获得日历中的 year month day
+                DatePickerDialog dlg=new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        sdate.setText(Integer.toString(year)+"-" + Integer.toString(monthOfYear+1)+"-"+Integer.toString(dayOfMonth));
+                        try {
+                            Date ssdate=sdf.parse(sdate.getText().toString());
+                            Date eedate=sdf.parse(edate.getText().toString());
+                            if (ssdate.compareTo(eedate)>0)
+                            {
+
+                                edate.setText(sdate.getText());
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, year, month, day);
+//新建一个DatePickerDialog 构造方法中
+//     （设备上下文，OnDateSetListener时间设置监听器，默认年，默认月，默认日）
+                dlg.show();
+                Log.d("myapp","heloo a clik");
+            }
+        });
+
+        edate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar d = Calendar.getInstance(Locale.CHINA);
+//创建一个日历引用d，通过静态方法getInstance() 从指定时区 Locale.CHINA 获得一个日期实例
+                Date myDate= null;
+                try {
+                    myDate = sdf.parse(edate.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+//创建一个Date实例
+                d.setTime(myDate);
+//设置日历的时间，把一个新建Date实例myDate传入
+                int year=d.get(Calendar.YEAR);
+                int month=d.get(Calendar.MONTH);
+                int day=d.get(Calendar.DAY_OF_MONTH);
+//获得日历中的 year month day
+                DatePickerDialog dlg=new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        edate.setText(Integer.toString(year)+"-" + Integer.toString(monthOfYear+1)+"-"+Integer.toString(dayOfMonth));
+                        try {
+                            Date ssdate=sdf.parse(sdate.getText().toString());
+                            Date eedate=sdf.parse(edate.getText().toString());
+                            if (ssdate.compareTo(eedate)>0)
+                            {
+
+                                sdate.setText(edate.getText());
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, year, month, day);
+//新建一个DatePickerDialog 构造方法中
+//     （设备上下文，OnDateSetListener时间设置监听器，默认年，默认月，默认日）
+                dlg.show();
+
+            }
+        });
+
+        //设置文本的内容：
+
         final LinearLayout linearLayout= (LinearLayout) view.findViewById(R.id.classlist);
+
+
+
         linearLayout.removeAllViews();
 
         for(int i=0;i<gradeClassList.size();i++){
         TextView txt = new TextView(getContext());
         txt.setText(gradeClassList.get(i).getName());
+
+
+
+
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
         txt.setLayoutParams(lp);
@@ -99,6 +219,8 @@ public class SubjectDetailFragment extends Fragment {
 
         return  view;
     }
+
+
 
     private void setGridView(List<Student> tempstulist,View view){
 

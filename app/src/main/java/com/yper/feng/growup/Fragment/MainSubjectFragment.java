@@ -2,6 +2,8 @@ package com.yper.feng.growup.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,53 +14,105 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yper.feng.growup.Activity.AddSubjectActivity;
+import com.yper.feng.growup.Activity.MainActivity;
 import com.yper.feng.growup.Activity.SubjectMain;
 import com.yper.feng.growup.Adapter.MainSubjectListAdapter;
+import com.yper.feng.growup.Adapter.SubjectListFragmentAdapter;
 import com.yper.feng.growup.Module.Subject;
+import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.MDBTools;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import java.util.logging.LogRecord;
 
 /**
  * Created by Feng on 2016/7/10.
  */
 public class MainSubjectFragment extends ListFragment {
     //subject list
+    Teacher teacher;
     List<Subject>  subjectList=new ArrayList<>();
     ImageView imageView;
+
     RelativeLayout linearLayout;
+
+
+    public Handler mhandler=new Handler() {
+        public void handleMessage(Message msg){
+            switch (msg.what)
+            {
+                case 1:
+
+                    setListAdapter(new MainSubjectListAdapter(subjectList,getContext()));
+
+                    break;
+
+            }
+            super.handleMessage(msg);
+
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        // return super.onCreateView(inflater, container, savedInstanceState);
         View view=inflater.inflate(R.layout.fragment_subject,container,false);
         imageView= (ImageView) view.findViewById(R.id.plussubjectimage);
         imageView.setImageResource(R.mipmap.plus);
+
         linearLayout=(RelativeLayout) view.findViewById(R.id.addnewsubject);
         linearLayout.setFocusable(true);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(getContext(), AddSubjectActivity.class);
-                startActivityForResult(intent,101);
+                intent.putExtra("Tid",teacher.getTid());
+                intent.putExtra("name",teacher.getName());
+                startActivityForResult(intent,200);
             }
         });
 
-        MainSubjectListAdapter mainSubjectListAdapter= (MainSubjectListAdapter) getListAdapter();
-        subjectList=mainSubjectListAdapter.items;
-        Log.d("myapp","subjectlis is " + String.valueOf(subjectList.size()));
+        teacher=((MainActivity)getActivity()).teacher;
+
+
+        loaddata();
+
         return  view;
+    }
+
+    private void loaddata()
+    {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                MDBTools mdb=new MDBTools();
+                subjectList=mdb.getSubjects();
+                Message message=new Message();
+                message.what=1;
+                mhandler.sendMessage(message);
+
+            }
+        }.start();
+
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
+        Gson gson=new GsonBuilder().create();
 
                 Intent intent=new Intent(getContext(), SubjectMain.class);
-                intent.putExtra("subjectname",((Subject)getListAdapter().getItem(position)).getSubjectName());
-                intent.putExtra("subjectid",((Subject)getListAdapter().getItem(position)).get_id().toString());
+            intent.putExtra("subject",gson.toJson((Subject)getListAdapter().getItem(position)));
+
+            intent.putExtra("teacher",gson.toJson(teacher));
+
                 startActivityForResult(intent,100);
 
     }
@@ -68,9 +122,39 @@ public class MainSubjectFragment extends ListFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode==0) return;  // 取消时退出
-        if(requestCode==101)
+
+        switch(requestCode)
         {
+            default:
             Log.d("myapp",String.valueOf(resultCode));
+
+        }
+
+        switch (resultCode)
+        {
+            case 201:
+                //addsubject
+
+//                new Thread().start();
+//                setListAdapter(new MainSubjectListAdapter(mdb.));
+
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        MDBTools mdb=new MDBTools();
+                        subjectList=mdb.getSubjects();
+                        Message message=new Message();
+                        message.what=1;
+                        mhandler.sendMessage(message);
+
+                    }
+                }.start();
+//
+                break;
+            case 101:
+                //sujectMain
+                break;
         }
 
     }

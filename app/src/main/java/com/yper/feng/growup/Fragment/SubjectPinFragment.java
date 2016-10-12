@@ -19,4 +19,5 @@ public class SubjectPinFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_subject_pin,container,false);
         return  view;
     }
+
 }

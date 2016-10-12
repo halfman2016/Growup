@@ -19,8 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.MDBTools;
 
 /**
  * A login screen that offers login via Uid/password.
@@ -188,6 +192,7 @@ public class LoginActivity extends Activity {
 
         private final String mUid;
         private final String mPassword;
+        private  Teacher teacher;
 
         UserLoginTask(String uid, String password) {
             mUid = uid;
@@ -198,25 +203,30 @@ public class LoginActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                return false;
+            MDBTools mdb=new MDBTools();
+
+            if (mdb.teacherLogin(mUid,mPassword)){
+
+
+                teacher=mdb.getTeacher(mUid);
+
+                return  mdb.teacherLogin(mUid,mPassword);
+
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUid)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
 
-            // TODO: register the new account here.
-
-
-            return false;
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mUid)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+//
+//            // TODO: register the new account here.
+//
+//
+         return false;
         }
 
         @Override
@@ -236,13 +246,22 @@ public class LoginActivity extends Activity {
 
 
                 Intent intent = new Intent();
+
+                Bundle bundle=new Bundle();
+                Gson gson= new GsonBuilder().create();
+
+                gson.toJson(teacher);
+
+
+                intent.putExtra("teacherjson",gson.toJson(teacher));
+
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
 
 
-
                 MyApplication myApplication=MyApplication.getInstance();
                 myApplication.setUsername(mUid);
+
 
                 finish();
             } else {

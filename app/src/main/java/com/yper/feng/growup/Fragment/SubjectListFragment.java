@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.yper.feng.growup.Adapter.SubjectListFragmentAdapter;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.MDBTools;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,8 @@ import java.util.List;
 public class SubjectListFragment extends ListFragment {
     private List<Photopic> photopicList =new ArrayList<>();
     private String annouce;
+
+    private MDBTools mdbTools=new MDBTools();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        // return super.onCreateView(inflater, container, savedInstanceState);
@@ -39,6 +42,8 @@ public class SubjectListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initData();
         Photopic photopic1 =new Photopic();
         Photopic photopic2 =new Photopic();
         photopic1.setPhotoauthor("张晓帅");
@@ -52,6 +57,19 @@ public class SubjectListFragment extends ListFragment {
 
         annouce="通知,大家中午12点集合!不要错过时间!";
 
+    }
+
+    void  initData()
+    {
+        new Thread(){
+
+            @Override
+            public void run() {
+                super.run();
+
+
+            }
+        }.start();
     }
 
 

@@ -10,56 +10,113 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.yper.feng.growup.Module.Photopic;
+import com.yper.feng.growup.Module.Subject;
+import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
 import com.yper.feng.growup.Util.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 public class TakePhoto extends AppCompatActivity  {
 
-Uri fileUri;
+    Uri fileUri;
+    Teacher teacher;
+    Subject subject=null;
     ImageView imageView;
+    Photopic photopic=new Photopic();
+    EditText photomemo;
+    TextView photoauthor;
+    TextView photodate;
+    ProgressBar progressBar;
+    Gson gson=new GsonBuilder().create();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
-      //  fileUri=savedInstanceState.getBundle("fileUri");
         Intent intent=getIntent();
         fileUri=intent.getData();
 
-        imageView= (ImageView) findViewById(R.id.imageView);
-        imageView.setImageURI(fileUri);
-        String str= Utils.getPathByUri4kitkat(getBaseContext(),fileUri);
-        Bitmap bm=BitmapFactory.decodeFile(str);
+        teacher=gson.fromJson(intent.getStringExtra("teacher"),Teacher.class);
 
-        int rawHeight=bm.getHeight();
-        int rawWidth=bm.getWidth();
+        if(intent.getStringExtra("subject")==null)
+        {
 
-        int newHeight=1000;
-        float heightScale=((float)newHeight)/rawHeight;
-        float widthScale=heightScale;
-        Matrix matrix = new Matrix();
-        matrix.postScale(heightScale,widthScale);
+        }
+        else
+        {
+            subject=gson.fromJson(intent.getStringExtra("subject"),Subject.class);
+            photopic.setBelongToSubject(subject.get_id());
+        }
 
-        Bitmap newBitMap=Bitmap.createBitmap(bm,0,0,rawWidth,rawHeight,matrix,true);
 
-        imageView.setImageBitmap(newBitMap);
+        Bitmap bm=BitmapFactory.decodeFile(Utils.getPathByUri4kitkat(getBaseContext(),fileUri));
+        bm=bitmapresize(bm,1000);
 
-        Utils.compressAndSaveBitmapToSDCard(newBitMap,"id.jpg",80);
+        imageView=(ImageView)findViewById(R.id.imageView);
+        photomemo=(EditText)findViewById(R.id.photomemo);
+        photoauthor=(TextView) findViewById(R.id.photoauthor);
+        photodate=(TextView)findViewById(R.id.photodate);
+
+        progressBar=(ProgressBar)findViewById(R.id.progressBar);
+
+        photoauthor.setText(teacher.getName());
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        photodate.setText(sdf.format(new Date()));
+
+        imageView.setImageBitmap(bm);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        bm=bitmapresize(bm,220);
+        //photopic.setPhotofile(baos.toByteArray());
+        bm.compress(Bitmap.CompressFormat.JPEG,80,baos);
+        photopic.setPhotopreview(baos.toByteArray());
         Button btn= (Button) findViewById(R.id.btnLoadPhoto);
         MyListener myListener=new MyListener();
         btn.setOnClickListener(myListener);
 
-        Button btnbtn= (Button) findViewById(R.id.btnReadPhoto);
-        btnbtn.setOnClickListener(myListener);
 
 
+    }
+
+    private Bitmap bitmapresize(Bitmap bitmap,int newwidth){
+
+        int rawHeight=bitmap.getHeight();
+        int rawWidth=bitmap.getWidth();
+
+
+        float widthScale=((float)newwidth)/rawWidth;
+        float heightScale=widthScale;
+
+        Matrix matrix = new Matrix();
+
+        matrix.postScale(heightScale,widthScale);
+
+        bitmap=Bitmap.createBitmap(bitmap,0,0,rawWidth,rawHeight,matrix,true);
+        return bitmap;
     }
 
     private  class  MyListener implements View.OnClickListener{
@@ -70,16 +127,12 @@ Uri fileUri;
             if (view.getId()==R.id.btnLoadPhoto)
             {
                 Log.d("myapp","hello loadphoto");
-                String str= Utils.getSDCardPath()+File.separator+"id.jpg";
                 addPhotoTask ad=new addPhotoTask();
-                ad.execute(str);
+                progressBar.setVisibility(View.VISIBLE);
+                ad.execute();
             }
 
-            if(view.getId()==R.id.btnReadPhoto){
-                Log.v("myapp","hllo");
-                getPhotoTask gp=new getPhotoTask();
-                gp.execute("id.jpg");
-            }
+
 
         }
     }
@@ -87,42 +140,61 @@ Uri fileUri;
 
 
 
-private  class addPhotoTask extends AsyncTask<String,Integer,Boolean>
-{
+private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
 
 
     @Override
     protected Boolean doInBackground(String... strings) {
-        String filename=strings[0];
-        MDBTools mdbTools=new MDBTools();
-        mdbTools.addPhoto(filename);
+
+        MDBTools mdbTools = new MDBTools();
+        photopic.setPhotoauthorid(teacher.get_id());
+        photopic.setPhotodate(new Date());
+        photopic.setPhotoauthor(teacher.getName());
+        publishProgress(1,1);
+        mdbTools.addPhoto(photopic);
         return true;
+
     }
 
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
 
+    }
+
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        photopic.setPhotomemo(photomemo.getText().toString());
+       if(subject==null) {
+           setResult(101);  //main调用
+       }
+        else
+       {
+           setResult(102);  //subject调用
+       }
+           finish();
+    }
 }
 
     private class getPhotoTask extends AsyncTask<String,Integer,String>{
+        Photopic photopic;
 
         @Override
         protected String doInBackground(String... strings) {
 
             MDBTools mdbTools=new MDBTools();
-            byte[] txt=mdbTools.getPhoto(strings[0]);
-            File mediaStorageDir=new File(getBaseContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),"growup");
-            File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "id.jpg");
+            photopic=mdbTools.getPhoto(UUID.fromString(strings[0]));
 
-            mdbTools.putFileFromBytes(txt,mediaFile.getPath());
             return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            File mediaStorageDir=new File(getBaseContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),"growup");
-            File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "id.jpg");
-            Bitmap bm=Utils.getLoacalBitmap(mediaFile.getPath());
-
+//            File mediaStorageDir=new File(getBaseContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),"growup");
+//            File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "id.jpg");
+            Bitmap bm=BitmapFactory.decodeByteArray(photopic.getPhotofile(),0,photopic.getPhotofile().length);
             imageView.setImageBitmap(bm);
 
         }

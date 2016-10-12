@@ -6,19 +6,15 @@ import java.util.UUID;
 /**
  * Created by Feng on 2016/6/21.
  */
-public class Photopic {
+public class Photopic extends Photo{
     private Date photodate; //拍照时间
-    private int takePhotoPid; //拍照的人ID
+    private UUID photoauthorid; //拍照的人ID
     private String photoauthor;
     private String photomemo;
-    private String photopic; //图片地址
-    private String belongToSubject; // 照片属于哪个专题
-    private int haspeged; //0从未标定，1 标定了，n 标定了几次
-    private UUID _id=UUID.randomUUID();
 
-    public UUID get_id() {
-        return _id;
-    }
+    private UUID belongToSubject; // 照片属于哪个专题
+    private int haspined; //0从未标定，1 标定了，n 标定了几次
+
 
     public Date getPhotodate() {
         return photodate;
@@ -28,12 +24,12 @@ public class Photopic {
         this.photodate = photodate;
     }
 
-    public int getTakePhotoPid() {
-        return takePhotoPid;
+    public UUID getPhotoauthorid() {
+        return photoauthorid;
     }
 
-    public void setTakePhotoPid(int takePhotoPid) {
-        this.takePhotoPid = takePhotoPid;
+    public void setPhotoauthorid(UUID photoauthorid) {
+        this.photoauthorid = photoauthorid;
     }
 
     public String getPhotoauthor() {
@@ -52,27 +48,20 @@ public class Photopic {
         this.photomemo = photomemo;
     }
 
-    public String getPhotopic() {
-        return photopic;
-    }
 
-    public void setPhotopic(String photopic) {
-        this.photopic = photopic;
-    }
-
-    public String getBelongToSubject() {
+    public UUID getBelongToSubject() {
         return belongToSubject;
     }
 
-    public void setBelongToSubject(String belongToSubject) {
+    public void setBelongToSubject(UUID belongToSubject) {
         this.belongToSubject = belongToSubject;
     }
 
-    public int getHaspeged() {
-        return haspeged;
+    public int getHaspined() {
+        return haspined;
     }
 
-    public void setHaspeged(int haspeged) {
-        this.haspeged = haspeged;
+    public void setHaspined(int haspined) {
+        this.haspined = haspined;
     }
 }

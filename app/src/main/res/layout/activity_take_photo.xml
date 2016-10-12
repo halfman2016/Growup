@@ -12,41 +12,98 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="245dp"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="false"
-        android:layout_weight="1"/>
+        android:layout_alignParentEnd="false" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView2" />
+            android:id="@+id/textView2"
+            android:text="@string/photoauthor"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="14dp"
+            android:layout_marginStart="14dp" />
+
+        <TextView
+            android:text="@string/photodate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/photoauthor"
+            android:layout_toEndOf="@+id/photoauthor"
+            android:layout_marginLeft="23dp"
+            android:layout_marginStart="23dp"
+            android:id="@+id/textView29" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/textView29"
+            android:layout_toEndOf="@+id/textView29"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:id="@+id/photodate" />
+
+        <TextView
+            android:text="@string/photomemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:layout_alignLeft="@+id/textView2"
+            android:layout_alignStart="@+id/textView2"
+            android:layout_marginTop="14dp"
+            android:id="@+id/textView35" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:layout_below="@+id/textView35"
+            android:layout_marginTop="10dp"
+            android:id="@+id/photomemo"
+            android:layout_alignLeft="@+id/textView35"
+            android:layout_alignStart="@+id/textView35"
+            android:layout_width="match_parent"
+            android:layout_marginRight="10dp" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="上传"
             android:id="@+id/btnLoadPhoto"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_marginBottom="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
-        <Button
+        <TextView
+            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="切换"
-            android:id="@+id/btnReadPhoto"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_toEndOf="@+id/textView2" />
+            android:id="@+id/photoauthor"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/textView35"
+            android:layout_toEndOf="@+id/textView35" />
+
     </RelativeLayout>
 
 </LinearLayout>

@@ -5,6 +5,9 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.yper.feng.growup.Activity.MainActivity;
 import com.yper.feng.growup.R;
 
 /**
@@ -16,6 +19,8 @@ public class MainInfoFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_info, container, false);
+        TextView mainwho=(TextView)view.findViewById(R.id.mainWho);
+        mainwho.setText(((MainActivity)getActivity()).teacher.getName());
         return view;
     }
 }

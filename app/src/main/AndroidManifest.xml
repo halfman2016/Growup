@@ -35,7 +35,8 @@
         <activity android:name=".Activity.Add_rec" />
         <activity android:name=".Activity.SubjectMain" />
         <activity android:name=".Activity.PinPhotoActivity" />
-        <activity android:name=".Activity.AddSubjectActivity"></activity>
+        <activity android:name=".Activity.AddSubjectActivity" />
+        <activity android:name=".Activity.AddRecMain"></activity>
     </application>
 
 </manifest>

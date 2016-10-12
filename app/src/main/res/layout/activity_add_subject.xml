@@ -51,7 +51,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginStart="21dp"
         android:layout_marginTop="12dp"
-        android:id="@+id/editText" />
+        android:id="@+id/txtsubjectname" />
 
         <TextView
         android:text="@string/txt_subject_info"
@@ -70,9 +70,9 @@
             android:layout_alignLeft="@+id/textView15"
             android:layout_alignStart="@+id/textView15"
             android:layout_marginTop="16dp"
-            android:id="@+id/editText3"
-            android:layout_alignRight="@+id/editText"
-            android:layout_alignEnd="@+id/editText"
+            android:id="@+id/txtsubjectinfo"
+            android:layout_alignRight="@+id/txtsubjectname"
+            android:layout_alignEnd="@+id/txtsubjectname"
             android:editable="true"
             android:fadingEdge="horizontal|vertical"
             android:layout_marginLeft="15dp"
@@ -163,7 +163,8 @@
                 android:id="@+id/btnAddSubject"
                 android:layout_alignParentBottom="true"
                 android:layout_alignLeft="@+id/endDateDisplay"
-                android:layout_alignStart="@+id/endDateDisplay" />
+                android:layout_alignStart="@+id/endDateDisplay"
+                android:onClick="saveSubject" />
 
         </RelativeLayout>
 

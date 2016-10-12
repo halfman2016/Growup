@@ -56,6 +56,26 @@
             android:layout_marginTop="20dp"
             android:id="@+id/textView9" />
 
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView8"
+            android:layout_toRightOf="@+id/textView8"
+            android:layout_toEndOf="@+id/textView8"
+            android:layout_marginLeft="27dp"
+            android:layout_marginStart="27dp"
+            android:id="@+id/txtsdate" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView9"
+            android:layout_alignRight="@+id/txtsdate"
+            android:layout_alignEnd="@+id/txtsdate"
+            android:id="@+id/txtedate" />
+
 
     </RelativeLayout>
 

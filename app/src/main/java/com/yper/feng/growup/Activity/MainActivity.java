@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yper.feng.growup.Adapter.MainInfoListAdapter;
 import com.yper.feng.growup.Adapter.MainFragmentAdapter;
 import com.yper.feng.growup.Adapter.MainPinListAdapter;
@@ -27,6 +29,7 @@ import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.SubjectPinAction;
+import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.Module.WeekReport;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
@@ -39,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
     private HashMap<String,Integer> defaultValues=new HashMap<>();
@@ -50,10 +54,12 @@ public class MainActivity extends FragmentActivity {
     private RadioGroup radioGroup;
     private RadioButton rbInfo, rbSubject, rbPin, rbAnalysis;
 
-
+    public Teacher teacher;
     private Uri fileUri;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+
+    private MainPinFragment mainPinFragment = new MainPinFragment();
 
 
     private MDBTools mdb=new MDBTools();
@@ -66,7 +72,12 @@ public class MainActivity extends FragmentActivity {
         initViews();
         initEvents();
         MyApplication myApplication=MyApplication.getInstance();
-        Log.d("myapp",myApplication.getUsername());
+
+        Intent intent=getIntent();
+        String teacherjson=intent.getStringExtra("teacherjson");
+        Gson gson= new GsonBuilder().create();
+        teacher=gson.fromJson(teacherjson,Teacher.class);
+
     }
 
     private void initEvents() {
@@ -92,12 +103,12 @@ public class MainActivity extends FragmentActivity {
                     Log.d("myapp", "addrec");
                     intent=new Intent();
                     intent.setClass(MainActivity.this,Add_rec.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,300);
 
                     break;
                 case R.id.titlebar_camrec:
                     Log.d("myapp", "camrec");
-                     intent=new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    intent=new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                     fileUri=getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
                     startActivityForResult(intent,200);
@@ -110,7 +121,6 @@ public class MainActivity extends FragmentActivity {
                      fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-                    // start the image capture
 
                     startActivityForResult(intent, 100);
                     break;
@@ -124,24 +134,51 @@ public class MainActivity extends FragmentActivity {
 
         Log.d("myapp",String.valueOf(resultCode) );
 
+        Intent intent;
         if (resultCode==0) return;  // 取消时退出
 
-        if (requestCode==100)
-        {
-            //照相
-            Intent intent=new Intent(MainActivity.this,TakePhoto.class);
-            intent.setData(fileUri);
-            startActivityForResult(intent,103);
-        }
-        else if(requestCode==200)
-        {
-            //摄像
-            Intent intent=new Intent(this,TakeCam.class);
-            intent.setData(fileUri);
-            startActivityForResult(intent,104);
+        switch (requestCode) {
+            case 100:
+
+                    //照相
+                    intent = new Intent(MainActivity.this, TakePhoto.class);
+                    intent.setData(fileUri);
+                Gson gson=new GsonBuilder().create();
+                intent.putExtra("teacher",gson.toJson(teacher));
+                startActivityForResult(intent, 103);
+                break;
+            case 200:
+                    //摄像
+                    intent = new Intent(this, TakeCam.class);
+                    intent.setData(fileUri);
+                    startActivityForResult(intent, 104);
+                break;
+            case 300:
+
+                 //
+
+
+            break;
+
+            case 400:
+
+                break;
 
         }
 
+        switch (resultCode){
+            case 301:
+                Log.d("myapp" ,"返回的值是:"+data.getStringExtra("actiontype"));
+                intent=new Intent(getBaseContext(),AddRecMain.class);
+                intent.putExtra("actiontype",data.getStringExtra("actiontype"));
+                startActivityForResult(intent,400);
+                break;
+            case 101:
+                //拍照返回
+                mainPinFragment.setListAdapter(new MainPinListAdapter(photopics,getBaseContext()));
+
+                break;
+        }
 
     }
 
@@ -184,6 +221,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initDatas() {
+
 
 
         MyApplication.getInstance().setDefaultValues(defaultValues);
@@ -240,20 +278,20 @@ public class MainActivity extends FragmentActivity {
         subjectItems.add(s2);
 
         //pinphoto数据初始化
-
-        Photopic photopic1=new Photopic();
-        Photopic photopic2=new Photopic();
-
-        photopic1.setPhotomemo("抓拍一下");
-        photopic1.setPhotodate(new Date());
-        //photopic1.setPhotopic();
-        photopic2.setPhotomemo("做的真棒");
-        photopic2.setPhotodate(new Date());
-        photopic1.setPhotoauthor("王强");
-        photopic2.setPhotoauthor("李老师");
-
-        photopics.add(photopic1);
-        photopics.add(photopic2);
+//
+//        Photopic photopic1=new Photopic();
+//        Photopic photopic2=new Photopic();
+//
+//        photopic1.setPhotomemo("抓拍一下");
+//        photopic1.setPhotodate(new Date());
+//        //photopic1.setPhotopic();
+//        photopic2.setPhotomemo("做的真棒");
+//        photopic2.setPhotodate(new Date());
+//        photopic1.setPhotoauthor("王强");
+//        photopic2.setPhotoauthor("李老师");
+//
+//        photopics.add(photopic1);
+//        photopics.add(photopic2);
 
 
     }

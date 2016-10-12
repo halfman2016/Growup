@@ -2,4 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/txtPinActionScore"
+        android:layout_toEndOf="@+id/txtPinActionScore"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:id="@+id/btnpinAction"
+        android:text="@string/btnpinAction" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/txtPinName"
+        android:layout_alignBaseline="@+id/btnpinAction"
+        android:layout_alignBottom="@+id/btnpinAction"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_width="120dp" />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
+        android:id="@+id/txtPinActionScore"
+        android:layout_alignBaseline="@+id/txtPinActionType"
+        android:layout_alignBottom="@+id/txtPinActionType"
+        android:layout_toRightOf="@+id/txtPinActionType"
+        android:layout_toEndOf="@+id/txtPinActionType" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtPinActionType"
+        android:layout_width="80dp"
+        android:layout_alignBaseline="@+id/txtPinName"
+        android:layout_alignBottom="@+id/txtPinName"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

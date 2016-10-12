@@ -13,7 +13,24 @@ public class Subject  {
     private Date startTime;
     private Date endTime;
     private UUID _id=UUID.randomUUID();
+    private String Tid;
+    private String teacherName;
 
+    public String getTid() {
+        return Tid;
+    }
+
+    public void setTid(String tid) {
+        Tid = tid;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;

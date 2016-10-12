@@ -31,19 +31,41 @@ private ArrayList<DayCommonAction> days=new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_rec);
         listView= (ListView) findViewById(R.id.listrec);
-        LoadDayCommonAcions ld=new LoadDayCommonAcions();
-        ld.execute();
+       // LoadDayCommonAcions ld=new LoadDayCommonAcions();
+        //ld.execute();
+        initData();
 
+        listView.setAdapter(new AddRecListAdapter(days,getBaseContext()));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("myapp","ok" + String.valueOf(position));
+                DayCommonAction day=(DayCommonAction)listView.getAdapter().getItem(position);
+                Log.d("myapp","ok" + day.getActionName());
+
+                Intent intent=new Intent();
+                intent.putExtra("actiontype",day.getActionType());
+                setResult(301,intent);
+                finish();
+
             }
         });
 
     }
 
 
+    void initData(){
+
+        DayCommonAction day1=new DayCommonAction("毛巾合理摆放","卫生标兵",2);
+        DayCommonAction day2=new DayCommonAction("被子折叠整洁","卫生标兵",2);
+        DayCommonAction day3=new DayCommonAction("被子没有折叠整洁","卫生标兵",-2);
+        DayCommonAction day4=new DayCommonAction("口杯摆放合适","卫生标兵",2);
+        DayCommonAction day5=new DayCommonAction("毛巾乱放","卫生标兵",-2);
+        DayCommonAction day6=new DayCommonAction("口杯乱放","卫生标兵",2);
+
+        days.add(day1);
+        days.add(day2);
+        days.add(day3);days.add(day4);days.add(day5);days.add(day6);
+    }
 
     class LoadDayCommonAcions extends AsyncTask<String,Integer,ArrayList<DayCommonAction>>{
 

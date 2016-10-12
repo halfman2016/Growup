@@ -10,8 +10,6 @@ public class Teacher extends People {
     private ArrayList<String> Duty = new ArrayList<>();
 
 
-
-
     public Teacher(String name) {
         super(name);
     }
