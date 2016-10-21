@@ -6,9 +6,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,9 +25,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yper.feng.growup.Module.Teacher;
+import com.yper.feng.growup.Module.Updateobj;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.UpdateManager;
 
 /**
  * A login screen that offers login via Uid/password.
@@ -40,11 +45,17 @@ public class LoginActivity extends Activity {
      */
     private UserLoginTask mAuthTask = null;
 
+    private  UpdateManager update=new UpdateManager(this);
+
     // UI references.
     private AutoCompleteTextView mUidView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private MDBTools mdb=new MDBTools();
+    private int thisversion=0;
+    private Updateobj updateobj=new Updateobj();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +92,47 @@ public class LoginActivity extends Activity {
         mUidView.setText(settings.getString("UID", null));
         mPasswordView.setText(settings.getString("PWD", null));
 
+        //update
+
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                updateobj = mdb.getUpdate("btdy-tea");
+                Message msg=new Message();
+                msg.what=1;
+                myhandler.sendMessage(msg);
+            }
+        }.start();
+
 
     }
+
+    private Handler myhandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    try {
+                        thisversion=getPackageManager().getPackageInfo("com.yper.feng.growup",0).versionCode;
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if (thisversion==updateobj.getVersion())
+                    {
+                        //version 相等什么都不用做啊
+                    }
+                    else
+                    {
+                        //升级啊
+                        update.checkUpdateInfo();
+                    }
+
+                    break;
+            }
+        }
+    };
 
 
     /**
@@ -203,7 +253,6 @@ public class LoginActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            MDBTools mdb=new MDBTools();
 
             if (mdb.teacherLogin(mUid,mPassword)){
 

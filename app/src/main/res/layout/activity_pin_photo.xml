@@ -35,7 +35,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="80dp"
                 android:id="@+id/alreadypins">
 
                 <ListView
@@ -153,11 +153,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/autoCompleteTextView"
-                    android:drawableLeft="@android:drawable/ic_menu_search"/>
+                    android:layout_height="match_parent">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/autoCompleteTextView"
+                        android:drawableLeft="@android:drawable/ic_menu_search"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:text="搜"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button2"
+                        android:layout_weight="1"
+                        android:layout_width="80dp" />
+                </LinearLayout>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:id="@+id/android:list"
+                    android:layout_height="200dp" />
             </LinearLayout>
 
         </LinearLayout>

@@ -61,6 +61,7 @@ public class SubjectMain extends FragmentActivity {
 
     private MDBTools mdb=new MDBTools();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,16 @@ public class SubjectMain extends FragmentActivity {
 
 
     }
-        private void initDatas(){
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(1001);
+        finish();
+
+    }
+
+    private void initDatas(){
 
             new Thread(){
                 @Override
@@ -296,6 +306,12 @@ public class SubjectMain extends FragmentActivity {
 
         switch (resultCode){
             case 301:
+
+                break;
+
+            case 102:
+                //拍照返回程序
+
 
                 break;
         }

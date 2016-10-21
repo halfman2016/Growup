@@ -19,8 +19,8 @@
         android:ems="10"
         android:id="@+id/txtSubject_info"
         android:textSize="18sp"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusable="true"
+         />
 
     <TextView
         android:text="@string/txt_subject_time"
@@ -145,13 +145,24 @@
         android:numColumns="3"
         android:gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:stretchMode="columnWidth"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:descendantFocusability="beforeDescendants"
+        android:layout_height="160dp" />
+
+    <Button
+        android:text="@string/savepeople"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtAddstustosubject"
+        android:layout_below="@+id/mygridview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
 

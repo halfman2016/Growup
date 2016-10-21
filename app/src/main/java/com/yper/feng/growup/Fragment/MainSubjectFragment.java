@@ -48,9 +48,9 @@ public class MainSubjectFragment extends ListFragment {
             switch (msg.what)
             {
                 case 1:
-
-                    setListAdapter(new MainSubjectListAdapter(subjectList,getContext()));
-
+if(isVisible()) {
+    setListAdapter(new MainSubjectListAdapter(subjectList, getContext()));
+}
                     break;
 
             }
@@ -58,6 +58,11 @@ public class MainSubjectFragment extends ListFragment {
 
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,49 +118,17 @@ public class MainSubjectFragment extends ListFragment {
 
             intent.putExtra("teacher",gson.toJson(teacher));
 
-                startActivityForResult(intent,100);
+            startActivityForResult(intent, 1000);
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        loaddata();
 
-        if (resultCode==0) return;  // 取消时退出
-
-        switch(requestCode)
-        {
-            default:
-            Log.d("myapp",String.valueOf(resultCode));
-
-        }
-
-        switch (resultCode)
-        {
-            case 201:
-                //addsubject
-
-//                new Thread().start();
-//                setListAdapter(new MainSubjectListAdapter(mdb.));
-
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        MDBTools mdb=new MDBTools();
-                        subjectList=mdb.getSubjects();
-                        Message message=new Message();
-                        message.what=1;
-                        mhandler.sendMessage(message);
-
-                    }
-                }.start();
-//
-                break;
-            case 101:
-                //sujectMain
-                break;
-        }
 
     }
+
+
 }

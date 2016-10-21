@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
-    private HashMap<String,Integer> defaultValues=new HashMap<>();
+
     private List<BaseInfoItem> items = new ArrayList<>();
     private List<Subject> subjectItems=new ArrayList<>();
     private List<Photopic> photopics=new ArrayList<>();
@@ -161,6 +161,8 @@ public class MainActivity extends FragmentActivity {
             break;
 
             case 400:
+                //开启记录窗口
+
 
                 break;
 
@@ -175,9 +177,24 @@ public class MainActivity extends FragmentActivity {
                 break;
             case 101:
                 //拍照返回
-                mainPinFragment.setListAdapter(new MainPinListAdapter(photopics,getBaseContext()));
+
+                viewPager.setCurrentItem(2);
+                break;
+
+            case 401:
+                //记录窗口返回
+
+
 
                 break;
+
+            case 1001:
+                //subject刷新
+                Log.d("myapp","subject refresh");
+
+                break;
+
+
         }
 
     }
@@ -224,7 +241,6 @@ public class MainActivity extends FragmentActivity {
 
 
 
-        MyApplication.getInstance().setDefaultValues(defaultValues);
 
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String datetime = "2016-03-12 09:3:2";
@@ -391,4 +407,6 @@ public class MainActivity extends FragmentActivity {
 
 
     }
+
+
 }

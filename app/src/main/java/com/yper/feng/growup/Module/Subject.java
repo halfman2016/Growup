@@ -1,6 +1,8 @@
 package com.yper.feng.growup.Module;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,6 +17,15 @@ public class Subject  {
     private UUID _id=UUID.randomUUID();
     private String Tid;
     private String teacherName;
+    private List<Student> students=new ArrayList<>();
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
     public String getTid() {
         return Tid;

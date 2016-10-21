@@ -6,11 +6,19 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndDeleteOptions;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.yper.feng.growup.Module.Annouce;
+import com.yper.feng.growup.Module.DayCheckListAction;
+import com.yper.feng.growup.Module.DayChecksAcion;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Photopic;
+import com.yper.feng.growup.Module.PicPinAction;
+import com.yper.feng.growup.Module.PinAction;
 import com.yper.feng.growup.Module.Rank;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,11 +30,14 @@ import com.mongodb.client.MongoDatabase;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
+import com.yper.feng.growup.Module.Updateobj;
+
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
 import org.bson.types.Binary;
+import org.bson.types.ObjectId;
 
 
 import java.io.*;
@@ -34,6 +45,7 @@ import java.lang.reflect.Type;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +130,14 @@ public class MDBTools {
 
     }
 
+    public  void updateSubject(Subject subject){
+        mongoCollection=mongoDatabase.getCollection("subjects");
+        Gson gson=new GsonBuilder().create();
+        String json=gson.toJson(subject);
+        mongoCollection.findOneAndReplace(Filters.eq("_id",subject.get_id().toString()),Document.parse(json));
+
+    }
+
 
 
     public void addStu(Student student) {
@@ -160,7 +180,7 @@ public class MDBTools {
         ArrayList<Subject> subjects=new ArrayList<>();
         Subject subject;
         mongoCollection=mongoDatabase.getCollection("subjects");
-        FindIterable<Document> iterable=mongoCollection.find().sort(new BasicDBObject("startTime",-1));
+        FindIterable<Document> iterable=mongoCollection.find().sort(new BasicDBObject("endTime",-1));
         MongoCursor mongoCursor=iterable.iterator();
         Gson gson=new GsonBuilder().create();
         while (mongoCursor.hasNext())
@@ -214,6 +234,23 @@ public class MDBTools {
         return gradeClasses;
     }
 
+    public List<PinAction> getPinActions(){
+        List<PinAction> pinActions=new ArrayList<>();
+        PinAction pinAction;
+        mongoCollection=mongoDatabase.getCollection("pinactions");
+        FindIterable<Document> iterable=mongoCollection.find();
+        MongoCursor mongoCursor=iterable.iterator();
+        Gson gson=new GsonBuilder().create();
+        while (mongoCursor.hasNext())
+        {
+            Document doc=(Document)mongoCursor.next();
+            pinAction=gson.fromJson(doc.toJson(),PinAction.class);
+            pinActions.add(pinAction);
+        }
+
+        return pinActions;
+    }
+
     public void saveGradeClasses(ArrayList<GradeClass> gradeClasses){
         mongoCollection=mongoDatabase.getCollection("classes");
         mongoCollection.deleteMany(Filters.exists("_id"));
@@ -241,6 +278,13 @@ public class MDBTools {
         mongoCollection.insertOne(Document.parse(json));
     }
 
+    public void updateGradeClass(GradeClass gc){
+        mongoCollection =mongoDatabase.getCollection("classes");
+        Gson gson=new GsonBuilder().create();
+        Document document=Document.parse(gson.toJson(gc));
+        mongoCollection.updateOne(Filters.eq("_id",gc.get_id().toString()),document);
+
+    }
 
     public HashMap<String,Rank> getRanks(){
 
@@ -316,11 +360,49 @@ public class MDBTools {
     public boolean addPhoto(Photopic photopic) {
         mongoCollection=mongoDatabase.getCollection("photos");
         Gson gson=new GsonBuilder().create();
-        Document doc = new Document();
+//        DB db= (DB) mongoClient.getDB("lizhi");
+//
+//        GridFS mygridfs=new GridFS(db,"pics");
+//        com.mongodb.gridfs.GridFSFile file =mygridfs.createFile(photopic.getPhotopreview());
+//        file.save();
+//        Object id=file.getId();
+//        photopic.setPicfileid(id);
+//       // photopic.setPhotopreview(null);
+        //photopic.setPhotofile(null);
         mongoCollection.insertOne(Document.parse(gson.toJson(photopic)));
         return true;
 
     }
+
+    public byte[] getPhotoPicfile(Photopic photopic) throws IOException {
+        DB db=mongoClient.getDB("lizhi");
+        GridFS myfs=new GridFS(db,"pics");
+        GridFSDBFile file=myfs.findOne((ObjectId) photopic.getPicfileid());
+        ByteArrayOutputStream out=new ByteArrayOutputStream();
+
+        file.writeTo(out);
+
+        byte[] buffer=out.toByteArray();
+
+        return  buffer;
+    }
+
+    public List<PicPinAction> getPicpinactions(Photopic photopic)
+    {
+        List<PicPinAction> picPinActions=new ArrayList<>();
+        PicPinAction picPinAction;
+        mongoCollection=mongoDatabase.getCollection("pincpinactions");
+        MongoCursor mongoCursor=mongoCollection.find(Filters.eq("picsrcid",photopic.get_id().toString())).iterator();
+        while (mongoCursor.hasNext()){
+            Document doc=(Document)mongoCursor.next();
+            Gson gson=new GsonBuilder().create();
+            picPinAction=gson.fromJson(doc.toJson(),PicPinAction.class);
+            picPinActions.add(picPinAction);
+        }
+
+        return  picPinActions;
+    }
+
 
     public Photopic  getPhoto(UUID photoid){
         mongoCollection=mongoDatabase.getCollection("photos");
@@ -344,7 +426,7 @@ public class MDBTools {
         Gson gson=new GsonBuilder().create();
         mongoCollection=mongoDatabase.getCollection("photos");
 
-        MongoCursor cursor=mongoCollection.find().iterator();
+        MongoCursor cursor=mongoCollection.find(Filters.exists("belongToSubject",false)).sort(new BasicDBObject("photodate",-1)).iterator();
         while (cursor.hasNext()){
             Document doc=(Document)cursor.next();
             photopic=gson.fromJson(doc.toJson(),Photopic.class);
@@ -353,6 +435,108 @@ public class MDBTools {
         return photopics;
     }
 
+    public List<Photopic> getSubjectPhoto(Subject subject){
+        List<Photopic> photopics=new ArrayList<>();
+        Photopic photopic;
+        Gson gson=new GsonBuilder().create();
+        mongoCollection=mongoDatabase.getCollection("photos");
+        MongoCursor cursor=mongoCollection.find(Filters.eq("belongToSubject",subject.get_id().toString())).sort(new BasicDBObject("photodate",-1)).iterator();
+    while (cursor.hasNext()){
+        Document doc =(Document) cursor.next();
+        photopic =gson.fromJson(doc.toJson(),Photopic.class);
+        photopics.add(photopic);
+
+    }
+        return photopics;
+
+    }
+
+    public List<DayChecksAcion> getDayChecksActions(){
+        List<DayChecksAcion> dayChecksAcions=new ArrayList<>();
+        DayChecksAcion dayChecksAcion;
+        Gson gson=new GsonBuilder().create();
+        mongoCollection=mongoDatabase.getCollection("daycheckactions");
+        MongoCursor cursor=mongoCollection.find().iterator();
+
+        while (cursor.hasNext())
+        {
+            Document doc=(Document) cursor.next();
+            dayChecksAcion=gson.fromJson(doc.toJson(),DayChecksAcion.class);
+            dayChecksAcions.add(dayChecksAcion);
+        }
+
+        return dayChecksAcions;
+    }
+
+    public  List<DayCheckListAction> getDayCheckListActions(String typeName){
+        List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
+        DayCheckListAction dayCheckListAction;
+        Gson gson=new GsonBuilder().create();
+        mongoCollection=mongoDatabase.getCollection("daychecklistactions");
+        MongoCursor cursor=mongoCollection.find(Filters.eq("actionType",typeName)).iterator();
+        while (cursor.hasNext())
+        {
+            Document doc=(Document) cursor.next();
+            dayCheckListAction=gson.fromJson(doc.toJson(),DayCheckListAction.class);
+            dayCheckListActions.add(dayCheckListAction);
+        }
+        return  dayCheckListActions;
+    }
+
+    public void addDaycheckListAction(DayCheckListAction dayCheckListAction){
+        mongoCollection=mongoDatabase.getCollection("daychecklistactions");
+        Gson gson=new GsonBuilder().create();
+        mongoCollection.insertOne(Document.parse(gson.toJson(dayCheckListAction)));
+
+    }
+
+    public void addDaycheckAction(DayChecksAcion Action){
+        mongoCollection=mongoDatabase.getCollection("daycheckactions");
+        Gson gson=new GsonBuilder().create();
+        mongoCollection.insertOne(Document.parse(gson.toJson(Action)));
+    }
+
+    public List<Annouce> getAnnouces(Subject subject){
+        List<Annouce> annouces=new ArrayList<>();
+        mongoCollection=mongoDatabase.getCollection("annouces");
+        Annouce ann;
+        Gson gson =new GsonBuilder().create();
+        MongoCursor cursor=mongoCollection.find(Filters.eq("belongtoSubject",subject.get_id().toString())).sort(new BasicDBObject("AnnouceTime",-1)).iterator();
+        while (cursor.hasNext())
+        {
+         Document doc=(Document)cursor.next();
+            ann=gson.fromJson(doc.toJson(),Annouce.class);
+            annouces.add(ann);
+        }
+
+        return  annouces;
+    }
+
+    public Annouce getAnnouceLatest(Subject subject)
+    {
+        Annouce annouce=null;
+        mongoCollection=mongoDatabase.getCollection("annouces");
+        Document doc=mongoCollection.find(Filters.eq("belongtoSubject",subject.get_id().toString())).sort(new BasicDBObject("AnnouceTime",-1)).first();
+if(doc==null)
+{
+    annouce=new Annouce("","",new Date());
+    return annouce;
+}
+        else
+{
+        Gson gson=new GsonBuilder().create();
+        annouce=gson.fromJson(doc.toJson(),Annouce.class);
+
+        return  annouce;
+}   }
+
+    public void addAnnouce(Subject subject,Annouce ann){
+        mongoCollection=mongoDatabase.getCollection("annouces");
+        Annouce annouce=ann;
+        Gson gson=new GsonBuilder().create();
+        ann.setBelongtoSubject(subject.get_id());
+        mongoCollection.insertOne(Document.parse(gson.toJson(ann)));
+    }
     public static File putFileFromBytes(byte[] b, String outputFile) {
         File ret = null;
         BufferedOutputStream stream = null;
@@ -423,5 +607,16 @@ public class MDBTools {
         }
 
         return result;
+    }
+
+
+    public Updateobj getUpdate(String apkname){
+
+        Updateobj updateobj;
+        mongoCollection=mongoDatabase.getCollection("update");
+        Document doc=mongoCollection.find(Filters.eq("apkname",apkname)).first();
+        Gson gson=new GsonBuilder().create();
+        updateobj= gson.fromJson(doc.toJson(),Updateobj.class);
+        return updateobj;
     }
 }

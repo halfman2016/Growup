@@ -11,6 +11,16 @@ public class Photo {
     private UUID _id= UUID.randomUUID();
     private byte[] photofile;
     private byte[] photopreview;
+    private Object picfileid;
+
+
+    public Object getPicfileid() {
+        return picfileid;
+    }
+
+    public void setPicfileid(Object picfileid) {
+        this.picfileid = picfileid;
+    }
 
     public UUID get_id() {
         return _id;

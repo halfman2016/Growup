@@ -18,6 +18,7 @@ public class People extends Object {
 
     public People(String name) {
         this.name=name;
+        this.pwd="123456";
     }
 
     public UUID get_id() {

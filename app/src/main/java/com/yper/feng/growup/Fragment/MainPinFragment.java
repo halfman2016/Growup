@@ -1,5 +1,6 @@
 package com.yper.feng.growup.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,7 +8,12 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.yper.feng.growup.Activity.MainActivity;
+import com.yper.feng.growup.Activity.PinPhotoActivity;
 import com.yper.feng.growup.Adapter.MainPinListAdapter;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Teacher;
@@ -34,7 +40,9 @@ public class MainPinFragment extends ListFragment {
             switch (msg.what)
             {
                 case 1:
-                    setListAdapter(new MainPinListAdapter(photopics,getContext()));
+if(isVisible()) {
+    setListAdapter(new MainPinListAdapter(photopics, getContext()));
+}
                     break;
             }
         }
@@ -47,6 +55,20 @@ public class MainPinFragment extends ListFragment {
         loaddata();
 
         return view;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+                MainPinListAdapter mainPinListAdapter= (MainPinListAdapter) getListAdapter();
+                Gson gson= new GsonBuilder().create();
+
+                Intent intent =new Intent(getContext(), PinPhotoActivity.class);
+                intent.putExtra("photopicjson",gson.toJson(mainPinListAdapter.getItem(position)));
+                teacher=((MainActivity)getActivity()).teacher;
+                intent.putExtra("teacherjson",gson.toJson(teacher));
+                startActivity(intent);
+
     }
 
     void loaddata()

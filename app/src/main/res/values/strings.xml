@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">补天成长</string>
+    <string name="app_name">补天德育</string>
 
     <!-- Strings related to login -->
     <string name="prompt_uid">账号</string>
@@ -67,5 +67,6 @@
     <string name="photoauthor">拍摄人</string>
     <string name="photomemo">拍摄说明</string>
 
+    <string name="savepeople">保存人员</string>
 
 </resources>

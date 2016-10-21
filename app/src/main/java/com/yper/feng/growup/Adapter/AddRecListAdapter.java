@@ -9,23 +9,25 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.yper.feng.growup.Module.DayChecksAcion;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Feng on 2016/8/25.
  */
 public class AddRecListAdapter extends BaseAdapter {
-    ArrayList<DayCommonAction> dayCommonActions =new ArrayList<>();
+    List<DayChecksAcion> dayChecksAcions =new ArrayList<>();
     Context context;
     LayoutInflater layoutInflater;
 
 
-    public AddRecListAdapter(ArrayList<DayCommonAction> dayCommonActions,Context context){
-        this.dayCommonActions=dayCommonActions;
+    public AddRecListAdapter(List<DayChecksAcion> dayChecksAcions, Context context){
+        this.dayChecksAcions=dayChecksAcions;
         this.context=context;
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -34,14 +36,14 @@ public class AddRecListAdapter extends BaseAdapter {
     @Override
 
     public int getCount() {
-        return dayCommonActions.size();
+        return dayChecksAcions.size();
     }
 
     @Override
     public Object getItem(int position) {
 
 
-        return dayCommonActions.get(position);
+        return dayChecksAcions.get(position);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class AddRecListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final DayCommonAction item=dayCommonActions.get(position);
+        final DayChecksAcion item=dayChecksAcions.get(position);
         final viewHolder vh;
         if (convertView==null)
         {
@@ -66,11 +68,10 @@ public class AddRecListAdapter extends BaseAdapter {
         else
 
         {
-
             vh= (viewHolder) convertView.getTag();
         }
 
-        vh.txtRecName.setText(item.getActionName());
+        vh.txtRecName.setText(item.getActionType());
 
         return convertView;
     }

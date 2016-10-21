@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.yper.feng.growup.Activity.PinPhotoActivity;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.R;
 
@@ -34,10 +31,12 @@ public class MainPinListAdapter extends BaseAdapter {
     private Context context;
 
     public MainPinListAdapter(List<Photopic> photolist, Context context) {
+        super();
         this.photolist = photolist;
         this.context = context;
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
 
     @Override
     public int getCount() {
@@ -78,20 +77,9 @@ public class MainPinListAdapter extends BaseAdapter {
         vh.photopic.setImageBitmap(BitmapFactory.decodeByteArray(item.getPhotopreview(), 0, item.getPhotopreview().length));
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (item.getPhotodate()!=null )vh.photodate.setText(sdf.format(item.getPhotodate()));
         vh.pinphoto.setImageResource(R.mipmap.pin);
-        vh.pinphoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("myapp","click on pinphoto");
-                Intent intent =new Intent();
-                intent.putExtra("photopid",item.get_id().toString());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setClassName(context, "com.yper.feng.growup.Activity.PinPhotoActivity");
-                context.startActivity(intent);
-            }
-        });
 
         return convertView;
 

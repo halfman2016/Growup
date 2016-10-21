@@ -14,11 +14,20 @@ public class Annouce {
     private Date AnnouceTime;
     private UUID _id=UUID.randomUUID();
     private UUID annouceauthorid;
+    private UUID belongtoSubject;
 
     public Annouce(String annouceauthor, String annouceBody, Date annouceTime) {
         Annouceauthor = annouceauthor;
         AnnouceBody = annouceBody;
         AnnouceTime = annouceTime;
+    }
+
+    public UUID getBelongtoSubject() {
+        return belongtoSubject;
+    }
+
+    public void setBelongtoSubject(UUID belongtoSubject) {
+        this.belongtoSubject = belongtoSubject;
     }
 
     public String getAnnouceauthor() {

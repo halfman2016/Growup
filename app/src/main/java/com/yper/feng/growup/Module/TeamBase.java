@@ -28,6 +28,10 @@ public class TeamBase extends Object {
 
     }
 
+    public UUID get_id() {
+        return _id;
+    }
+
     public String getName() {
         return Name;
     }

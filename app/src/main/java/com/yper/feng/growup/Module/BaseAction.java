@@ -18,6 +18,9 @@ public class BaseAction {
 
     }
 
+    public UUID get_id() {
+        return _id;
+    }
 
     public String getActionName() {
         return actionName;

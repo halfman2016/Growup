@@ -11,8 +11,8 @@ public class Student extends People {
     private int score;  //分数
     private String gradeclass;
     private UUID gradeclassid;
-    ArrayList<UUID> scoreActionsUUID = new ArrayList<>(); //相关行文记录集合 UUID
-
+    ArrayList<UUID> daycommonActionids = new ArrayList<>(); //记录日检查的内容
+    ArrayList<UUID> picPinActions=new ArrayList<>();  //记录标定的内容
     private String QQ;
 
     public Student(String name) {
@@ -52,12 +52,20 @@ public class Student extends People {
         this.gradeclassid = gradeclassid;
     }
 
-    public ArrayList<UUID> getScoreActionsUUID() {
-        return scoreActionsUUID;
+    public ArrayList<UUID> getDaycommonActionids() {
+        return daycommonActionids;
     }
 
-    public void setScoreActionsUUID(ArrayList<UUID> scoreActionsUUID) {
-        this.scoreActionsUUID = scoreActionsUUID;
+    public void setDaycommonActionids(ArrayList<UUID> scoreActionsUUID) {
+        this.daycommonActionids = scoreActionsUUID;
+    }
+
+    public ArrayList<UUID> getPicPinActions() {
+        return picPinActions;
+    }
+
+    public void setPicPinActions(ArrayList<UUID> picPinActions) {
+        this.picPinActions = picPinActions;
     }
 
     public String getQQ() {

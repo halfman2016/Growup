@@ -73,7 +73,8 @@ public class TakePhoto extends AppCompatActivity  {
 
 
         Bitmap bm=BitmapFactory.decodeFile(Utils.getPathByUri4kitkat(getBaseContext(),fileUri));
-        bm=bitmapresize(bm,1000);
+        bm=bitmapresize(bm,300);
+
 
         imageView=(ImageView)findViewById(R.id.imageView);
         photomemo=(EditText)findViewById(R.id.photomemo);
@@ -89,9 +90,12 @@ public class TakePhoto extends AppCompatActivity  {
         imageView.setImageBitmap(bm);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
         bm.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        bm=bitmapresize(bm,220);
-        //photopic.setPhotofile(baos.toByteArray());
+        photopic.setPhotofile(baos.toByteArray());
+
+        bm=bitmapresize(bm,150);
+
         bm.compress(Bitmap.CompressFormat.JPEG,80,baos);
         photopic.setPhotopreview(baos.toByteArray());
         Button btn= (Button) findViewById(R.id.btnLoadPhoto);
@@ -167,11 +171,11 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         super.onPostExecute(aBoolean);
         photopic.setPhotomemo(photomemo.getText().toString());
        if(subject==null) {
-           setResult(101);  //main调用
+           setResult(101);  //main调用 返回101
        }
         else
        {
-           setResult(102);  //subject调用
+           setResult(102);  //subject调用 返回102
        }
            finish();
     }
