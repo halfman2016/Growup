@@ -18,6 +18,15 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import com.qiniu.util.Auth;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +35,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
+
+import javax.crypto.Mac;
 
 /**
  * Created by Feng on 2016/8/17.
@@ -240,5 +253,70 @@ public class Utils {
         }
     }
 
+    public static String getToken()
+    {
+
+        String access_key="M69EWymSG8o0Y7Tl8T5iZ3pZlyceiCvMalynnli2";
+        String secret_key="1g3e5MsedHliY86oSZSH9RXFAdTeX0eD3eb9L3_-";
+        String bucketname="lizhibutian";
+        Auth auth=Auth.create(access_key,secret_key);
+
+        return auth.uploadToken(bucketname);
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+// pre-condition
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+// listItem.measure(0, 0);
+            listItem.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
+    public static void setGridViewHeightBasedOnChildren(int numColumns,GridView gridView) {
+
+
+        // 获取GridView对应的Adapter
+        ListAdapter listAdapter = gridView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) { // listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, gridView);
+            listItem.measure(0, 0); // 计算子项View 的宽高
+
+            if ((i+1)%numColumns == 0) {
+                totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度
+            }
+
+            if ((i+1) == len && (i+1)%numColumns != 0) {
+                totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度
+            }
+        }
+
+        totalHeight += 40;
+
+        ViewGroup.LayoutParams params = gridView.getLayoutParams();
+        params.height = totalHeight;
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        gridView.setLayoutParams(params);
+    }
+
 
 }
+

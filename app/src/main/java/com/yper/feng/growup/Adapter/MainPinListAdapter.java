@@ -1,19 +1,21 @@
 package com.yper.feng.growup.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.yper.feng.growup.Module.Photopic;
+import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.BitmapCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,11 +31,15 @@ public class MainPinListAdapter extends BaseAdapter {
     private List<Photopic> photolist =new ArrayList<>();
     private LayoutInflater layoutInflater;
     private Context context;
+    private RequestQueue queue;
+    private ImageLoader imageLoader;
 
     public MainPinListAdapter(List<Photopic> photolist, Context context) {
         super();
         this.photolist = photolist;
         this.context = context;
+        queue= Volley.newRequestQueue(this.context);
+        imageLoader=new ImageLoader(queue,new BitmapCache());
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -61,7 +67,7 @@ public class MainPinListAdapter extends BaseAdapter {
         {
             vh=new viewHolder();
             convertView=layoutInflater.inflate(R.layout.pin_item,parent,false);
-            vh.photopic= (ImageView) convertView.findViewById(R.id.photopic);
+            vh.photopic= (NetworkImageView) convertView.findViewById(R.id.photopic);
             vh.photoauthor= (TextView) convertView.findViewById(R.id.photoauthor);
             vh.photodate= (TextView) convertView.findViewById(R.id.photodate);
             vh.photomemo= (TextView) convertView.findViewById(R.id.photomemo);
@@ -74,7 +80,14 @@ public class MainPinListAdapter extends BaseAdapter {
             vh= (viewHolder) convertView.getTag();
         }
 
-        vh.photopic.setImageBitmap(BitmapFactory.decodeByteArray(item.getPhotopreview(), 0, item.getPhotopreview().length));
+
+        final String imgurl= MyApplication.getInstance().Url+item.getPicname();
+        if (item.getPicname()!=null && !item.getPicname().equals("")){
+            vh.photopic.setDefaultImageResId(R.mipmap.no_pic);
+            vh.photopic.setErrorImageResId(R.mipmap.no_pic);
+            vh.photopic.setImageUrl(imgurl,imageLoader);
+        }
+
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -85,7 +98,7 @@ public class MainPinListAdapter extends BaseAdapter {
 
     }
     static class viewHolder{
-        ImageView photopic;
+        NetworkImageView photopic;
         TextView photoauthor;
         TextView photodate;
         TextView photomemo;

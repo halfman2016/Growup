@@ -2,6 +2,7 @@ package com.yper.feng.growup.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,7 @@ import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +53,7 @@ public class SubjectDetailFragment extends Fragment {
     private TextView sdate=null;
     private TextView edate=null;
     private EditText txtSubject_info;
+    private EditText txtsubjectname;
 
     private int mYear;
     private int mMonth;
@@ -86,6 +89,8 @@ public class SubjectDetailFragment extends Fragment {
         gridView= (GridView) view.findViewById(R.id.mygridview);
         txtSubject_info=(EditText)view.findViewById(R.id.txtSubject_info);
         txtSubject_info.setText(subject.getSubjectInfo());
+        txtsubjectname= (EditText) view.findViewById(R.id.txtsubjectname);
+        txtsubjectname.setText(subject.getSubjectName());
         sdate=(TextView)view.findViewById(R.id.txtsdate);
         edate=(TextView)view.findViewById(R.id.txtedate);
 
@@ -185,6 +190,7 @@ loaddata();
             public void onClick(View v) {
 
                 subject.setSubjectInfo(txtSubject_info.getText().toString());
+                subject.setSubjectName(txtsubjectname.getText().toString());
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     subject.setStartTime(sdf.parse(sdate.getText().toString()));
@@ -197,7 +203,7 @@ loaddata();
                 if (instudents!=null)
                 {StudentsNameAdapter sta= (StudentsNameAdapter) gridView.getAdapter();
                     instudents=sta.getStudents();
-                subject.setStudents(instudents);}
+                    subject.setStudents(instudents);}
 
                 new Thread(){
                     @Override
@@ -213,9 +219,6 @@ loaddata();
     }
 
 
-
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -225,8 +228,6 @@ loaddata();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
     }
 
@@ -256,6 +257,7 @@ loaddata();
                 for(int i=0;i<gradeClassList.size();i++){
                     TextView txt = new TextView(getContext());
                     txt.setText(gradeClassList.get(i).getName());
+                    txt.setBackgroundColor(Color.WHITE);
 
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
@@ -267,19 +269,24 @@ loaddata();
                         @Override
                         public void onClick(View v) {
                             TextView tmp=(TextView) v;
+                            LinearLayout layout= (LinearLayout) getView().findViewById(R.id.classlist);
+                            for(int j=0;j<layout.getChildCount();j++)
+                            { layout.getChildAt(j).setBackgroundColor(Color.WHITE);}
                             for(int i=0;i<gradeClassList.size();i++)
                             {
                                 if (gradeClassList.get(i).getName()==tmp.getText())
                                 {
 
                                     gridView.setAdapter(new StudentsNameAdapter(gradeClassList.get(i).getStus(),instudents,getContext()));
-
+                                    tmp.setBackgroundColor(Color.YELLOW);
+                                    Utils.setGridViewHeightBasedOnChildren(3,gridView);
                                 }
                             }
                         }
                     });
 
                     gridView.setAdapter(new StudentsNameAdapter(instudents,instudents,getContext()));
+                    Utils.setGridViewHeightBasedOnChildren(3,gridView);
 
                 }
 

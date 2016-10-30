@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yongchun.library.view.ImageSelectorActivity;
 import com.yper.feng.growup.Adapter.SubjectMainFragmentAdapter;
 import com.yper.feng.growup.Fragment.SubjectAnnouceFragment;
 import com.yper.feng.growup.Fragment.SubjectDetailFragment;
@@ -43,7 +44,6 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class SubjectMain extends FragmentActivity {
 
-    private HashMap<String,Integer> defaultValues=new HashMap<>();
     private Uri fileUri;
 
     public Subject subject;
@@ -51,7 +51,11 @@ public class SubjectMain extends FragmentActivity {
     private Gson gson=new GsonBuilder().create();
     //list subjectActions
 
-
+    private SubjectListFragment subjectListFragment;
+    private SubjectDetailFragment subjectDetailFragment;
+    private SubjectPartakeFragment subjectPartakeFragment;
+    private SubjectAnnouceFragment subjectAnnouceFragment;
+    private SubjectPinFragment subjectPinFragment;
    // private List<>
 
 
@@ -173,11 +177,11 @@ public class SubjectMain extends FragmentActivity {
 
             //每个界面
 
-            SubjectListFragment subjectListFragment=new SubjectListFragment();
-            SubjectDetailFragment subjectDetailFragment=new SubjectDetailFragment();
-            SubjectAnnouceFragment subjectAnnouceFragment=new SubjectAnnouceFragment();
-            SubjectPartakeFragment subjectPartakeFragment=new SubjectPartakeFragment();
-            SubjectPinFragment subjectPinFragment=new SubjectPinFragment();
+            subjectListFragment=new SubjectListFragment();
+             subjectDetailFragment=new SubjectDetailFragment();
+             subjectAnnouceFragment=new SubjectAnnouceFragment();
+             subjectPartakeFragment=new SubjectPartakeFragment();
+             subjectPinFragment=new SubjectPinFragment();
 
 
             allfragment.add(subjectListFragment);
@@ -246,22 +250,14 @@ public class SubjectMain extends FragmentActivity {
             switch (v.getId()) {
                 case R.id.titlebar_camrec:
                     Log.d("myapp", "camrec");
-                    intent=new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    fileUri=getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-                    startActivityForResult(intent,200);
-
+                    ImageSelectorActivity.start(SubjectMain.this,1,ImageSelectorActivity.MODE_SINGLE,true,true,false);
                     break;
                 case R.id.titlebar_photo:
                     Log.d("myapp", "photo");
 
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                    int maxSelectNum=1;
+                    ImageSelectorActivity.start(SubjectMain.this, maxSelectNum, ImageSelectorActivity.MODE_SINGLE, true,true,false);
 
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-
-                    startActivityForResult(intent, 100);
                     break;
             }
         }
@@ -276,11 +272,15 @@ public class SubjectMain extends FragmentActivity {
         if (resultCode==0) return;  // 取消时退出
 
         switch (requestCode) {
-            case 100:
+            case ImageSelectorActivity.REQUEST_IMAGE:
 
                 //照相
                 intent = new Intent(this, TakePhoto.class);
-                intent.setData(fileUri);
+                ArrayList<String> images = (ArrayList<String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
+
+                String filname=images.get(0);
+
+                intent.putExtra("filename",filname);
                 intent.putExtra("teacher",gson.toJson(teacher));
                 intent.putExtra("subject",gson.toJson(subject));
                 startActivityForResult(intent, 103);
@@ -311,7 +311,8 @@ public class SubjectMain extends FragmentActivity {
 
             case 102:
                 //拍照返回程序
-
+                viewPager.setCurrentItem(0);
+                subjectListFragment.loaddata();
 
                 break;
         }
@@ -319,43 +320,6 @@ public class SubjectMain extends FragmentActivity {
     }
 
 
-    /** Create a file Uri for saving an image or video */
-    private  Uri getOutputMediaFileUri(int type){
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir=new File(getBaseContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),"growup");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("myapp", "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
 }
 
 

@@ -1,49 +1,41 @@
 package com.yper.feng.growup.Util;
-import android.os.Handler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndDeleteOptions;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
+import com.qiniu.common.QiniuException;
+import com.qiniu.storage.UploadManager;
 import com.yper.feng.growup.Module.Annouce;
 import com.yper.feng.growup.Module.DayCheckListAction;
-import com.yper.feng.growup.Module.DayChecksAcion;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.PicPinAction;
 import com.yper.feng.growup.Module.PinAction;
 import com.yper.feng.growup.Module.Rank;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.Module.Updateobj;
 
-import org.bson.BsonDocument;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
-import org.bson.types.Binary;
-import org.bson.types.ObjectId;
 
-
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -360,32 +352,27 @@ public class MDBTools {
     public boolean addPhoto(Photopic photopic) {
         mongoCollection=mongoDatabase.getCollection("photos");
         Gson gson=new GsonBuilder().create();
-//        DB db= (DB) mongoClient.getDB("lizhi");
-//
-//        GridFS mygridfs=new GridFS(db,"pics");
-//        com.mongodb.gridfs.GridFSFile file =mygridfs.createFile(photopic.getPhotopreview());
-//        file.save();
-//        Object id=file.getId();
-//        photopic.setPicfileid(id);
-//       // photopic.setPhotopreview(null);
-        //photopic.setPhotofile(null);
-        mongoCollection.insertOne(Document.parse(gson.toJson(photopic)));
+
+        String timeStamp = new SimpleDateFormat("yyMMdd_HHmmssSSS").format(new Date());
+        UploadManager uploadManager=new UploadManager();
+        String token=Utils.getToken();
+        try {
+            uploadManager.put(photopic.getPhotopreview(),timeStamp,token);
+            photopic.setPhotopreview(null);
+            photopic.setPhotofile(null);
+            photopic.setPicname(timeStamp);
+            mongoCollection.insertOne(Document.parse(gson.toJson(photopic)));
+
+        } catch (QiniuException e) {
+            e.printStackTrace();
+            return  false;
+        }
+
         return true;
 
     }
 
-    public byte[] getPhotoPicfile(Photopic photopic) throws IOException {
-        DB db=mongoClient.getDB("lizhi");
-        GridFS myfs=new GridFS(db,"pics");
-        GridFSDBFile file=myfs.findOne((ObjectId) photopic.getPicfileid());
-        ByteArrayOutputStream out=new ByteArrayOutputStream();
 
-        file.writeTo(out);
-
-        byte[] buffer=out.toByteArray();
-
-        return  buffer;
-    }
 
     public List<PicPinAction> getPicpinactions(Photopic photopic)
     {
@@ -451,22 +438,7 @@ public class MDBTools {
 
     }
 
-    public List<DayChecksAcion> getDayChecksActions(){
-        List<DayChecksAcion> dayChecksAcions=new ArrayList<>();
-        DayChecksAcion dayChecksAcion;
-        Gson gson=new GsonBuilder().create();
-        mongoCollection=mongoDatabase.getCollection("daycheckactions");
-        MongoCursor cursor=mongoCollection.find().iterator();
 
-        while (cursor.hasNext())
-        {
-            Document doc=(Document) cursor.next();
-            dayChecksAcion=gson.fromJson(doc.toJson(),DayChecksAcion.class);
-            dayChecksAcions.add(dayChecksAcion);
-        }
-
-        return dayChecksAcions;
-    }
 
     public  List<DayCheckListAction> getDayCheckListActions(String typeName){
         List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
@@ -483,6 +455,14 @@ public class MDBTools {
         return  dayCheckListActions;
     }
 
+    public List getDayCheckListType(){
+        DB db=mongoClient.getDB("lizhi");
+        DBCollection collection=db.getCollection("daychecklistactions");
+        List cl1=collection.distinct("actionType");
+
+     return cl1;
+    }
+
     public void addDaycheckListAction(DayCheckListAction dayCheckListAction){
         mongoCollection=mongoDatabase.getCollection("daychecklistactions");
         Gson gson=new GsonBuilder().create();
@@ -490,11 +470,6 @@ public class MDBTools {
 
     }
 
-    public void addDaycheckAction(DayChecksAcion Action){
-        mongoCollection=mongoDatabase.getCollection("daycheckactions");
-        Gson gson=new GsonBuilder().create();
-        mongoCollection.insertOne(Document.parse(gson.toJson(Action)));
-    }
 
     public List<Annouce> getAnnouces(Subject subject){
         List<Annouce> annouces=new ArrayList<>();

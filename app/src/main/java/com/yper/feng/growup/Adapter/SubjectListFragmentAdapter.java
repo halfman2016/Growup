@@ -13,8 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.yper.feng.growup.Module.Photopic;
+import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.BitmapCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,10 +36,14 @@ public class SubjectListFragmentAdapter extends BaseAdapter {
     private List<Photopic> photolist =new ArrayList<>();
     private LayoutInflater layoutInflater;
     private Context context;
+    private RequestQueue queue;
+    private ImageLoader imageLoader;
 
     public SubjectListFragmentAdapter(List<Photopic> photolist, Context context) {
         this.photolist = photolist;
         this.context = context;
+        queue= Volley.newRequestQueue(context);
+        imageLoader=new ImageLoader(queue,new BitmapCache());
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -61,7 +71,7 @@ public class SubjectListFragmentAdapter extends BaseAdapter {
         {
             vh=new viewHolder();
             convertView=layoutInflater.inflate(R.layout.subject_list_photo_item,parent,false);
-            vh.photopic= (ImageView) convertView.findViewById(R.id.photopic);
+            vh.photopic= (NetworkImageView) convertView.findViewById(R.id.photopic);
             vh.photoauthor= (TextView) convertView.findViewById(R.id.photoauthor);
             vh.photodate= (TextView) convertView.findViewById(R.id.photodate);
             vh.photomemo= (TextView) convertView.findViewById(R.id.photomemo);
@@ -74,7 +84,8 @@ public class SubjectListFragmentAdapter extends BaseAdapter {
             vh= (viewHolder) convertView.getTag();
         }
 
-        vh.photopic.setImageBitmap(BitmapFactory.decodeByteArray(item.getPhotopreview(),0,item.getPhotopreview().length));
+        String url= MyApplication.getInstance().Url+item.getPicname();
+        vh.photopic.setImageUrl(url,imageLoader);
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -84,7 +95,7 @@ public class SubjectListFragmentAdapter extends BaseAdapter {
     }
 
     static class viewHolder{
-        ImageView photopic;
+        NetworkImageView photopic;
         TextView photoauthor;
         TextView photodate;
         TextView photomemo;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ public class MainPinFragment extends ListFragment {
     private Teacher teacher;
     private Photopic photopic;
     private List<Photopic> photopics=new ArrayList<>();
-
     private MDBTools mdbTools=new MDBTools();
     public Handler myhandler=new Handler(){
 
@@ -52,9 +52,14 @@ if(isVisible()) {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pin, container, false);
 
+        return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         loaddata();
 
-        return view;
     }
 
     @Override
@@ -71,13 +76,15 @@ if(isVisible()) {
 
     }
 
-    void loaddata()
+
+
+    public void loaddata()
     {
         new Thread(){
             @Override
             public void run() {
                 super.run();
-              photopics=  mdbTools.getfreePhotopic();
+                photopics=  mdbTools.getfreePhotopic();
                 Message msg=new Message();
                 msg.what=1;
                 myhandler.sendMessage(msg);

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,7 +58,7 @@ public class TakePhoto extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
         Intent intent=getIntent();
-        fileUri=intent.getData();
+        String filename=intent.getStringExtra("filename");
 
         teacher=gson.fromJson(intent.getStringExtra("teacher"),Teacher.class);
 
@@ -72,8 +73,8 @@ public class TakePhoto extends AppCompatActivity  {
         }
 
 
-        Bitmap bm=BitmapFactory.decodeFile(Utils.getPathByUri4kitkat(getBaseContext(),fileUri));
-        bm=bitmapresize(bm,300);
+        Bitmap bm=BitmapFactory.decodeFile(filename);
+        bm=bitmapresize(bm,800);
 
 
         imageView=(ImageView)findViewById(R.id.imageView);
@@ -92,11 +93,7 @@ public class TakePhoto extends AppCompatActivity  {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         bm.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        photopic.setPhotofile(baos.toByteArray());
 
-        bm=bitmapresize(bm,150);
-
-        bm.compress(Bitmap.CompressFormat.JPEG,80,baos);
         photopic.setPhotopreview(baos.toByteArray());
         Button btn= (Button) findViewById(R.id.btnLoadPhoto);
         MyListener myListener=new MyListener();
@@ -155,9 +152,17 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         photopic.setPhotodate(new Date());
         photopic.setPhotoauthor(teacher.getName());
         publishProgress(1,1);
-        mdbTools.addPhoto(photopic);
-        return true;
+        if (mdbTools.addPhoto(photopic))
+        {
 
+            return true;
+        }
+        else
+        {
+            //Toast.makeText(getBaseContext(), "上传失败！请核对手机时间，时间不正确将不能上传！", Toast.LENGTH_SHORT);
+            return false;
+
+        }
     }
 
     @Override

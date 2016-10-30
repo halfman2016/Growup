@@ -17,6 +17,7 @@ import com.yper.feng.growup.Activity.PinPhotoActivity;
 import com.yper.feng.growup.Module.PicPinAction;
 import com.yper.feng.growup.Module.PinAction;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.Utils;
 
 import org.w3c.dom.Text;
 
@@ -92,6 +93,7 @@ if (convertView==null){
                 list.add(p2);
                 list.add(p3);
                 listView.setAdapter(new AlreadyPinAdapter(list,context));
+                Utils.setListViewHeightBasedOnChildren(listView);
             }
         });
 

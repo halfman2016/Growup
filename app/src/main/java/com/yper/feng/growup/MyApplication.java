@@ -2,6 +2,7 @@ package com.yper.feng.growup;
 
 import android.app.Application;
 
+import java.security.PublicKey;
 import java.util.HashMap;
 
 /**
@@ -11,7 +12,7 @@ public class MyApplication extends Application {
     private  HashMap<String,Integer> defaultValues;
     private static MyApplication instance;
     private static String username;
-
+    public static String Url="http://lizhibutian.boteteam.com/";
 
     @Override
     public void onCreate() {

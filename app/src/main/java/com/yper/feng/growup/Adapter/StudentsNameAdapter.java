@@ -1,6 +1,7 @@
 package com.yper.feng.growup.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.yper.feng.growup.Fragment.SubjectDetailFragment;
 import com.yper.feng.growup.Module.Student;
+import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
 
 import java.util.ArrayList;
@@ -58,6 +60,9 @@ public class StudentsNameAdapter extends BaseAdapter {
         if(convertView ==null){
             box = new CheckBox(context);
             box.setText(student.getName());
+            box.setTextColor(Color.BLACK);
+            box.setButtonDrawable(R.drawable.checkbox);
+
         }else{
             box = (CheckBox)convertView;
         }
@@ -67,6 +72,7 @@ public class StudentsNameAdapter extends BaseAdapter {
             for (int i = 0; i < students.size(); i++) {
                 if (students.get(i).get_id().toString().equals(student.get_id().toString())) {
                     box.setChecked(true);
+
                     break;
                 }
             }
@@ -78,14 +84,14 @@ public class StudentsNameAdapter extends BaseAdapter {
                 if (isChecked==true)
                 {
                     students.add(student);
-
+                    box.setTextColor(Color.BLUE);
 
                 }
                 if (isChecked==false){
                     int result=studentshave(students,student);
                     if (result!=-1) {
                         students.remove(result);
-
+                        box.setTextColor(Color.BLACK);
                     }
                 }
 

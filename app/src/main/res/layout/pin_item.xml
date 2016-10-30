@@ -41,7 +41,7 @@
             android:layout_toEndOf="@+id/photoauthor"
             android:layout_marginLeft="5dp" />
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:layout_height="150dp"
             app:srcCompat="@mipmap/no_pic"
             android:id="@+id/photopic"

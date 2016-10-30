@@ -68,5 +68,6 @@
     <string name="photomemo">拍摄说明</string>
 
     <string name="savepeople">保存人员</string>
+    <string name="subjectname">专题名称</string>
 
 </resources>

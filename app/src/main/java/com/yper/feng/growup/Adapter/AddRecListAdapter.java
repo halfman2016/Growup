@@ -1,17 +1,12 @@
 package com.yper.feng.growup.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.yper.feng.growup.Module.DayChecksAcion;
-import com.yper.feng.growup.Module.DayCommonAction;
-import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.R;
 
 import java.util.ArrayList;
@@ -21,12 +16,12 @@ import java.util.List;
  * Created by Feng on 2016/8/25.
  */
 public class AddRecListAdapter extends BaseAdapter {
-    List<DayChecksAcion> dayChecksAcions =new ArrayList<>();
+    List dayChecksAcions =new ArrayList<>();
     Context context;
     LayoutInflater layoutInflater;
 
 
-    public AddRecListAdapter(List<DayChecksAcion> dayChecksAcions, Context context){
+    public AddRecListAdapter(List dayChecksAcions, Context context){
         this.dayChecksAcions=dayChecksAcions;
         this.context=context;
         this.layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -54,7 +49,7 @@ public class AddRecListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final DayChecksAcion item=dayChecksAcions.get(position);
+        final String item= (String) dayChecksAcions.get(position);
         final viewHolder vh;
         if (convertView==null)
         {
@@ -71,7 +66,7 @@ public class AddRecListAdapter extends BaseAdapter {
             vh= (viewHolder) convertView.getTag();
         }
 
-        vh.txtRecName.setText(item.getActionType());
+        vh.txtRecName.setText(item);
 
         return convertView;
     }

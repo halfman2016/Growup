@@ -18,24 +18,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/titleday"
-                    android:layout_marginLeft="141dp"
-                    android:id="@+id/txtTitle"
-                    android:layout_marginStart="141dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,6 +47,14 @@
                     android:layout_toRightOf="@+id/txtTitle"
                     android:layout_toEndOf="@+id/txtTitle" />
 
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/titleday"
+                    android:id="@+id/txtTitle"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+
 
             </RelativeLayout>
 
@@ -66,84 +62,13 @@
             <ListView
                 android:layout_width="match_parent"
                 android:id="@+id/list_stu_common_action"
-                android:layout_height="200dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:orientation="horizontal"
-                android:id="@+id/classlist"
-                android:layout_marginLeft="5dp">
-
-
-                <TextView
-                    android:text="@string/qixin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/txtclass1" />
-
-                <TextView
-                    android:text="@string/class81"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass2"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="@string/class82"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass3"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="@string/class83"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass4"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="@string/class91"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass5"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="@string/class92"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass6"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="@string/class93"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtclass7"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <GridView
-                android:id="@+id/mygridview"
-                android:numColumns="3"
-                android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:stretchMode="columnWidth"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:descendantFocusability="beforeDescendants"
-                android:layout_height="160dp" />
+                android:layout_height="wrap_content"
+                />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -161,18 +86,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView30"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginStart="27dp"
+                    android:text="@string/promptdaypic"
+                    android:layout_alignTop="@+id/imageView2"
                     android:layout_toRightOf="@+id/imageView2"
-                    android:layout_toEndOf="@+id/imageView2"
-                    android:text="@string/promptdaypic" />
+                    android:layout_toEndOf="@+id/imageView2" />
 
             </RelativeLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -189,6 +115,7 @@
                     android:layout_weight="1"
                     android:text="@string/promptcancel"
                     android:onClick="cancel" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -32,7 +32,7 @@ import java.util.List;
 public class SubjectListFragment extends ListFragment {
     private List<Photopic> photopicList =new ArrayList<>();
     private String annouce;
-private TextView txtannouce;
+    private TextView txtannouce;
     private MDBTools mdb=new MDBTools();
 private Subject subject;
     private Teacher teacher;
@@ -47,19 +47,13 @@ private Subject subject;
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initData();
-
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         teacher=((SubjectMain)getActivity()).teacher;
         subject=((SubjectMain)getActivity()).subject;
-        initData();
+        loaddata();
 //        Photopic photopic1 =new Photopic();
 //        Photopic photopic2 =new Photopic();
 //        photopic1.setPhotoauthor("张晓帅");
@@ -89,7 +83,7 @@ private Handler myhandler=new Handler(){
         }
     }
 };
-    void  initData()
+   public void  loaddata()
     {
         new Thread(){
 

@@ -7,8 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.BitmapCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,8 +23,7 @@ import java.util.List;
  */
 
 public class MainSubjectListAdapter extends BaseAdapter {
-
-    public List<Subject> items = new ArrayList<>();
+    private List<Subject> items = new ArrayList<>();
     private LayoutInflater layoutInflater = null;
     private Context context;
 

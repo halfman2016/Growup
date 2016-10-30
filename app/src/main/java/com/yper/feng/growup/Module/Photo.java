@@ -11,15 +11,15 @@ public class Photo {
     private UUID _id= UUID.randomUUID();
     private byte[] photofile;
     private byte[] photopreview;
-    private Object picfileid;
+    private String picname;
 
 
-    public Object getPicfileid() {
-        return picfileid;
+    public String getPicname() {
+        return picname;
     }
 
-    public void setPicfileid(Object picfileid) {
-        this.picfileid = picfileid;
+    public void setPicname(String picname) {
+        this.picname = picname;
     }
 
     public UUID get_id() {

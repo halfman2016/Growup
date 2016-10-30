@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.media.RatingCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yongchun.library.view.ImageSelectorActivity;
 import com.yper.feng.growup.Adapter.MainInfoListAdapter;
 import com.yper.feng.growup.Adapter.MainFragmentAdapter;
 import com.yper.feng.growup.Adapter.MainPinListAdapter;
@@ -72,7 +74,6 @@ public class MainActivity extends FragmentActivity {
         initViews();
         initEvents();
         MyApplication myApplication=MyApplication.getInstance();
-
         Intent intent=getIntent();
         String teacherjson=intent.getStringExtra("teacherjson");
         Gson gson= new GsonBuilder().create();
@@ -117,12 +118,15 @@ public class MainActivity extends FragmentActivity {
                 case R.id.titlebar_photo:
                     Log.d("myapp", "photo");
 
-                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                     fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                     fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+//
+//                    startActivityForResult(intent, 100);
+                    int maxSelectNum=1;
+                    ImageSelectorActivity.start(MainActivity.this, maxSelectNum, ImageSelectorActivity.MODE_SINGLE, true,true,false);
 
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-                    startActivityForResult(intent, 100);
                     break;
             }
         }
@@ -134,15 +138,20 @@ public class MainActivity extends FragmentActivity {
 
         Log.d("myapp",String.valueOf(resultCode) );
 
+
         Intent intent;
         if (resultCode==0) return;  // 取消时退出
 
+
+
         switch (requestCode) {
-            case 100:
+            case ImageSelectorActivity.REQUEST_IMAGE:
 
                     //照相
-                    intent = new Intent(MainActivity.this, TakePhoto.class);
-                    intent.setData(fileUri);
+                intent = new Intent(MainActivity.this, TakePhoto.class);
+                ArrayList<String> images = (ArrayList<String>) data.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
+                String filename= (images.get(0));
+                intent.putExtra("filename",filename);
                 Gson gson=new GsonBuilder().create();
                 intent.putExtra("teacher",gson.toJson(teacher));
                 startActivityForResult(intent, 103);
@@ -173,12 +182,16 @@ public class MainActivity extends FragmentActivity {
                 Log.d("myapp" ,"返回的值是:"+data.getStringExtra("actiontype"));
                 intent=new Intent(getBaseContext(),AddRecMain.class);
                 intent.putExtra("actiontype",data.getStringExtra("actiontype"));
+                Gson gson=new GsonBuilder().create();
+                intent.putExtra("teacherjson",gson.toJson(teacher));
                 startActivityForResult(intent,400);
                 break;
             case 101:
                 //拍照返回
 
                 viewPager.setCurrentItem(2);
+                mainPinFragment.loaddata();
+
                 break;
 
             case 401:

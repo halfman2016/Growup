@@ -2,43 +2,40 @@ package com.yper.feng.growup.Activity;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.ListFragment;
-import android.support.v4.media.RatingCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yper.feng.growup.Adapter.PinPhotoActionAdapter;
 import com.yper.feng.growup.Adapter.StudentsNameAdapter;
-import com.yper.feng.growup.Module.BaseAction;
-import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.PicPinAction;
 import com.yper.feng.growup.Module.PinAction;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Teacher;
+import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.BitmapCache;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class PinPhotoActivity extends ListActivity {
     private MDBTools mdb=new MDBTools();
@@ -58,13 +55,17 @@ public class PinPhotoActivity extends ListActivity {
     private Teacher teacher;
     private Photopic photopic;
     private GridView gridView;
-    private ImageView imageView;
+    private ImageLoader imageLoader;
+    private RequestQueue queue;
+    private NetworkImageView imageView;
     private ArrayList<HashMap<String,Object>> lstNameItem=new ArrayList<HashMap<String,Object>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_photo);
+        queue= Volley.newRequestQueue(getBaseContext());
+        imageLoader=new ImageLoader(queue,new BitmapCache());
         Intent intent=getIntent();
         Gson gson= new GsonBuilder().create();
         teacher=gson.fromJson(intent.getStringExtra("teacherjson"),Teacher.class);
@@ -80,7 +81,7 @@ public class PinPhotoActivity extends ListActivity {
 
         }
 
-        imageView= (ImageView) findViewById(R.id.photopic);
+        imageView= (NetworkImageView) findViewById(R.id.photopic);
         gridView=(GridView)findViewById(R.id.mygridview);
         loaddata();
 
@@ -95,7 +96,8 @@ public class PinPhotoActivity extends ListActivity {
         {
             case 1:
                 initView();
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(photopic.getPhotopreview(),0,photopic.getPhotopreview().length));
+
+                imageView.setImageUrl(MyApplication.getInstance().Url+photopic.getPicname(),imageLoader);
                 break;
         }
         }
@@ -132,6 +134,7 @@ public class PinPhotoActivity extends ListActivity {
         for(int i=0;i<gradeClassList.size();i++){
             TextView txt = new TextView(getBaseContext());
             txt.setText(gradeClassList.get(i).getName());
+            txt.setBackgroundColor(Color.WHITE);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
             txt.setLayoutParams(lp);
@@ -141,23 +144,39 @@ public class PinPhotoActivity extends ListActivity {
                 @Override
                 public void onClick(View v) {
                     TextView tmp=(TextView) v;
+                    LinearLayout linearLayout1= (LinearLayout) findViewById(R.id.classlist);
+                   for(int j=0;j<linearLayout1.getChildCount();j++)
+                   {
+                       linearLayout1.getChildAt(j).setBackgroundColor(Color.WHITE);
+                   }
                     for(int i=0;i<gradeClassList.size();i++)
                     {
                         if (gradeClassList.get(i).getName()==tmp.getText())
                         {
+
                             gridView.setAdapter(new StudentsNameAdapter(gradeClassList.get(i).getStus(),instudents,getBaseContext()));
+
+                            tmp.setBackgroundColor(Color.YELLOW);
+                            Utils.setGridViewHeightBasedOnChildren(3,gridView);
 
                         }
                     }
+
                 }
+
+
             });
 
         }
 
         gridView.setAdapter(new StudentsNameAdapter(instudents,instudents,getBaseContext()));
+        Utils.setGridViewHeightBasedOnChildren(3,gridView);
+
         //显示项目
 
         setListAdapter(new PinPhotoActionAdapter(pinActions,this));
+        Utils.setListViewHeightBasedOnChildren(getListView());
+
 
     }
 //    private  void initdata(){
