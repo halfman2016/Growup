@@ -91,7 +91,11 @@ if(isVisible()) {
         return  view;
     }
 
-    private void loaddata()
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+ public    void loaddata()
     {
         new Thread(){
             @Override

@@ -19,7 +19,8 @@
             android:id="@+id/photoauthor"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:clickable="false" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
             android:id="@+id/photodate"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:clickable="false" />
 
         <com.android.volley.toolbox.NetworkImageView
             app:srcCompat="@mipmap/no_pic"
@@ -46,8 +48,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/photomemo" />
+        android:id="@+id/photomemo"
+        android:clickable="false" />
 </LinearLayout>

@@ -177,7 +177,7 @@ public class SubjectMain extends FragmentActivity {
 
             //每个界面
 
-            subjectListFragment=new SubjectListFragment();
+                subjectListFragment=new SubjectListFragment();
              subjectDetailFragment=new SubjectDetailFragment();
              subjectAnnouceFragment=new SubjectAnnouceFragment();
              subjectPartakeFragment=new SubjectPartakeFragment();
@@ -318,6 +318,8 @@ public class SubjectMain extends FragmentActivity {
         }
 
     }
+
+
 
 
 }

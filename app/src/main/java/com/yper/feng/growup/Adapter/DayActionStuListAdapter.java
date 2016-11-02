@@ -30,6 +30,7 @@ public class DayActionStuListAdapter extends BaseAdapter {
 
     private List<Student> students=new ArrayList<>();
     private List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
+
     private Context context;
     private LayoutInflater layoutInflater;
 
@@ -85,29 +86,64 @@ public class DayActionStuListAdapter extends BaseAdapter {
             ll.setOrientation(LinearLayout.HORIZONTAL);
             Spinner spinner=new Spinner(context);
             TextView txtactionname=new TextView(context);
+            txtactionname.setWidth(450);
             txtactionname.setTextColor(Color.DKGRAY);
+            txtactionname.setBackgroundColor(Color.WHITE);
             txtactionname.setText(dayCheckListActions.get(i).getActionName());
 
            int value= dayCheckListActions.get(i).getDefaultvalue();
-            List list = new ArrayList();
-            list.add(value);
-            for (int ii=0;ii<value*3+1;ii++)
+
+            if(value>=0)
             {
-                list.add(2*value-ii);
+                List list = new ArrayList();
+
+                for (int ii=0;ii<value*3+1;ii++)
+                {
+                    list.add(2*value-ii);
+                }
+
+                ArrayAdapter adapter=new ArrayAdapter(context,R.layout.day_check_item,list);
+                adapter.setDropDownViewResource(R.layout.dropdownstyle);
+                spinner.setAdapter(adapter);
+
+                if (dayCheckListActions.get(i).isDayaddscore())
+                {
+                    spinner.setSelection(value);
+
+                }
+                else {
+                    spinner.setSelection(2*value);
+
+                }
+
+            }
+            else
+            {
+                List list=new ArrayList();
+                for(int ii=0;ii>2*value-1;ii--)
+                {
+                    list.add(ii);
+                }
+                ArrayAdapter adapter=new ArrayAdapter(context,R.layout.day_check_item,list);
+                adapter.setDropDownViewResource(R.layout.dropdownstyle);
+                spinner.setAdapter(adapter);
+
+                spinner.setSelection(0);
+
             }
 
-            ArrayAdapter adapter=new ArrayAdapter(context,R.layout.day_check_item,list);
-            adapter.setDropDownViewResource(R.layout.dropdownstyle);
-            spinner.setAdapter(adapter);
+
+
             ll.addView(txtactionname);
             ll.addView(spinner);
+
             vh.actions.addView(ll);
 
 
         }
 
         ViewGroup.LayoutParams lp=vh.actions.getLayoutParams();
-        lp.height=100*dayCheckListActions.size();
+        lp.height=105*dayCheckListActions.size();
         vh.actions.setLayoutParams(lp);
 
         return  convertView;

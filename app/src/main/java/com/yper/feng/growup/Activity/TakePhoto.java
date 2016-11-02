@@ -49,6 +49,7 @@ public class TakePhoto extends AppCompatActivity  {
     Photopic photopic=new Photopic();
     EditText photomemo;
     TextView photoauthor;
+    String strphotomemo;
     TextView photodate;
     ProgressBar progressBar;
     Gson gson=new GsonBuilder().create();
@@ -128,6 +129,7 @@ public class TakePhoto extends AppCompatActivity  {
             if (view.getId()==R.id.btnLoadPhoto)
             {
                 Log.d("myapp","hello loadphoto");
+                strphotomemo=photomemo.getText().toString();
                 addPhotoTask ad=new addPhotoTask();
                 progressBar.setVisibility(View.VISIBLE);
                 ad.execute();
@@ -151,6 +153,7 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         photopic.setPhotoauthorid(teacher.get_id());
         photopic.setPhotodate(new Date());
         photopic.setPhotoauthor(teacher.getName());
+        photopic.setPhotomemo(strphotomemo);
         publishProgress(1,1);
         if (mdbTools.addPhoto(photopic))
         {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -113,6 +114,11 @@ public class AddRecMain extends AppCompatActivity {
 
 
         }.start();
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("日常规-"+typeName);
+        setSupportActionBar(toolbar);
     }
 
    public void cancel(View view){
@@ -122,12 +128,8 @@ public class AddRecMain extends AppCompatActivity {
    public void save(View view){
 
 
+       DayActionStuListAdapter dayActionStuListAdapter= (DayActionStuListAdapter) listView.getAdapter();
 
-      for(int i=0;i<listView.getChildCount();i++)
-      {
-          View resultview=listView.getChildAt(i);
-
-      }
 
    }
 }

@@ -62,6 +62,7 @@ public class MainActivity extends FragmentActivity {
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     private MainPinFragment mainPinFragment = new MainPinFragment();
+    private MainSubjectFragment mainSubjectFragment=new MainSubjectFragment();
 
 
     private MDBTools mdb=new MDBTools();
@@ -204,7 +205,7 @@ public class MainActivity extends FragmentActivity {
             case 1001:
                 //subject刷新
                 Log.d("myapp","subject refresh");
-
+                mainSubjectFragment.loaddata();
                 break;
 
 
@@ -286,41 +287,8 @@ public class MainActivity extends FragmentActivity {
         items.add(item3);
         items.add(item4);
 
-        Subject s1=new Subject("黄陂游学活动");
-        Subject s2=new Subject("参观科技馆");
-
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            s1.setStartTime(simpleDateFormat.parse("2016-10-1"));
-            s1.setEndTime(simpleDateFormat.parse("2016-10-4"));
-            s2.setStartTime(simpleDateFormat.parse("2016-10-1"));
-            s2.setEndTime(simpleDateFormat.parse("2016-10-3"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
 
-        s1.setSubjectInfo("我们组织去黄陂游学,住在大余湾,4天时间。从小伙伴身上学习必须学习到的东西。大家努力!");
-        s2.setSubjectInfo("去江滩的武汉科技馆,3天时间,大家学习新技术,脑子里存在的问题,现场钻研琢磨。");
-        subjectItems.add(s1);
-        subjectItems.add(s2);
-
-        //pinphoto数据初始化
-//
-//        Photopic photopic1=new Photopic();
-//        Photopic photopic2=new Photopic();
-//
-//        photopic1.setPhotomemo("抓拍一下");
-//        photopic1.setPhotodate(new Date());
-//        //photopic1.setPhotopic();
-//        photopic2.setPhotomemo("做的真棒");
-//        photopic2.setPhotodate(new Date());
-//        photopic1.setPhotoauthor("王强");
-//        photopic2.setPhotoauthor("李老师");
-//
-//        photopics.add(photopic1);
-//        photopics.add(photopic2);
 
 
     }
@@ -363,8 +331,6 @@ public class MainActivity extends FragmentActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         MainInfoFragment mainInfoFragment = new MainInfoFragment();
-        MainSubjectFragment mainSubjectFragment = new MainSubjectFragment();
-        MainPinFragment mainPinFragment = new MainPinFragment();
         MainAnalysisFragment mainAnalysisFragment = new MainAnalysisFragment();
 
         List<Fragment> alFragment = new ArrayList<>();

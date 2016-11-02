@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.yper.feng.growup.Adapter.AddRecListAdapter;
+import com.yper.feng.growup.Module.DayCheckListAction;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
 
@@ -61,8 +62,21 @@ private MDBTools mdb=new MDBTools();
             }
         }.start();
 
+
     }
 
+    void writedata(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                DayCheckListAction day1=new DayCheckListAction("不用心听讲","上课纪律检查",-2);
+                DayCheckListAction day2=new DayCheckListAction("用心听讲","上课纪律检查",2);
+                mdb.addDaycheckListAction(day1);
+                mdb.addDaycheckListAction(day2);
+            }
+        }.start();
+    }
 
 
 

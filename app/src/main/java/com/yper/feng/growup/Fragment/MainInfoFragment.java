@@ -17,7 +17,6 @@ public class MainInfoFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         TextView mainwho=(TextView)view.findViewById(R.id.mainWho);
         mainwho.setText(((MainActivity)getActivity()).teacher.getName());

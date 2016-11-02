@@ -67,7 +67,7 @@ public class StudentsNameAdapter extends BaseAdapter {
             box = (CheckBox)convertView;
         }
 
-        {
+
 
             for (int i = 0; i < students.size(); i++) {
                 if (students.get(i).get_id().toString().equals(student.get_id().toString())) {
@@ -76,7 +76,7 @@ public class StudentsNameAdapter extends BaseAdapter {
                     break;
                 }
             }
-        }
+
         box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

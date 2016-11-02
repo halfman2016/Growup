@@ -261,6 +261,27 @@ public class MDBTools {
 
     }
 
+
+    public void savePicPinAcions(List<PicPinAction> picPinActions,Photopic photopic){
+
+        mongoCollection=mongoDatabase.getCollection("picpinactions");
+
+        mongoCollection.deleteMany(Filters.eq("picsrcid",photopic.get_id().toString()));
+
+
+        if (picPinActions.size()>0) {
+            Gson gson = new GsonBuilder().create();
+            Document doc = new Document();
+            List<Document> docs = new ArrayList<>();
+
+            for (PicPinAction pic : picPinActions) {
+                doc = Document.parse(gson.toJson(pic));
+                docs.add(doc);
+            }
+            mongoCollection.insertMany(docs);
+        }
+        }
+
     public  void saveGradeClass(GradeClass gc){
 
         mongoCollection = mongoDatabase.getCollection("classes");
@@ -378,7 +399,7 @@ public class MDBTools {
     {
         List<PicPinAction> picPinActions=new ArrayList<>();
         PicPinAction picPinAction;
-        mongoCollection=mongoDatabase.getCollection("pincpinactions");
+        mongoCollection=mongoDatabase.getCollection("picpinactions");
         MongoCursor mongoCursor=mongoCollection.find(Filters.eq("picsrcid",photopic.get_id().toString())).iterator();
         while (mongoCursor.hasNext()){
             Document doc=(Document)mongoCursor.next();
@@ -582,6 +603,14 @@ if(doc==null)
         }
 
         return result;
+    }
+
+    public void addPinAction(PinAction pinAction)
+    {
+         mongoCollection=mongoDatabase.getCollection("pinactions");
+        Gson gson=new GsonBuilder().create();
+        Document doc=Document.parse(gson.toJson(pinAction));
+        mongoCollection.insertOne(doc);
     }
 
 

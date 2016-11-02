@@ -12,4 +12,11 @@ public class PicPinAction extends ScoreAction {
         super(actionName, actionType, actionScoreValue);
     }
 
+    public UUID getPicsrcid() {
+        return picsrcid;
+    }
+
+    public void setPicsrcid(UUID picsrcid) {
+        this.picsrcid = picsrcid;
+    }
 }

@@ -32,8 +32,8 @@ public class ScoreAction extends BaseAction {
     //最小构造函数，必须有分值
     public ScoreAction(String actionName, String actionType, int actionScoreValue) {
         super(actionName, actionType);
+        actionValue=actionScoreValue;
     }
-
 
     //常用构造函数，带分值,发生时间，默认pin时间今日
 

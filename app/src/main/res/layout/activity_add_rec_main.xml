@@ -11,7 +11,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.yper.feng.growup.Activity.AddRecMain"
     android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorAccent"
+            app:popupTheme="@style/Widget.AppCompat.PopupMenu" />
+
+    </android.support.design.widget.AppBarLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,26 +46,20 @@
                     android:layout_below="@+id/txtTitle"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="11dp" />
+                    android:layout_marginTop="11dp"
+                    android:text="ddddd"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/txtactioncheckteacher"
                     android:layout_marginLeft="44dp"
-                    android:layout_marginStart="44dp"
-                    android:layout_alignBaseline="@+id/txtActiondate"
-                    android:layout_alignBottom="@+id/txtActiondate"
-                    android:layout_toRightOf="@+id/txtTitle"
-                    android:layout_toEndOf="@+id/txtTitle" />
-
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/titleday"
-                    android:id="@+id/txtTitle"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
+                    android:text="ddddddd"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="77dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
             </RelativeLayout>
