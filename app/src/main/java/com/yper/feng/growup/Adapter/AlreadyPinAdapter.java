@@ -60,30 +60,20 @@ public class AlreadyPinAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         PicPinAction picPinAction=picPinActionList.get(position);
-        viewHolder vh;
-        if (convertView==null){
 
-            vh=new viewHolder();
             convertView=layoutInflater.inflate(R.layout.alreadypinitem,parent,false);
 
-            vh.txtalreadypinname= (TextView) convertView.findViewById(R.id.txtalreadypinname);
-            vh.txtalreadypinvalue=(TextView)convertView.findViewById(R.id.txtalreadypinvalue);
-            vh.txtalreadynames=(TextView)convertView.findViewById(R.id.txtalreadypinnames);
-            vh.alreadypincheck=(CheckBox)convertView.findViewById(R.id.alreadypincheck);
+            TextView txtalreadypinname= (TextView) convertView.findViewById(R.id.txtalreadypinname);
+            TextView txtalreadypinvalue=(TextView)convertView.findViewById(R.id.txtalreadypinvalue);
+            TextView txtalreadynames=(TextView)convertView.findViewById(R.id.txtalreadypinnames);
+            CheckBox alreadypincheck=(CheckBox)convertView.findViewById(R.id.alreadypincheck);
 
-            convertView.setTag(vh);
 
-        }
-        else
-        {
-            vh= (viewHolder) convertView.getTag();
 
-        }
+        txtalreadypinvalue.setText(String.valueOf(picPinAction.getActionValue()));
+        txtalreadypinname.setText(picPinAction.getActionName());
 
-        vh.txtalreadypinvalue.setText(String.valueOf(picPinAction.getActionValue()));
-        vh.txtalreadypinname.setText(picPinAction.getActionName());
-
-        vh.alreadypincheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        alreadypincheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 CheckBox box=(CheckBox) buttonView;
@@ -104,7 +94,7 @@ public class AlreadyPinAdapter extends BaseAdapter {
             names=names+stu.getName()+" ";
         }
 
-         vh.txtalreadynames.setText(names);
+         txtalreadynames.setText(names);
 
         return convertView;
 

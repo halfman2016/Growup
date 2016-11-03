@@ -44,7 +44,7 @@ public class PinPhotoActivity extends ListActivity {
 
     private List<PinAction> pinActions=new ArrayList<>();
 
-    private List<PicPinAction> mypinpcs=new ArrayList<>();
+    public List<PicPinAction> mypinpcs=new ArrayList<>();
 
 
     public List<Student> instudents=new ArrayList<>();
@@ -196,7 +196,7 @@ public class PinPhotoActivity extends ListActivity {
 
 
 
-        setListAdapter(new PinPhotoActionAdapter(pinActions,photopic,this));
+        setListAdapter(new PinPhotoActionAdapter(pinActions,mypinpcs,photopic,this));
         Utils.setListViewHeightBasedOnChildren(getListView());
 
         listalreadypin.setAdapter(new AlreadyPinAdapter(mypinpcs,this));
@@ -439,6 +439,8 @@ public class PinPhotoActivity extends ListActivity {
                     if(j==1) pics.add(picPinActions.get(i));
 
                 }
+
+
 
                 mdb.savePicPinAcions(pics,photopic);
 

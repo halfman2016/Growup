@@ -16,6 +16,7 @@ import com.qiniu.common.QiniuException;
 import com.qiniu.storage.UploadManager;
 import com.yper.feng.growup.Module.Annouce;
 import com.yper.feng.growup.Module.DayCheckListAction;
+import com.yper.feng.growup.Module.DayCheckRec;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Photopic;
@@ -39,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -224,6 +226,17 @@ public class MDBTools {
 
 
         return gradeClasses;
+    }
+
+    public GradeClass getGradeClass(UUID uuid){
+        GradeClass gradeClass;
+        mongoCollection=mongoDatabase.getCollection("classes");
+        Document document=mongoCollection.find(Filters.eq("_id",uuid.toString())).first();
+       Gson gson=new GsonBuilder().create();
+
+        gradeClass=gson.fromJson(document.toJson(),GradeClass.class);
+
+        return gradeClass;
     }
 
     public List<PinAction> getPinActions(){
@@ -557,23 +570,47 @@ if(doc==null)
         return ret;
     }
 
-    public void addDayCommonAction(ArrayList<DayCommonAction> daylist){
+    public void addDayCommonActionRecs(List<DayCommonAction> daylist,GradeClass gradeClass,Teacher teacher,String typename,Date date){
 
-        mongoCollection=mongoDatabase.getCollection("daycommonactions");
-        mongoCollection.deleteMany(Filters.exists("_id"));
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String strdate=sdf.format(date);
+
+        DayCheckRec dayCheckRec=new DayCheckRec(daylist,gradeClass,typename,strdate);
+        dayCheckRec.setCheckedteachername(teacher.getName());
+        dayCheckRec.setCheckedteacherid(teacher.get_id());
+        mongoCollection=mongoDatabase.getCollection("daycommonactionRecs");
 
         Gson gson=new GsonBuilder().create();
         Document doc = new Document();
-        List<Document> docs=new ArrayList<>();
-        for (DayCommonAction temp:daylist
-                ) {
-            doc=Document.parse(gson.toJson(temp));
-            docs.add(doc);
+        doc=Document.parse(gson.toJson(dayCheckRec));
+        mongoCollection.insertOne(doc);
 
-        }
+    }
 
-        mongoCollection.insertMany(docs);
+    public DayCheckRec getDayCheckRec(Date date,GradeClass gradeClass,String typename){
+        DayCheckRec dayCheckRec;
 
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String strdate=sdf.format(date);
+        mongoCollection =mongoDatabase.getCollection("daycommonactionRecs");
+
+     MongoCursor cursor= mongoCollection.find(Filters.eq("strdate",strdate)).iterator();
+
+        Gson gson=new GsonBuilder().create();
+
+        while (cursor.hasNext())
+        {
+           Document doc= (Document)cursor.next();
+            dayCheckRec=gson.fromJson(doc.toJson(),DayCheckRec.class);
+
+          if((dayCheckRec.getGradeClass().getName().equals(gradeClass.getName())) && (dayCheckRec.getTypename().equals(typename)) ) {
+
+              return dayCheckRec;
+          }
+          }
+
+        dayCheckRec=new DayCheckRec();
+        return dayCheckRec;
     }
 
     public  ArrayList<DayCommonAction> getTypedDayActions(String typeName){

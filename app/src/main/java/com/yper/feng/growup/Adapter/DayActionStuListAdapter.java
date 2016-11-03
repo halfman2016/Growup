@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -16,11 +17,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.yper.feng.growup.Module.DayCheckListAction;
+import com.yper.feng.growup.Module.GradeClass;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jiangfeng on 2016/10/25.
@@ -28,16 +32,27 @@ import java.util.List;
 
 public class DayActionStuListAdapter extends BaseAdapter {
 
-    private List<Student> students=new ArrayList<>();
-    private List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
-
+    public List<Student> students=new ArrayList<>();
+    public List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
+    public Map<Student,List> map=new HashMap<>();
     private Context context;
     private LayoutInflater layoutInflater;
+    private GradeClass gradeClass;
 
-    public DayActionStuListAdapter(List<Student> studentList, List<DayCheckListAction> dayCheckListActions, Context context) {
-        this.students=studentList;
+    public DayActionStuListAdapter(GradeClass gradeClass, List<DayCheckListAction> dayCheckListActions, Context context) {
+        this.gradeClass=gradeClass;
         this.dayCheckListActions=dayCheckListActions;
         this.context=context;
+        this.students=gradeClass.getStus();
+        for (Student stu:gradeClass.getStus())
+        {
+            List temp=new ArrayList();
+            for(int i=0;i<dayCheckListActions.size();i++)
+            {
+                temp.add(0);
+            }
+            map.put(stu,temp);
+        }
         layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -58,7 +73,7 @@ public class DayActionStuListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Student student =students.get(position);
+        final Student student =students.get(position);
 
         final  viewHolder vh;
 
@@ -84,7 +99,7 @@ public class DayActionStuListAdapter extends BaseAdapter {
         {
             LinearLayout ll=new LinearLayout(context);
             ll.setOrientation(LinearLayout.HORIZONTAL);
-            Spinner spinner=new Spinner(context);
+            final Spinner spinner=new Spinner(context);
             TextView txtactionname=new TextView(context);
             txtactionname.setWidth(450);
             txtactionname.setTextColor(Color.DKGRAY);
@@ -136,6 +151,19 @@ public class DayActionStuListAdapter extends BaseAdapter {
 
             ll.addView(txtactionname);
             ll.addView(spinner);
+            final int finalI = i;
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    map.get(student).set(finalI,Integer.parseInt(spinner.getSelectedItem().toString()));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             vh.actions.addView(ll);
 

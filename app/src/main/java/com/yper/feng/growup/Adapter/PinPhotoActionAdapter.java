@@ -33,13 +33,15 @@ import java.util.List;
 
 public class PinPhotoActionAdapter extends BaseAdapter {
     List<PinAction> pinActions=new ArrayList<>();
+    List<PicPinAction> picPinActions=new ArrayList<>();
     Photopic photopic;
     Context context;
     LayoutInflater layoutInflater;
 
-    public PinPhotoActionAdapter(List<PinAction> pinActions, Photopic photopic,Context context) {
+    public PinPhotoActionAdapter(List<PinAction> pinActions,List<PicPinAction> picPinActions, Photopic photopic,Context context) {
 super();
         this.pinActions = pinActions;
+        this.picPinActions=picPinActions;
         this.photopic=photopic;
         this.context = context;
         this.layoutInflater=(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,24 +67,15 @@ super();
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
        final PinAction item=pinActions.get(position);
-       final viewHolder vh;
-if (convertView==null){
-    vh=new viewHolder();
+
     convertView=layoutInflater.inflate(R.layout.subject_list_pin_pic_item,parent,false);
-    vh.txtPinname=(TextView)convertView.findViewById(R.id.txtPinName);
-    vh.txtpinActionScore=(Spinner) convertView.findViewById(R.id.actionvalue);
-    vh.txtpinactiontype=(TextView) convertView.findViewById(R.id.txtPinActionType);
-    vh.btnpinaction=(Button)convertView.findViewById(R.id.btnpinAction);
-    convertView.setTag(vh);
-}
-        else
-{
-    vh=(viewHolder)convertView.getTag();
+    TextView txtPinname=(TextView)convertView.findViewById(R.id.txtPinName);
+        final Spinner txtpinActionScore=(Spinner) convertView.findViewById(R.id.actionvalue);
+    TextView txtpinactiontype=(TextView) convertView.findViewById(R.id.txtPinActionType);
+    Button btnpinaction=(Button)convertView.findViewById(R.id.btnpinAction);
 
-}
-
-        vh.txtPinname.setText(item.getActionName());
-        vh.txtpinactiontype.setText(item.getActionType());
+        txtPinname.setText(item.getActionName());
+        txtpinactiontype.setText(item.getActionType());
         final List list=new ArrayList();
         list.add(item.getGoodvalue());
         list.add(item.getActionValue());
@@ -90,9 +83,9 @@ if (convertView==null){
 
         ArrayAdapter adapter=new ArrayAdapter(context,R.layout.day_check_item,list);
         adapter.setDropDownViewResource(R.layout.dropdownstyle);
-        vh.txtpinActionScore.setAdapter(adapter);
-        vh.txtpinActionScore.setSelection(1);
-        vh.btnpinaction.setOnClickListener(new View.OnClickListener() {
+        txtpinActionScore.setAdapter(adapter);
+        txtpinActionScore.setSelection(1);
+        btnpinaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PinPhotoActivity pinPhotoActivity=(PinPhotoActivity) context;
@@ -103,7 +96,7 @@ if (convertView==null){
                 ListView listView=(ListView) pinPhotoActivity.findViewById(R.id.list_alreadypins);
 
                 List list=((AlreadyPinAdapter)listView.getAdapter()).list;
-                List<PicPinAction> picPinActions=((AlreadyPinAdapter)listView.getAdapter()).picPinActionList;
+               // List<PicPinAction> picPinActions=((AlreadyPinAdapter)listView.getAdapter()).picPinActionList;
                 List<PicPinAction> pics=new ArrayList<PicPinAction>();
                 for(int i=0;i<list.size();i++)
                 {
@@ -112,11 +105,13 @@ if (convertView==null){
 
                 }
 
-                PicPinAction p1=new PicPinAction(item.getActionName(),item.getActionType(),Integer.parseInt(vh.txtpinActionScore.getSelectedItem().toString()));
+                PicPinAction p1=new PicPinAction(item.getActionName(),item.getActionType(),Integer.parseInt(txtpinActionScore.getSelectedItem().toString()));
                 p1.setRelativeStus(students);
                 p1.setPicsrcid(photopic.get_id());
                 pics.add(p1);
                 listView.setAdapter(new AlreadyPinAdapter(pics,context));
+                ListView listView1= pinPhotoActivity.getListView();
+                listView1.setAdapter(new PinPhotoActionAdapter(pinActions,pics,photopic,context));
                 Utils.setListViewHeightBasedOnChildren(listView);
             }
         });
