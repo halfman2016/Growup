@@ -15,16 +15,17 @@ public class BaseInfoItem {
     private String infoTitle;  //信息标题 显示在第一行的
     private Date infoTime;   //信息时间   显示在第一行行尾巴
     private String infotype;  //日常规  专题 双周排名…… 显示在第一行
-    private BaseAction actionObject;  //通知的行为实体
+    private Object actionObject;  //通知的行为实体
     private int order; //0 排序参数
 
-    public BaseInfoItem(BaseAction actionObject) {
-        this.infoTitle = actionObject.getActionName();
-        this.infotype = actionObject.getActionType();
+    public BaseInfoItem(Object actionObject) {
+
         this.actionObject = actionObject;
         this.order = 50;
         this.infoTime = new Date();
     }
+
+
 
     public String getInfoTitle() {
         return infoTitle;

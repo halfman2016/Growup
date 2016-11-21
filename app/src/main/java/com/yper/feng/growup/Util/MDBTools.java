@@ -660,4 +660,37 @@ if(doc==null)
         updateobj= gson.fromJson(doc.toJson(),Updateobj.class);
         return updateobj;
     }
+
+    public  void savePhotopic(Photopic photopic){
+        mongoCollection=mongoDatabase.getCollection("photos");
+        Gson gson=new GsonBuilder().create();
+
+        Document doc=Document.parse(gson.toJson(photopic));
+        mongoCollection.updateOne(Filters.eq("_id",photopic.get_id().toString()),new Document("$set",doc));
+    }
+    public  List<Photopic> getToppics(){
+        List<Photopic> photopics=new ArrayList<>();
+        mongoCollection=mongoDatabase.getCollection("photos");
+        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("photodate",-1)).limit(5).iterator();
+        Gson gson=new GsonBuilder().create();
+        while (mongoCursor.hasNext())
+        {
+            Document doc= (Document) mongoCursor.next();
+            photopics.add(gson.fromJson(doc.toJson(),Photopic.class));
+        }
+        return photopics;
+    }
+
+    public  List<DayCheckRec> getTopDaychecks(){
+        List<DayCheckRec> dayCheckRecs=new ArrayList<>();
+        mongoCollection=mongoDatabase.getCollection("daycommonactionRecs");
+        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("strdate",-1)).limit(5).iterator();
+        Gson gson=new GsonBuilder().create();
+        while (mongoCursor.hasNext())
+        {
+            Document doc= (Document) mongoCursor.next();
+            dayCheckRecs.add(gson.fromJson(doc.toJson(),DayCheckRec.class));
+        }
+        return dayCheckRecs;
+    }
 }

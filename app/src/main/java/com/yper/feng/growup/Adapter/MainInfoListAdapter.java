@@ -8,15 +8,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.yper.feng.growup.Module.BaseInfoItem;
+import com.yper.feng.growup.Module.DayCheckRec;
 import com.yper.feng.growup.Module.DayCommonAction;
+import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.SubjectPinAction;
 import com.yper.feng.growup.Module.WeekReport;
+import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
+import com.yper.feng.growup.Util.BitmapCache;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +42,16 @@ public class MainInfoListAdapter extends BaseAdapter {
 
 
     private List<BaseInfoItem> items = new ArrayList<>();
-    private LayoutInflater layoutInflater = null;
+    private LayoutInflater layoutInflater ;
     private Context context;
+    private RequestQueue queue;
+    private ImageLoader imageLoader;
 
     public MainInfoListAdapter(List<BaseInfoItem> items, Context context) {
         this.items = items;
         this.context = context;
+        queue= Volley.newRequestQueue(context);
+        imageLoader=new ImageLoader(queue,new BitmapCache());
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -63,49 +81,57 @@ public class MainInfoListAdapter extends BaseAdapter {
 
 
 
-        if (convertView == null) {
+    //按action对象类别获得布局
+    switch (className) {
 
-            //按action对象类别获得布局
-            switch (className) {
+        case "com.yper.feng.growup.Module.DayCheckRec":
+            convertView = layoutInflater.inflate(R.layout.info_item_daycommon, parent, false);
+            break;
+        case "com.yper.feng.growup.Module.Photopic":
+            convertView = layoutInflater.inflate(R.layout.info_item_subject, parent, false);
+            break;
+        case "com.yper.feng.growup.Module.WeekReport":
 
-                case "com.yper.feng.growup.Module.DayCommonAction":
-                    convertView = layoutInflater.inflate(R.layout.info_item_daycommon, parent, false);
-                    break;
-                case "com.yper.feng.growup.Module.SubjectPinAction":
-                    convertView = layoutInflater.inflate(R.layout.info_item_subject, parent, false);
-                    break;
-                case "com.yper.feng.growup.Module.WeekReport":
-
-                    convertView = layoutInflater.inflate(R.layout.info_item_weekreport, parent, false);
-                    break;
-            }
+            convertView = layoutInflater.inflate(R.layout.info_item_weekreport, parent, false);
+            break;
+    }
 
 
-        }
+
+
 
         //按action对象类别获得数据
 
         switch (className) {
-            case "com.yper.feng.growup.Module.DayCommonAction":
+            case "com.yper.feng.growup.Module.DayCheckRec":
 
-                com.yper.feng.growup.Module.DayCommonAction temp = (DayCommonAction) item.getActionObject();
+                com.yper.feng.growup.Module.DayCheckRec temp = (DayCheckRec) item.getActionObject();
                 TextView itemtitle = (TextView) convertView.findViewById(R.id.itemtitle);
-                itemtitle.setText(temp.getActionName());
+                itemtitle.setText(temp.getCheckedteachername());
                 TextView itemtype = (TextView) convertView.findViewById(R.id.item_type);
-                itemtype.setText(item.getInfotype());
+                itemtype.setText(temp.getTypename());
+                TextView checkdate=(TextView) convertView.findViewById(R.id.checkdate);
+                TextView txtClass=(TextView) convertView.findViewById(R.id.txtclass);
+                checkdate.setText(temp.getStrdate());
+                txtClass.setText(temp.getGradeClass().getName());
 
 
                 break;
-            case "com.yper.feng.growup.Module.SubjectPinAction":
-                SubjectPinAction stemp = (SubjectPinAction) item.getActionObject();
-                TextView stitile = (TextView) convertView.findViewById(R.id.itemtitle);
-                stitile.setText(stemp.getActionName());
-                TextView stype = (TextView) convertView.findViewById(R.id.item_type);
-                stype.setText(item.getInfotype());
-                ImageView simage = (ImageView) convertView.findViewById(R.id.relateiveImage);
-                Resources res = context.getResources();
+            case "com.yper.feng.growup.Module.Photopic":
+                Photopic stemp = (Photopic) item.getActionObject();
 
-                simage.setImageResource(res.getIdentifier("addrec", "mipmap", context.getPackageName()));
+                String url= MyApplication.getInstance().Url+stemp.getPicname();
+
+                TextView stitile = (TextView) convertView.findViewById(R.id.itemtitle);
+                stitile.setText(stemp.getPhotoauthor());
+                TextView stype = (TextView) convertView.findViewById(R.id.item_type);
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                stype.setText(sdf.format(stemp.getPhotodate()));
+                NetworkImageView simage = (NetworkImageView) convertView.findViewById(R.id.relateiveImage);
+                TextView imagememo=(TextView) convertView.findViewById(R.id.imagememo);
+                imagememo.setText(stemp.getPhotomemo());
+                simage.setImageUrl(url,imageLoader);
+
 
                 break;
             case "com.yper.feng.growup.Module.WeekReport":
@@ -129,18 +155,10 @@ public class MainInfoListAdapter extends BaseAdapter {
         }
 
 
-        //TextView actionValue = (TextView) convertView.findViewById(R.id.actionValue);
-        //actionValue.setText(String.valueOf(sa.getActionValue()));
 
-//        SimpleDateFormat fmt = new SimpleDateFormat("m-d HH:mm:ss");
-//
-//
-//        TextView actionOccurTime = (TextView) convertView.findViewById(R.id.actionOccurTime);
-//        actionOccurTime.setText(fmt.format(sa.getActionOccurTime()));
-//        TextView actionPinTime = (TextView) convertView.findViewById(R.id.actionPinTime);
-//        actionPinTime.setText(fmt.format(sa.getActionPinTime()));
         return convertView;
     }
+
 
 
 }

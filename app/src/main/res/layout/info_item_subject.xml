@@ -27,17 +27,18 @@
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-        <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:id="@+id/relateiveImage"
-                android:src="@mipmap/subject_normal"/>
+        <com.android.volley.toolbox.NetworkImageView
+                android:layout_width="match_parent"
+            android:id="@+id/relateiveImage"
+                android:src="@mipmap/subject_normal"
+            android:layout_height="200dp" />
 
         <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+            android:id="@+id/imagememo" />
     </LinearLayout>
 
 </LinearLayout>

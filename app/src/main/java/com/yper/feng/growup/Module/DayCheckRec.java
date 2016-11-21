@@ -12,8 +12,7 @@ public class DayCheckRec {
   private   List<DayCommonAction>  dayCommonActions;
  private    List<Student> students;
     private  String typename;
-
- private    String checkedteachername;
+    private    String checkedteachername;
 private     UUID checkedteacherid;
 
     public String getTypename() {

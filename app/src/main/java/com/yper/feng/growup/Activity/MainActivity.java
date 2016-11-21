@@ -256,20 +256,20 @@ public class MainActivity extends FragmentActivity {
 
 
 
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String datetime = "2016-03-12 09:3:2";
-        DayCommonAction ac1 = new DayCommonAction("检查卫生合格", "日常规", 2);
-        DayCommonAction ac2 = new DayCommonAction("讲文明懂礼貌", "日常规", 2);
-        SubjectPinAction ac3 = new SubjectPinAction("洗漱用品摆放不整齐", "专题", -2);
-        HashMap<Integer, String> rank = new HashMap<Integer, String>();
-        rank.put(1, "赵一");
-        rank.put(2, "钱二");
-        rank.put(3, "孙三");
-        rank.put(4, "李四");
-        rank.put(5, "张五");
-        WeekReport ac4 = new WeekReport("2016年第2次", rank);
-        BaseInfoItem item1 = new BaseInfoItem(ac1), item2 = new BaseInfoItem(ac2), item3 = new BaseInfoItem(ac3), item4 = new BaseInfoItem(ac4);
-//        try {
+//        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String datetime = "2016-03-12 09:3:2";
+//        DayCommonAction ac1 = new DayCommonAction("检查卫生合格", "日常规", 2);
+//        DayCommonAction ac2 = new DayCommonAction("讲文明懂礼貌", "日常规", 2);
+//        SubjectPinAction ac3 = new SubjectPinAction("洗漱用品摆放不整齐", "专题", -2);
+//        HashMap<Integer, String> rank = new HashMap<Integer, String>();
+//        rank.put(1, "赵一");
+//        rank.put(2, "钱二");
+//        rank.put(3, "孙三");
+//        rank.put(4, "李四");
+//        rank.put(5, "张五");
+//        WeekReport ac4 = new WeekReport("2016年第2次", rank);
+//        BaseInfoItem item1 = new BaseInfoItem(ac1), item2 = new BaseInfoItem(ac2), item3 = new BaseInfoItem(ac3), item4 = new BaseInfoItem(ac4);
+////        try {
 //            ac1.setActionOccurTime(fmt.parse(datetime));
 //            ac2.setActionOccurTime(fmt.parse("2016-03-14 19:03:12"));
 //            ac3.setActionOccurTime(fmt.parse("2016-03-2 12:03:02"));
@@ -282,11 +282,11 @@ public class MainActivity extends FragmentActivity {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        items.add(item1);
-        items.add(item2);
-        items.add(item3);
-        items.add(item4);
-
+//        items.add(item1);
+//        items.add(item2);
+//        items.add(item3);
+//        items.add(item4);
+//
 
 
 

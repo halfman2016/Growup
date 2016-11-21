@@ -76,7 +76,7 @@ private Handler myhandler=new Handler(){
         {
             case 1:
                 if (isVisible()) {
-                    setListAdapter(new SubjectListFragmentAdapter(photopicList, getContext()));
+                    setListAdapter(new SubjectListFragmentAdapter(photopicList, getContext(),teacher));
                     txtannouce.setText(ann.getAnnouceBody());
                 }
                 break;
