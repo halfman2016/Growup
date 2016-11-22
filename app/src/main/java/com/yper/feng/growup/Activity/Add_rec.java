@@ -74,8 +74,8 @@ private MDBTools mdb=new MDBTools();
                 DayCheckListAction day2=new DayCheckListAction("用心听讲","上课纪律检查",2);
                 mdb.addDaycheckListAction(day1);
                 mdb.addDaycheckListAction(day2);
-            }
-        }.start();
+    }
+}.start();
     }
 
 
