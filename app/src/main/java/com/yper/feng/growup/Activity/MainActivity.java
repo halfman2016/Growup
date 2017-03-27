@@ -24,6 +24,7 @@ import com.yper.feng.growup.Adapter.MainPinListAdapter;
 import com.yper.feng.growup.Adapter.MainSubjectListAdapter;
 import com.yper.feng.growup.Fragment.MainAnalysisFragment;
 import com.yper.feng.growup.Fragment.MainInfoFragment;
+import com.yper.feng.growup.Fragment.MainPeopleFragment;
 import com.yper.feng.growup.Fragment.MainPinFragment;
 import com.yper.feng.growup.Fragment.MainSubjectFragment;
 import com.yper.feng.growup.Module.BaseInfoItem;
@@ -54,7 +55,7 @@ public class MainActivity extends FragmentActivity {
 
     private ViewPager viewPager;
     private RadioGroup radioGroup;
-    private RadioButton rbInfo, rbSubject, rbPin, rbAnalysis;
+    private RadioButton rbInfo, rbSubject, rbPin, rbAnalysis,rbpeople;
 
     public Teacher teacher;
     private Uri fileUri;
@@ -300,6 +301,7 @@ public class MainActivity extends FragmentActivity {
         rbSubject = (RadioButton) findViewById(R.id.rb_suject);
         rbPin = (RadioButton) findViewById(R.id.rb_pin);
         rbAnalysis = (RadioButton) findViewById(R.id.rb_analysis);
+        rbpeople=(RadioButton)findViewById(R.id.rb_people) ;
         //RadioGroup选中状态改变监听
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -320,6 +322,9 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case R.id.rb_analysis:
                         viewPager.setCurrentItem(3, false);
+                        break;
+                    case R.id.rb_people:
+                        viewPager.setCurrentItem(4,false);
                         break;
                 }
             }
@@ -345,10 +350,15 @@ public class MainActivity extends FragmentActivity {
         MainPinListAdapter mainPinListAdapter=new MainPinListAdapter(photopics,getBaseContext());
         mainPinFragment.setListAdapter(mainPinListAdapter);
 
+        MainPeopleFragment mainPeopleFragment=new MainPeopleFragment();
+
+
         alFragment.add(mainInfoFragment);
         alFragment.add(mainSubjectFragment);
         alFragment.add(mainPinFragment);
         alFragment.add(mainAnalysisFragment);
+        alFragment.add(mainPeopleFragment);
+
         //ViewPager设置适配器
         viewPager.setAdapter(new MainFragmentAdapter(getSupportFragmentManager(), alFragment));
         //ViewPager显示第一个Fragment
@@ -374,6 +384,9 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case 3:
                         radioGroup.check(R.id.rb_analysis);
+                        break;
+                    case 4:
+                        radioGroup.check(R.id.rb_people);
                         break;
                 }
             }

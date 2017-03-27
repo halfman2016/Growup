@@ -8,12 +8,12 @@ import java.util.UUID;
  */
 
 public class DayCheckRec {
-  private   String strdate;
-  private   List<DayCommonAction>  dayCommonActions;
- private    List<Student> students;
+    private   String strdate;
+    private   List<DayCommonAction>  dayCommonActions;
+    private    List<Student> students;
     private  String typename;
     private    String checkedteachername;
-private     UUID checkedteacherid;
+    private     UUID checkedteacherid;
 
     public String getTypename() {
         return typename;

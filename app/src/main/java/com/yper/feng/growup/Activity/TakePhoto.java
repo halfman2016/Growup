@@ -162,7 +162,7 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         }
         else
         {
-            //Toast.makeText(getBaseContext(), "上传失败！请核对手机时间，时间不正确将不能上传！", Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(), "上传失败！请核对手机时间，时间不正确将不能上传！", Toast.LENGTH_SHORT);
             return false;
 
         }

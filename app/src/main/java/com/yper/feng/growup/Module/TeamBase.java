@@ -37,7 +37,7 @@ public class TeamBase extends Object {
     }
 
     public void setName(String name) {
-        Name = name;
+        this.Name = name;
     }
 
     public List<Student> getStus() {
