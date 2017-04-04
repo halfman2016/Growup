@@ -71,14 +71,20 @@ public class SubjectMain extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_detail_main);
         Intent intent = getIntent();
-        Gson gson= new GsonBuilder().create();
+        Gson gson = new GsonBuilder().create();
 
-        subject=gson.fromJson(intent.getStringExtra("subject"),Subject.class);
-        teacher=gson.fromJson(intent.getStringExtra("teacher"),Teacher.class);
+        subject = gson.fromJson(intent.getStringExtra("subject"), Subject.class);
+        teacher = gson.fromJson(intent.getStringExtra("teacher"), Teacher.class);
 
 
         TextView title = (TextView) findViewById(R.id.titile_subjectName);
-        title.setText(subject.getSubjectName());
+        if (subject.getSubjectName().length() > 13) {
+            title.setText(subject.getSubjectName().substring(0, 13)+"...");
+        } else
+        {
+            title.setText(subject.getSubjectName());
+        }
+
 
         initDatas();
 

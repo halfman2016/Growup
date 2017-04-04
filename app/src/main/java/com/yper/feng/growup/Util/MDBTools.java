@@ -58,8 +58,8 @@ public class MDBTools {
 //    private static   MongoCredential credential;
 //    private static    MongoClient mongoClient;
     //  private static final MongoClient mongoClient = new MongoClient("192.168.32.188", 27017);
-  private static   MongoCredential credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
-  private static    MongoClient mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
+  private    MongoCredential credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
+  private    MongoClient mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
 // private static MongoClientURI uri = new MongoClientURI("mongodb://halfman:halfman21@boteteam.com/?authSource=db1&authMechanism=SCRAM-SHA-1");
 // private static    MongoClient mongoClient = new MongoClient(uri);
     private MongoDatabase mongoDatabase;
@@ -114,6 +114,8 @@ public class MDBTools {
 
         return teacher;
     }
+
+
 
     public Subject getSubject(String _id){
         Subject subject=null;
@@ -487,6 +489,23 @@ public class MDBTools {
         return photopics;
 
     }
+
+    public List<Photopic> getTeacherPics(Teacher teacher) {
+        List<Photopic> photopics = new ArrayList<>();
+        Photopic photopic;
+        Gson gson = new GsonBuilder().create();
+        mongoCollection = mongoDatabase.getCollection("photos");
+        MongoCursor cursor = mongoCollection.find(Filters.eq("photoauthorid", teacher.get_id().toString())).sort(new BasicDBObject("photodate", 1)).iterator();
+        while (cursor.hasNext()) {
+            Document doc = (Document) cursor.next();
+            photopic = gson.fromJson(doc.toJson(), Photopic.class);
+            photopics.add(photopic);
+
+
+        }
+        return photopics;
+    }
+
 
 
 
