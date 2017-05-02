@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yper.feng.growup.Activity.ChgPwd;
 import com.yper.feng.growup.Activity.MainActivity;
 import com.yper.feng.growup.Activity.MyPhotoList;
 import com.yper.feng.growup.Module.Teacher;
@@ -53,6 +54,18 @@ public class MainPeopleFragment extends Fragment {
                 Gson gson=new GsonBuilder().create();
                 String teastr=gson.toJson(teacher);
 
+                intent.putExtra("teacher",teastr);
+                startActivity(intent);
+            }
+        });
+
+        Button btnChgPwd=(Button) view.findViewById(R.id.btnChgPwd);
+        btnChgPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), ChgPwd.class);
+                Gson gson=new GsonBuilder().create();
+                String teastr=gson.toJson(teacher);
                 intent.putExtra("teacher",teastr);
                 startActivity(intent);
             }

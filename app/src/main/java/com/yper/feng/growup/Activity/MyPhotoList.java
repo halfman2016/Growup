@@ -5,8 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,7 +29,7 @@ public class MyPhotoList extends AppCompatActivity {
     private List<Photopic> photopicList =new ArrayList<>();
     private MDBTools mdb=new MDBTools();
     private Teacher teacher;
-    private ListView photolist;
+    private RecyclerView photolist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,9 @@ public class MyPhotoList extends AppCompatActivity {
         String teastr=   intent.getStringExtra("teacher");
         Gson gson=new GsonBuilder().create();
         teacher=gson.fromJson(teastr,Teacher.class);
-        photolist= (ListView) findViewById(R.id.myphotolist);
+        photolist= (RecyclerView) findViewById(R.id.myphotolist);
+
+        photolist.setLayoutManager(new LinearLayoutManager(this));
 
 
         loaddata();
@@ -50,8 +55,14 @@ public class MyPhotoList extends AppCompatActivity {
             switch (msg.what){
                 case 1:
                     //加载
-                    photolist.setAdapter(new MyPhotoListAdapter(photopicList, getBaseContext()));
-
+                   int size= photopicList.size();
+                   if(size >0) {
+                       photolist.setAdapter(new MyPhotoListAdapter(photopicList, getBaseContext()));
+                   }
+                   else
+                {
+                    Toast.makeText(getBaseContext(),"照片为空，请回退！",Toast.LENGTH_LONG).show();
+                }
                     break;
 
             }

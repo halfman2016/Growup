@@ -16,6 +16,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.UploadManager;
 import com.yper.feng.growup.Module.Annouce;
@@ -32,6 +33,8 @@ import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.Module.Updateobj;
 
+import org.bson.BSONObject;
+import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -420,11 +423,40 @@ public class MDBTools {
             return  false;
         }
 
+
         return true;
 
     }
 
+    public boolean chgTeaPwd(Teacher teacher ,String Newpwd){
+        mongoCollection=mongoDatabase.getCollection("teachers");
+        Document filer=Document.parse("{_id:\""+teacher.get_id().toString()+"\"}");
+        Document update=Document.parse("{$set:{\"pwd\":\""+Newpwd+"\"}}");
 
+        mongoCollection.findOneAndUpdate(filer,update);
+
+
+        return true;
+    }
+
+    public boolean delPhotopic(Photopic photopic)
+    {
+        mongoCollection=mongoDatabase.getCollection("photos");
+
+        Document filer=Document.parse("{_id:\""+photopic.get_id().toString()+"\"}");
+       DeleteResult result= mongoCollection.deleteOne(Filters.eq("_id",photopic.get_id().toString()));
+        if(result.getDeletedCount()==1)
+        {
+            return true;
+        }
+        else
+        {return false;}
+
+
+
+
+        //暂时不删除服务器资源
+    }
 
     public List<PicPinAction> getPicpinactions(Photopic photopic)
     {
@@ -703,11 +735,14 @@ if(doc==null)
         Document doc=Document.parse(gson.toJson(photopic));
         mongoCollection.updateOne(Filters.eq("_id",photopic.get_id().toString()),new Document("$set",doc));
     }
+
+
     public  List<Photopic> getToppics(){
         List<Photopic> photopics=new ArrayList<>();
         mongoCollection=mongoDatabase.getCollection("photos");
-        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("photodate",1)).limit(30).iterator();
+        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("photodate",-1)).limit(30).iterator();
         Gson gson=new GsonBuilder().create();
+
         while (mongoCursor.hasNext())
         {
             Document doc= (Document) mongoCursor.next();
