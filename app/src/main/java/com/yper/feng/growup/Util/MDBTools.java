@@ -497,7 +497,7 @@ public class MDBTools {
         Gson gson=new GsonBuilder().create();
         mongoCollection=mongoDatabase.getCollection("photos");
 
-        MongoCursor cursor=mongoCollection.find(Filters.exists("belongToSubject",false)).sort(new BasicDBObject("photodate",1)).iterator();
+        MongoCursor cursor=mongoCollection.find(Filters.exists("belongToSubject",false)).sort(new BasicDBObject("picname",-1)).iterator();
         while (cursor.hasNext()){
             Document doc=(Document)cursor.next();
             photopic=gson.fromJson(doc.toJson(),Photopic.class);
@@ -511,7 +511,7 @@ public class MDBTools {
         Photopic photopic;
         Gson gson=new GsonBuilder().create();
         mongoCollection=mongoDatabase.getCollection("photos");
-        MongoCursor cursor=mongoCollection.find(Filters.eq("belongToSubject",subject.get_id().toString())).sort(new BasicDBObject("photodate",1)).iterator();
+        MongoCursor cursor=mongoCollection.find(Filters.eq("belongToSubject",subject.get_id().toString())).sort(new BasicDBObject("picname",-1)).iterator();
     while (cursor.hasNext()){
         Document doc =(Document) cursor.next();
         photopic =gson.fromJson(doc.toJson(),Photopic.class);
@@ -527,7 +527,7 @@ public class MDBTools {
         Photopic photopic;
         Gson gson = new GsonBuilder().create();
         mongoCollection = mongoDatabase.getCollection("photos");
-        MongoCursor cursor = mongoCollection.find(Filters.eq("photoauthorid", teacher.get_id().toString())).sort(new BasicDBObject("photodate", 1)).iterator();
+        MongoCursor cursor = mongoCollection.find(Filters.eq("photoauthorid", teacher.get_id().toString())).sort(new BasicDBObject("picname", -1)).iterator();
         while (cursor.hasNext()) {
             Document doc = (Document) cursor.next();
             photopic = gson.fromJson(doc.toJson(), Photopic.class);
@@ -740,7 +740,7 @@ if(doc==null)
     public  List<Photopic> getToppics(){
         List<Photopic> photopics=new ArrayList<>();
         mongoCollection=mongoDatabase.getCollection("photos");
-        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("photodate",-1)).limit(30).iterator();
+        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("picname",-1)).limit(30).iterator();
         Gson gson=new GsonBuilder().create();
 
         while (mongoCursor.hasNext())
