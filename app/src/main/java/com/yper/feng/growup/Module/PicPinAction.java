@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 public class PicPinAction extends ScoreAction {
     private UUID picsrcid;
-
+//针对某个照片的具体标定内容
     public PicPinAction(String actionName, String actionType, int actionScoreValue) {
         super(actionName, actionType, actionScoreValue);
     }

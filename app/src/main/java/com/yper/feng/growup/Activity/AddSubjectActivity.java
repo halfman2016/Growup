@@ -239,6 +239,7 @@ public class AddSubjectActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         mdb.saveSubject(subject);
+
                         Message msg=new Message();
                         msg.what=1;
                         mhandler.sendMessage(msg);

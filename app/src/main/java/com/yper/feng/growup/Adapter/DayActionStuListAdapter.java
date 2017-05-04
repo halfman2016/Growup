@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +100,10 @@ public class DayActionStuListAdapter extends BaseAdapter {
         {
             LinearLayout ll=new LinearLayout(context);
             ll.setOrientation(LinearLayout.HORIZONTAL);
+            Log.d("myapp",String.valueOf(ll.getHeight()));
             final Spinner spinner=new Spinner(context);
             TextView txtactionname=new TextView(context);
-            txtactionname.setWidth(450);
+            txtactionname.setWidth(230);
             txtactionname.setTextColor(Color.DKGRAY);
             txtactionname.setBackgroundColor(Color.WHITE);
             txtactionname.setText(dayCheckListActions.get(i).getActionName());
@@ -145,6 +147,7 @@ public class DayActionStuListAdapter extends BaseAdapter {
 
                 spinner.setSelection(0);
 
+
             }
 
 
@@ -170,9 +173,7 @@ public class DayActionStuListAdapter extends BaseAdapter {
 
         }
 
-        ViewGroup.LayoutParams lp=vh.actions.getLayoutParams();
-        lp.height=105*dayCheckListActions.size();
-        vh.actions.setLayoutParams(lp);
+
 
         return  convertView;
     }

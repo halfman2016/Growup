@@ -128,7 +128,7 @@ public class MainInfoFragment extends ListFragment {
             public void run() {
                 super.run();
                 photopics=mdbTools.getToppics();
-                dayCheckRecs=mdbTools.getTopDaychecks();
+//                dayCheckRecs=mdbTools.getTopDaychecks();
                 Message msg=new Message();
                 msg.what=1;
                 mhandler.sendMessage(msg);

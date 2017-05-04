@@ -19,6 +19,7 @@
     <string name="subject">专题</string>
     <string name="pin">标定</string>
     <string name="analysis">分析</string>
+    <string name="people">我</string>
 
     <string name="subject_list">最新</string>
     <string name="subject_details">详细</string>
@@ -69,5 +70,8 @@
 
     <string name="savepeople">保存人员</string>
     <string name="subjectname">专题名称</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

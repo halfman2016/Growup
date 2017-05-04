@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -38,10 +38,12 @@
         <activity android:name=".Activity.SubjectMain" />
         <activity android:name=".Activity.PinPhotoActivity" />
         <activity android:name=".Activity.AddSubjectActivity" />
-        <activity android:name=".Activity.AddRecMain"></activity>
-        <activity android:name="com.yongchun.library.view.ImageSelectorActivity"/>
-        <activity android:name="com.yongchun.library.view.ImagePreviewActivity"/>
-        <activity android:name="com.yongchun.library.view.ImageCropActivity"/>
+        <activity android:name=".Activity.AddRecMain" />
+        <activity android:name="com.yongchun.library.view.ImageSelectorActivity" />
+        <activity android:name="com.yongchun.library.view.ImagePreviewActivity" />
+        <activity android:name="com.yongchun.library.view.ImageCropActivity" />
+        <activity android:name=".Activity.ChgPwd" />
+        <activity android:name=".Activity.MyPhotoList"></activity>
     </application>
 
 </manifest>

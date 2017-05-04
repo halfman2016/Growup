@@ -63,7 +63,7 @@ public class SubjectDetailFragment extends Fragment {
     static final int DATE_DIALOG_ID=0;
 
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-    private List<GradeClass> gradeClassList =new ArrayList<>();
+    private ArrayList<GradeClass> gradeClassList =new ArrayList<>();
 
     private Subject subject;
 
