@@ -140,6 +140,7 @@ public class AddRecMain extends AppCompatActivity {
                 super.run();
                 dayChecksAcionList=mdb.getDayCheckListActions(typeName);
                 gradeClass=mdb.getGradeClass(teacher.getOnDutyGradeClassId());
+
                 dayCheckRec=mdb.getDayCheckRec(new Date(),gradeClass,typeName);
                 Message message=new Message();
                 message.what=1;

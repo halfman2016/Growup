@@ -53,20 +53,23 @@ public class MainInfoFragment extends ListFragment {
                     if(isVisible()) {
 
                         items.clear();
+//
+//                        for (DayCheckRec day : dayCheckRecs) {
+//
+//                            infoItem = new BaseInfoItem(day);
+//                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+//                            try {
+//                                infoItem.setInfoTime(sdf.parse(day.getStrdate()));
+//                            } catch (ParseException e) {
+//                                e.printStackTrace();
+//                            }
+//                            items.add(infoItem);
+//
+//                        }
 
-                        for (DayCheckRec day : dayCheckRecs) {
+                        // Collection.sort 这里使用这个作为排序代码
 
-                            infoItem = new BaseInfoItem(day);
-                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-                            try {
-                                infoItem.setInfoTime(sdf.parse(day.getStrdate()));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            items.add(infoItem);
-
-                        }
-
+//
                         for (Photopic pic : photopics)
                         {
                             infoItem=new BaseInfoItem(pic);
@@ -74,27 +77,7 @@ public class MainInfoFragment extends ListFragment {
                             items.add(infoItem);
                         }
 
-                        Collections.sort(items, new Comparator<BaseInfoItem>() {
-                            @Override
-                            public int compare(BaseInfoItem o1, BaseInfoItem o2) {
-                                Date dt1 = o1.getInfoTime();
-                                Date dt2 = o2.getInfoTime();
 
-                                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                                try {
-                                    if (dt1.getTime() > dt2.getTime()) {
-                                        return 1;
-                                    } else if (dt1.getTime() < dt2.getTime()) {
-                                        return -1;
-                                    } else {
-                                        return 0;
-                                    }
-                                } catch (Exception exception) {
-                                    exception.printStackTrace();
-                                }
-                            return  0;
-                            }
-                        });
                         setListAdapter(new MainInfoListAdapter(items, getContext()));
                     }
                     break;

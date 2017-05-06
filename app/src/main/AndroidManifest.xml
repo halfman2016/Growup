@@ -43,7 +43,8 @@
         <activity android:name="com.yongchun.library.view.ImagePreviewActivity" />
         <activity android:name="com.yongchun.library.view.ImageCropActivity" />
         <activity android:name=".Activity.ChgPwd" />
-        <activity android:name=".Activity.MyPhotoList"></activity>
+        <activity android:name=".Activity.MyPhotoList" />
+        <activity android:name=".Activity.PopPic"></activity>
     </application>
 
 </manifest>

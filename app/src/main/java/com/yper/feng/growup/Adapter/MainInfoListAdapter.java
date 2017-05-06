@@ -1,8 +1,10 @@
 package com.yper.feng.growup.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.yper.feng.growup.Activity.PopPic;
 import com.yper.feng.growup.Module.BaseInfoItem;
 import com.yper.feng.growup.Module.DayCheckRec;
 import com.yper.feng.growup.Module.DayCommonAction;
@@ -171,7 +176,7 @@ public class MainInfoListAdapter extends BaseAdapter {
 //                break;
 //        }
 
-        Photopic sitem = (Photopic) item.getActionObject();
+        final Photopic sitem = (Photopic) item.getActionObject();
 
 //        final String imgurl= MyApplication.getInstance().Url+sitem.getPicname();
 //        if (sitem.getPicname()!=null && !sitem.getPicname().equals("")){
@@ -185,7 +190,18 @@ public class MainInfoListAdapter extends BaseAdapter {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (sitem.getPhotodate()!=null )vh.photodate.setText(sdf.format(sitem.getPhotodate()));
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Intent intent=new Intent(context, PopPic.class);
+                Gson gson=new GsonBuilder().create();
+                String json=gson.toJson(sitem);
+                intent.putExtra("photo",json);
+                context.startActivity(intent);
+                Log.d("myapp",sitem.getPicname());
+            }
+        });
         return convertView;
     }
 
