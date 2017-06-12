@@ -72,7 +72,7 @@ public class MyPhotoListAdapter extends RecyclerView.Adapter {
         vh.photopic.setImageUrl(url,imageLoader);
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (item.getPhotodate()!=null )vh.photodate.setText(sdf.format(item.getPhotodate()));
         vh.btnDelPhoto.setOnClickListener(new View.OnClickListener() {
             @Override

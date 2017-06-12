@@ -112,7 +112,7 @@ public class SubjectListFragmentAdapter extends BaseAdapter {
         vh.photoauthor.setText(item.getPhotoauthor());
         vh.photomemo.setText(item.getPhotomemo());
         vh.zanimg.setImageResource(android.R.drawable.btn_star_big_off);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (item.getPhotodate()!=null )vh.photodate.setText(sdf.format(item.getPhotodate()));
 
         int iszaned=0;

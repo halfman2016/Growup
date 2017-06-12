@@ -60,7 +60,7 @@ public class MDBTools {
 
 //    private static   MongoCredential credential;
 //    private static    MongoClient mongoClient;
-    //  private static final MongoClient mongoClient = new MongoClient("192.168.32.188", 27017);
+    // private static final MongoClient mongoClient = new MongoClient("192.168.31.188", 27017);
   private    MongoCredential credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
   private    MongoClient mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
 // private static MongoClientURI uri = new MongoClientURI("mongodb://halfman:halfman21@boteteam.com/?authSource=db1&authMechanism=SCRAM-SHA-1");
@@ -71,6 +71,33 @@ public class MDBTools {
 //       credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
 //       mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
         mongoDatabase = mongoClient.getDatabase("lizhi");
+    }
+
+    public Student stuLogin(String name, String pwd){
+
+        mongoCollection=mongoDatabase.getCollection("students");
+
+        List<BasicDBObject> objects = new ArrayList<BasicDBObject>();
+        objects.add(new BasicDBObject("name", name));
+        objects.add(new BasicDBObject("pwd",pwd));
+
+        BasicDBObject query=new BasicDBObject();
+
+        query.put("$and",objects);
+
+        MongoCursor cursor = mongoCollection.find(query).iterator();
+
+
+        while (cursor.hasNext()) {
+
+            Document doc= (Document) cursor.next();
+            Gson gson=new GsonBuilder().create();
+
+            return gson.fromJson(doc.toJson(),Student.class);
+
+        }
+
+        return null;
     }
 
     public boolean teacherLogin(String Tid,String pwd){
@@ -128,14 +155,14 @@ public class MDBTools {
         while (cursor.hasNext())
         {
             Document doc=(Document) cursor.next();
-            Gson gson=new GsonBuilder().create();
+            Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
             subject=gson.fromJson(doc.toJson(),Subject.class);
         }
         return subject;
     }
     public void saveSubject(Subject subject){
         mongoCollection=mongoDatabase.getCollection("subjects");
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         String json=gson.toJson(subject);
         mongoCollection.insertOne(Document.parse(json));
 
@@ -143,7 +170,7 @@ public class MDBTools {
 
     public  void updateSubject(Subject subject){
         mongoCollection=mongoDatabase.getCollection("subjects");
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         String json=gson.toJson(subject);
         mongoCollection.findOneAndReplace(Filters.eq("_id",subject.get_id().toString()),Document.parse(json));
 
@@ -193,7 +220,7 @@ public class MDBTools {
         mongoCollection=mongoDatabase.getCollection("subjects");
         FindIterable<Document> iterable=mongoCollection.find().sort(new BasicDBObject("endTime",-1));
         MongoCursor mongoCursor=iterable.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext())
         {
             Document doc=(Document) mongoCursor.next();
@@ -262,7 +289,7 @@ public class MDBTools {
         mongoCollection=mongoDatabase.getCollection("pinactions");
         FindIterable<Document> iterable=mongoCollection.find();
         MongoCursor mongoCursor=iterable.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext())
         {
             Document doc=(Document)mongoCursor.next();
@@ -300,7 +327,7 @@ public class MDBTools {
 
 
         if (picPinActions.size()>0) {
-            Gson gson = new GsonBuilder().create();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
             Document doc = new Document();
             List<Document> docs = new ArrayList<>();
 
@@ -406,7 +433,7 @@ public class MDBTools {
 
     public boolean addPhoto(Photopic photopic) {
         mongoCollection=mongoDatabase.getCollection("photos");
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         String timeStamp = new SimpleDateFormat("yyMMdd_HHmmssSSS").format(new Date());
         UploadManager uploadManager=new UploadManager();
@@ -485,7 +512,7 @@ public class MDBTools {
         while (cursor.hasNext()) {
 
             Document doc= (Document) cursor.next();
-            Gson gson=new GsonBuilder().create();
+            Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
              photopic=gson.fromJson(doc.toJson(),Photopic.class);
         }
             return photopic;
@@ -494,7 +521,7 @@ public class MDBTools {
     public List<Photopic>  getfreePhotopic(){
         List<Photopic> photopics=new ArrayList<>();
         Photopic photopic;
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         mongoCollection=mongoDatabase.getCollection("photos");
 
         MongoCursor cursor=mongoCollection.find(Filters.exists("belongToSubject",false)).sort(new BasicDBObject("picname",-1)).iterator();
@@ -509,7 +536,7 @@ public class MDBTools {
     public List<Photopic> getSubjectPhoto(Subject subject){
         List<Photopic> photopics=new ArrayList<>();
         Photopic photopic;
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         mongoCollection=mongoDatabase.getCollection("photos");
         MongoCursor cursor=mongoCollection.find(Filters.eq("belongToSubject",subject.get_id().toString())).sort(new BasicDBObject("picname",-1)).iterator();
     while (cursor.hasNext()){
@@ -525,7 +552,7 @@ public class MDBTools {
     public List<Photopic> getTeacherPics(Teacher teacher) {
         List<Photopic> photopics = new ArrayList<>();
         Photopic photopic;
-        Gson gson = new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         mongoCollection = mongoDatabase.getCollection("photos");
         MongoCursor cursor = mongoCollection.find(Filters.eq("photoauthorid", teacher.get_id().toString())).sort(new BasicDBObject("picname", -1)).iterator();
         while (cursor.hasNext()) {
@@ -730,7 +757,7 @@ if(doc==null)
 
     public  void savePhotopic(Photopic photopic){
         mongoCollection=mongoDatabase.getCollection("photos");
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         Document doc=Document.parse(gson.toJson(photopic));
         mongoCollection.updateOne(Filters.eq("_id",photopic.get_id().toString()),new Document("$set",doc));
@@ -741,12 +768,12 @@ if(doc==null)
         List<Photopic> photopics=new ArrayList<>();
         mongoCollection=mongoDatabase.getCollection("photos");
         MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("picname",-1)).limit(30).iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         while (mongoCursor.hasNext())
         {
             Document doc= (Document) mongoCursor.next();
-            photopics.add(gson.fromJson(doc.toJson(),Photopic.class));
+             photopics.add(gson.fromJson(doc.toJson(),Photopic.class));
         }
         return photopics;
     }
@@ -755,7 +782,7 @@ if(doc==null)
         List<DayCheckRec> dayCheckRecs=new ArrayList<>();
         mongoCollection=mongoDatabase.getCollection("daycommonactionRecs");
         MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("strdate",1)).limit(5).iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext())
         {
             Document doc= (Document) mongoCursor.next();
