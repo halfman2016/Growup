@@ -10,6 +10,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
@@ -26,6 +27,18 @@ public class PopPic extends AppCompatActivity {
     private ImageLoader imageLoader;
     private RequestQueue requestQueue;
     private NetworkImageView imageView;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

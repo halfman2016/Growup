@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
@@ -22,6 +23,17 @@ public class ChgPwd extends AppCompatActivity {
     private EditText txtNewPwdRetry;
     private String newpwd;
     private MDBTools mdb=new MDBTools();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

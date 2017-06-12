@@ -19,6 +19,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Adapter.AlreadyPinAdapter;
 import com.yper.feng.growup.Adapter.PinPhotoActionAdapter;
 import com.yper.feng.growup.Adapter.StudentsNameAdapter;
@@ -63,6 +64,18 @@ public class PinPhotoActivity extends ListActivity {
     private RequestQueue queue;
     private NetworkImageView imageView;
     private ArrayList<HashMap<String,Object>> lstNameItem=new ArrayList<HashMap<String,Object>>();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

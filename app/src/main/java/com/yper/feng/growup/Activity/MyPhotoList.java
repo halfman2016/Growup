@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Adapter.MyPhotoListAdapter;
 import com.yper.feng.growup.Module.Annouce;
 import com.yper.feng.growup.Module.Photopic;
@@ -46,6 +47,17 @@ public class MyPhotoList extends AppCompatActivity {
         loaddata();
 
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private Handler myhandler=new Handler(){

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Adapter.DayActionAlreadyhave;
 import com.yper.feng.growup.Adapter.DayActionStuListAdapter;
 import com.yper.feng.growup.Module.DayCheckListAction;
@@ -160,6 +161,19 @@ public class AddRecMain extends AppCompatActivity {
 
        finish();
    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Adapter.AddRecListAdapter;
 import com.yper.feng.growup.Module.DayCheckListAction;
 import com.yper.feng.growup.R;
@@ -44,6 +45,17 @@ private MDBTools mdb=new MDBTools();
             }
         }
     };
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
@@ -141,6 +142,17 @@ public class TakePhoto extends AppCompatActivity  {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 
 private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {

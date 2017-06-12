@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yongchun.library.view.ImageSelectorActivity;
 import com.yper.feng.growup.Adapter.SubjectMainFragmentAdapter;
 import com.yper.feng.growup.Fragment.SubjectAnnouceFragment;
@@ -65,6 +66,17 @@ public class SubjectMain extends FragmentActivity {
 
     private MDBTools mdb=new MDBTools();
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

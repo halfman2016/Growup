@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.umeng.analytics.MobclickAgent;
 import com.yongchun.library.view.ImageSelectorActivity;
 import com.yper.feng.growup.Adapter.MainInfoListAdapter;
 import com.yper.feng.growup.Adapter.MainFragmentAdapter;
@@ -67,6 +68,20 @@ public class MainActivity extends FragmentActivity {
 
 
     private MDBTools mdb=new MDBTools();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
