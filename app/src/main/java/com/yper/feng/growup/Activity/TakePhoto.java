@@ -23,11 +23,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.umeng.analytics.MobclickAgent;
+import com.yper.feng.growup.Module.LogAction;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.MySqlTools;
 import com.yper.feng.growup.Util.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +39,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -167,9 +170,32 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         photopic.setPhotoauthor(teacher.getName());
         photopic.setPhotomemo(strphotomemo);
         publishProgress(1,1);
-        if (mdbTools.addPhoto(photopic))
+       // if (mdbTools.addPhoto(photopic))
+  if(true)
         {
 
+            //上传成功
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    MySqlTools mySqlTools=new MySqlTools();
+                    mySqlTools.getConn();
+                    LogAction logAction=new LogAction();
+                    // photopic.getBelongToSubject() 判断是不是为专题拍照
+                   if( photopic.getBelongToSubject()!=null)
+                    {logAction.setActionname("专题拍照");}
+                    else
+                    {logAction.setActionname("自由拍照");}
+
+                    logAction.setActiontime(new Timestamp(new Date().getTime()));
+                    logAction.setActionpeoplename(teacher.getName());
+                    logAction.setActionpeopleid(teacher.getTid());
+                    logAction.setActiongradeclassname(teacher.getOnDutyGradeClassName());
+
+                    mySqlTools.insertActionLog(logAction);
+                    mySqlTools.closeConn();
+                }
+            }).start();
             return true;
         }
         else

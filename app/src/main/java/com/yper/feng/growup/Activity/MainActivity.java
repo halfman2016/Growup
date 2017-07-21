@@ -38,8 +38,10 @@ import com.yper.feng.growup.Module.WeekReport;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.MySqlTools;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public class MainActivity extends FragmentActivity {
     private MainPinFragment mainPinFragment = new MainPinFragment();
     private MainSubjectFragment mainSubjectFragment=new MainSubjectFragment();
 
-
+    private MyApplication myApplication=MyApplication.getInstance();
     private MDBTools mdb=new MDBTools();
 
     @Override
@@ -81,6 +83,27 @@ public class MainActivity extends FragmentActivity {
         MobclickAgent.onPause(this);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        final com.yper.feng.growup.Module.Log log=myApplication.getLog();
+        log.setEtime(new Timestamp(new Date().getTime()));
+        log.setDtime(log.getEtime().getTime()-log.getStime().getTime());
+
+                        new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        MySqlTools mySqlTools=new MySqlTools();
+                        mySqlTools.getConn();
+
+                        mySqlTools.insertLoginNameDate(log);
+                        mySqlTools.closeConn();
+                    }
+                }).start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

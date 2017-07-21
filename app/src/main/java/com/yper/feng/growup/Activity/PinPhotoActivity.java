@@ -252,8 +252,6 @@ public class PinPhotoActivity extends ListActivity {
 
                 }
 
-
-
                 mdb.savePicPinAcions(pics,photopic);
 
             }

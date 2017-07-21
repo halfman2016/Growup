@@ -27,12 +27,15 @@ import com.yper.feng.growup.Module.DayCheckListAction;
 import com.yper.feng.growup.Module.DayCheckRec;
 import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.GradeClass;
+import com.yper.feng.growup.Module.LogAction;
 import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.MySqlTools;
 import com.yper.feng.growup.Util.Utils;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -231,6 +234,24 @@ public class AddRecMain extends AppCompatActivity {
                                     }
 
                             }}.start();
+
+                            //记录
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    MySqlTools mySqlTools=new MySqlTools();
+                                    mySqlTools.getConn();
+                                    LogAction logAction=new LogAction();
+                                    logAction.setActionname(typeName);
+                                    logAction.setActiontime(new Timestamp(new Date().getTime()));
+                                    logAction.setActionpeoplename(teacher.getName());
+                                    logAction.setActionpeopleid(teacher.getTid());
+                                    logAction.setActiongradeclassname(teacher.getOnDutyGradeClassName());
+                                    mySqlTools.insertActionLog(logAction);
+                                    mySqlTools.closeConn();
+                                }
+                            }).start();
 
 
 

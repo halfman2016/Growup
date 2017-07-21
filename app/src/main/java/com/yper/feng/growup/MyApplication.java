@@ -2,6 +2,9 @@ package com.yper.feng.growup;
 
 import android.app.Application;
 
+import com.yper.feng.growup.Module.Log;
+import com.yper.feng.growup.Module.Teacher;
+
 import java.security.PublicKey;
 import java.util.HashMap;
 
@@ -12,6 +15,8 @@ public class MyApplication extends Application {
     private  HashMap<String,Integer> defaultValues;
     private static MyApplication instance;
     private static String username;
+    private static Log log;
+    private static Teacher teacher;
     public static String Url="http://lizhibutian.boteteam.com/";
 
     @Override
@@ -20,6 +25,17 @@ public class MyApplication extends Application {
         instance=this;
         defaultValues=new HashMap<>();
     }
+
+    public static Teacher getTeacher() {
+        return teacher;
+    }
+
+    public static void setTeacher(Teacher teacher) {
+        MyApplication.teacher = teacher;
+    }
+
+    public void setLog(Log log){this.log=log;}
+    public Log getLog(){return log;}
 
     public static MyApplication getInstance(){
         return instance;

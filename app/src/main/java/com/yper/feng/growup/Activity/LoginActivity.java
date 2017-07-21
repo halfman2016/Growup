@@ -25,12 +25,18 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.umeng.analytics.MobclickAgent;
+import com.yper.feng.growup.Module.Log;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.Module.Updateobj;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.MySqlTools;
 import com.yper.feng.growup.Util.UpdateManager;
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * A login screen that offers login via Uid/password.
@@ -116,6 +122,8 @@ public class LoginActivity extends Activity {
                 Message msg=new Message();
                 msg.what=1;
                 myhandler.sendMessage(msg);
+
+
             }
         }.start();
 
@@ -313,8 +321,7 @@ public class LoginActivity extends Activity {
                 Bundle bundle=new Bundle();
                 Gson gson= new GsonBuilder().create();
 
-                gson.toJson(teacher);
-
+                //gson.toJson(teacher);
 
                 intent.putExtra("teacherjson",gson.toJson(teacher));
 
@@ -322,11 +329,19 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
 
 
-                MyApplication myApplication=MyApplication.getInstance();
+                final MyApplication myApplication=MyApplication.getInstance();
                 myApplication.setUsername(mUid);
+                Log log=new Log(UUID.randomUUID());
+                log.setStime(new Timestamp(new Date().getTime()));
+                log.setLid(mUid);
+                log.setgradeClassName(teacher.getOnDutyGradeClassName());
+                log.setLname(teacher.getName());
 
+                myApplication.setLog(log);
+                myApplication.setTeacher(teacher);
 
                 MobclickAgent.onProfileSignIn(teacher.getName());
+
 
                 finish();
             } else {

@@ -15,10 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
+import com.yper.feng.growup.Module.LogAction;
 import com.yper.feng.growup.Module.Subject;
+import com.yper.feng.growup.Module.Teacher;
+import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
+import com.yper.feng.growup.Util.MySqlTools;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,7 +36,7 @@ public class AddSubjectActivity extends AppCompatActivity {
     private TextView startDatedisplay = null;
     private TextView endDatedisplay=null;
     private Button cancel;
-
+    private Teacher teacher;
     String teachername,Tid;
 
     private  SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
@@ -176,8 +181,11 @@ public class AddSubjectActivity extends AppCompatActivity {
                 .append(mDay+1));
 
         //教师姓名,发布人
+
             teachername=getIntent().getStringExtra("name");
             Tid=getIntent().getStringExtra("Tid");
+        MyApplication myApplication=MyApplication.getInstance();
+        teacher=myApplication.getTeacher();
     }
 
 
@@ -240,6 +248,24 @@ public class AddSubjectActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         mdb.saveSubject(subject);
+
+                        //记录
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                MySqlTools mySqlTools=new MySqlTools();
+                                mySqlTools.getConn();
+                                LogAction logAction=new LogAction();
+                                logAction.setActionname("增加专题");
+                                logAction.setActiontime(new Timestamp(new Date().getTime()));
+                                logAction.setActionpeoplename(teacher.getName());
+                                logAction.setActionpeopleid(teacher.getTid());
+                                logAction.setActiongradeclassname(teacher.getOnDutyGradeClassName());
+                                mySqlTools.insertActionLog(logAction);
+                                mySqlTools.closeConn();
+                            }
+                        }).start();
 
                         Message msg=new Message();
                         msg.what=1;
