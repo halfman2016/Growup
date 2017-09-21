@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.media.RatingCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -19,8 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.umeng.analytics.MobclickAgent;
 import com.yongchun.library.view.ImageSelectorActivity;
-import com.yper.feng.growup.Adapter.MainInfoListAdapter;
 import com.yper.feng.growup.Adapter.MainFragmentAdapter;
+import com.yper.feng.growup.Adapter.MainInfoListAdapter;
 import com.yper.feng.growup.Adapter.MainPinListAdapter;
 import com.yper.feng.growup.Adapter.MainSubjectListAdapter;
 import com.yper.feng.growup.Fragment.MainAnalysisFragment;
@@ -29,12 +28,9 @@ import com.yper.feng.growup.Fragment.MainPeopleFragment;
 import com.yper.feng.growup.Fragment.MainPinFragment;
 import com.yper.feng.growup.Fragment.MainSubjectFragment;
 import com.yper.feng.growup.Module.BaseInfoItem;
-import com.yper.feng.growup.Module.DayCommonAction;
 import com.yper.feng.growup.Module.Photopic;
 import com.yper.feng.growup.Module.Subject;
-import com.yper.feng.growup.Module.SubjectPinAction;
 import com.yper.feng.growup.Module.Teacher;
-import com.yper.feng.growup.Module.WeekReport;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
@@ -42,29 +38,23 @@ import com.yper.feng.growup.Util.MySqlTools;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
 
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+    public Teacher teacher;
     private List<BaseInfoItem> items = new ArrayList<>();
     private List<Subject> subjectItems=new ArrayList<>();
     private List<Photopic> photopics=new ArrayList<>();
-
     private ViewPager viewPager;
     private RadioGroup radioGroup;
     private RadioButton rbInfo, rbSubject, rbPin, rbAnalysis,rbpeople;
-
-    public Teacher teacher;
     private Uri fileUri;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
     private MainPinFragment mainPinFragment = new MainPinFragment();
     private MainSubjectFragment mainSubjectFragment=new MainSubjectFragment();
 
@@ -131,45 +121,6 @@ public class MainActivity extends FragmentActivity {
         btnAddrec.setOnClickListener(new MainActivityOnClickListener());
 
 
-    }
-
-    private class MainActivityOnClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            Log.d("myapp", String.valueOf(v.getId()));
-            Intent intent;
-            switch (v.getId()) {
-                case R.id.titlebar_addrec:
-                    Log.d("myapp", "addrec");
-                    intent=new Intent();
-                    intent.setClass(MainActivity.this,Add_rec.class);
-                    startActivityForResult(intent,300);
-
-                    break;
-                case R.id.titlebar_camrec:
-                    Log.d("myapp", "camrec");
-                    intent=new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    fileUri=getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-                    startActivityForResult(intent,200);
-
-                    break;
-                case R.id.titlebar_photo:
-                    Log.d("myapp", "photo");
-
-//                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                     fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-//
-//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-//
-//                    startActivityForResult(intent, 100);
-                    int maxSelectNum=1;
-                    ImageSelectorActivity.start(MainActivity.this, maxSelectNum, ImageSelectorActivity.MODE_SINGLE, true,true,false);
-
-                    break;
-            }
-        }
     }
 
     @Override
@@ -357,6 +308,7 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case R.id.rb_pin:
                         viewPager.setCurrentItem(2, false);
+
                         break;
                     case R.id.rb_analysis:
                         viewPager.setCurrentItem(3, false);
@@ -436,6 +388,45 @@ public class MainActivity extends FragmentActivity {
         });
 
 
+    }
+
+    private class MainActivityOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Log.d("myapp", String.valueOf(v.getId()));
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.titlebar_addrec:
+                    Log.d("myapp", "addrec");
+                    intent = new Intent();
+                    intent.setClass(MainActivity.this, Add_rec.class);
+                    startActivityForResult(intent, 300);
+
+                    break;
+                case R.id.titlebar_camrec:
+                    Log.d("myapp", "camrec");
+                    intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                    startActivityForResult(intent, 200);
+
+                    break;
+                case R.id.titlebar_photo:
+                    Log.d("myapp", "photo");
+
+//                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                     fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+//
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+//
+//                    startActivityForResult(intent, 100);
+                    int maxSelectNum = 1;
+                    ImageSelectorActivity.start(MainActivity.this, maxSelectNum, ImageSelectorActivity.MODE_SINGLE, true, true, false);
+
+                    break;
+            }
+        }
     }
 
 

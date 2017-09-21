@@ -6,11 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import android.text.Html;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,15 +27,8 @@ import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
 import com.yper.feng.growup.Util.MySqlTools;
-import com.yper.feng.growup.Util.Utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -125,6 +115,18 @@ public class TakePhoto extends AppCompatActivity  {
         return bitmap;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     private  class  MyListener implements View.OnClickListener{
 
         @Override
@@ -144,20 +146,6 @@ public class TakePhoto extends AppCompatActivity  {
         }
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
-
 private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
 
 
@@ -170,8 +158,8 @@ private  class addPhotoTask extends AsyncTask<String,Integer,Boolean> {
         photopic.setPhotoauthor(teacher.getName());
         photopic.setPhotomemo(strphotomemo);
         publishProgress(1,1);
-       // if (mdbTools.addPhoto(photopic))
-  if(true)
+        if (mdbTools.addPhoto(photopic))
+        // if(true)
         {
 
             //上传成功
