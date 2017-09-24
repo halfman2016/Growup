@@ -31,7 +31,6 @@ import com.yper.feng.growup.Module.Updateobj;
 import com.yper.feng.growup.MyApplication;
 import com.yper.feng.growup.R;
 import com.yper.feng.growup.Util.MDBTools;
-import com.yper.feng.growup.Util.MySqlTools;
 import com.yper.feng.growup.Util.UpdateManager;
 
 import java.sql.Timestamp;
@@ -47,23 +46,42 @@ public class LoginActivity extends Activity {
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "test:123", "bar:world"
     };
+    final MyApplication myApplication = MyApplication.getInstance();
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
     private  UpdateManager update=new UpdateManager(this);
-
     // UI references.
     private AutoCompleteTextView mUidView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
     private MDBTools mdb=new MDBTools();
     private int thisversion=0;
     private Updateobj updateobj=new Updateobj();
+    private Handler myhandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    try {
+                        thisversion = getPackageManager().getPackageInfo("com.yper.feng.growup", 0).versionCode;
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if (thisversion == updateobj.getVersion()) {
+                        //version 相等什么都不用做啊
+                    } else {
+                        //升级啊
+                        update.checkUpdateInfo();
+                    }
 
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -129,33 +147,6 @@ public class LoginActivity extends Activity {
 
 
     }
-
-    private Handler myhandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 1:
-                    try {
-                        thisversion=getPackageManager().getPackageInfo("com.yper.feng.growup",0).versionCode;
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    if (thisversion==updateobj.getVersion())
-                    {
-                        //version 相等什么都不用做啊
-                    }
-                    else
-                    {
-                        //升级啊
-                        update.checkUpdateInfo();
-                    }
-
-                    break;
-            }
-        }
-    };
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -329,7 +320,6 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
 
 
-                final MyApplication myApplication=MyApplication.getInstance();
                 myApplication.setUsername(mUid);
                 Log log=new Log(UUID.randomUUID());
                 log.setStime(new Timestamp(new Date().getTime()));

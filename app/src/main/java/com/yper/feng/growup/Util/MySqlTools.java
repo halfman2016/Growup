@@ -1,19 +1,14 @@
 package com.yper.feng.growup.Util;
 
 
-
 import com.yper.feng.growup.Module.Log;
 import com.yper.feng.growup.Module.LogAction;
-
-import java.io.UnsupportedEncodingException;
-import java.sql.Date;
-import java.sql.PreparedStatement;
+import com.yper.feng.growup.MyApplication;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 
 
 /**
@@ -23,10 +18,23 @@ import java.sql.Timestamp;
 public class MySqlTools {
     private String dbDriver="com.mysql.jdbc.Driver";
     //database?useUnicode=true&amp;characterEncoding=UTF-8
-    private String dbUrl="jdbc:mysql://boteteam.com:3306/lizhidy?useUnicode=true&amp;characterEncoding=UTF-8";//根据实际情况变化
+    private String dbUrl;//根据实际情况变化
     private String dbUser="root";
     private String dbPass="123456";
     private Connection conn=null;
+    private String mode;  // test release 2种模式
+
+    public MySqlTools() {
+        final MyApplication myApplication = MyApplication.getInstance();
+        mode = myApplication.getMode();
+        if (mode == "test") {
+            dbUrl = "jdbc:mysql://boteteam.com:3306/lizhidytest?useUnicode=true&amp;characterEncoding=UTF-8";//根据实际情况变化
+
+        } else if (mode == "release") {
+            dbUrl = "jdbc:mysql://boteteam.com:3306/lizhidy?useUnicode=true&amp;characterEncoding=UTF-8";//根据实际情况变化
+        }
+    }
+
     public Connection getConn()
     {
 

@@ -6,9 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
@@ -32,9 +30,8 @@ import com.yper.feng.growup.Module.Student;
 import com.yper.feng.growup.Module.Subject;
 import com.yper.feng.growup.Module.Teacher;
 import com.yper.feng.growup.Module.Updateobj;
+import com.yper.feng.growup.MyApplication;
 
-import org.bson.BSONObject;
-import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -48,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -61,8 +57,10 @@ public class MDBTools {
 //    private static   MongoCredential credential;
 //    private static    MongoClient mongoClient;
     // private static final MongoClient mongoClient = new MongoClient("192.168.31.188", 27017);
-  private    MongoCredential credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
-  private    MongoClient mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
+private String mode; //test 测试 release 输出
+    private MongoCredential credential;
+    private MongoClient mongoClient;
+
 // private static MongoClientURI uri = new MongoClientURI("mongodb://halfman:halfman21@boteteam.com/?authSource=db1&authMechanism=SCRAM-SHA-1");
 // private static    MongoClient mongoClient = new MongoClient(uri);
     private MongoDatabase mongoDatabase;
@@ -70,7 +68,41 @@ public class MDBTools {
    public MDBTools() {
 //       credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
 //       mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
-        mongoDatabase = mongoClient.getDatabase("lizhi");
+       final MyApplication myApplication = MyApplication.getInstance();
+       mode = myApplication.getMode();
+       if (mode == "test") {
+           credential = MongoCredential.createScramSha1Credential("halfman", "lizhitest", "halfman21".toCharArray());
+           mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
+           mongoDatabase = mongoClient.getDatabase("lizhitest");
+       } else if (mode == "release") {
+           credential = MongoCredential.createScramSha1Credential("halfman", "lizhi", "halfman21".toCharArray());
+           mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
+           mongoDatabase = mongoClient.getDatabase("lizhi");
+       }
+    }
+
+    public static File putFileFromBytes(byte[] b, String outputFile) {
+        File ret = null;
+        BufferedOutputStream stream = null;
+        try {
+            ret = new File(outputFile);
+            FileOutputStream fstream = new FileOutputStream(ret);
+            stream = new BufferedOutputStream(fstream);
+            stream.write(b);
+        } catch (Exception e) {
+            // log.error("helper:get file from byte process error!");
+            e.printStackTrace();
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    // log.error("helper:get file from byte process error!");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ret;
     }
 
     public Student stuLogin(String name, String pwd){
@@ -145,8 +177,6 @@ public class MDBTools {
         return teacher;
     }
 
-
-
     public Subject getSubject(String _id){
         Subject subject=null;
         mongoCollection=mongoDatabase.getCollection("subjects");
@@ -160,6 +190,7 @@ public class MDBTools {
         }
         return subject;
     }
+
     public void saveSubject(Subject subject){
         mongoCollection=mongoDatabase.getCollection("subjects");
         Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
@@ -175,8 +206,6 @@ public class MDBTools {
         mongoCollection.findOneAndReplace(Filters.eq("_id",subject.get_id().toString()),Document.parse(json));
 
     }
-
-
 
     public void addStu(Student student) {
         mongoCollection = mongoDatabase.getCollection("students");
@@ -195,6 +224,7 @@ public class MDBTools {
         mongoCollection.insertOne(Document.parse(json));
 
     }
+
     public ArrayList<Student> getStus()
     {
         ArrayList<Student> stus=new ArrayList<>();
@@ -248,7 +278,6 @@ public class MDBTools {
         }
         return teas;
     }
-
 
     public ArrayList<GradeClass> getGradeClasses() {
         ArrayList<GradeClass> gradeClasses = new ArrayList<>();
@@ -317,7 +346,6 @@ public class MDBTools {
         mongoCollection.insertMany(docs);
 
     }
-
 
     public void savePicPinAcions(List<PicPinAction> picPinActions,Photopic photopic){
 
@@ -430,7 +458,6 @@ public class MDBTools {
 
     }
 
-
     public boolean addPhoto(Photopic photopic) {
         mongoCollection=mongoDatabase.getCollection("photos");
         Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
@@ -501,7 +528,6 @@ public class MDBTools {
         return  picPinActions;
     }
 
-
     public Photopic  getPhoto(UUID photoid){
         mongoCollection=mongoDatabase.getCollection("photos");
         Photopic photopic=null;
@@ -565,9 +591,6 @@ public class MDBTools {
         return photopics;
     }
 
-
-
-
     public  List<DayCheckListAction> getDayCheckListActions(String typeName){
         List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
         DayCheckListAction dayCheckListAction;
@@ -597,7 +620,6 @@ public class MDBTools {
         mongoCollection.insertOne(Document.parse(gson.toJson(dayCheckListAction)));
 
     }
-
 
     public List<Annouce> getAnnouces(Subject subject){
         List<Annouce> annouces=new ArrayList<>();
@@ -639,29 +661,6 @@ if(doc==null)
         Gson gson=new GsonBuilder().create();
         ann.setBelongtoSubject(subject.get_id());
         mongoCollection.insertOne(Document.parse(gson.toJson(ann)));
-    }
-    public static File putFileFromBytes(byte[] b, String outputFile) {
-        File ret = null;
-        BufferedOutputStream stream = null;
-        try {
-            ret = new File(outputFile);
-            FileOutputStream fstream = new FileOutputStream(ret);
-            stream = new BufferedOutputStream(fstream);
-            stream.write(b);
-        } catch (Exception e) {
-            // log.error("helper:get file from byte process error!");
-            e.printStackTrace();
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    // log.error("helper:get file from byte process error!");
-                    e.printStackTrace();
-                }
-            }
-        }
-        return ret;
     }
 
     public void addDayCommonActionRecs(List<DayCommonAction> daylist,GradeClass gradeClass,Teacher teacher,String typename,Date date){

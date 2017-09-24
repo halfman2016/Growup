@@ -5,26 +5,20 @@ import android.app.Application;
 import com.yper.feng.growup.Module.Log;
 import com.yper.feng.growup.Module.Teacher;
 
-import java.security.PublicKey;
 import java.util.HashMap;
 
 /**
  * Created by Feng on 2016/7/21.
  */
 public class MyApplication extends Application {
-    private  HashMap<String,Integer> defaultValues;
+    public static String Url = "http://lizhibutian.boteteam.com/";
     private static MyApplication instance;
     private static String username;
     private static Log log;
     private static Teacher teacher;
-    public static String Url="http://lizhibutian.boteteam.com/";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance=this;
-        defaultValues=new HashMap<>();
-    }
+    // test 和 release 2 种模式
+    private static String mode = "test";
+    private HashMap<String, Integer> defaultValues;
 
     public static Teacher getTeacher() {
         return teacher;
@@ -34,19 +28,16 @@ public class MyApplication extends Application {
         MyApplication.teacher = teacher;
     }
 
-    public void setLog(Log log){this.log=log;}
-    public Log getLog(){return log;}
-
     public static MyApplication getInstance(){
         return instance;
     }
 
-    public HashMap<String, Integer> getDefaultValues() {
-        return defaultValues;
+    public static String getMode() {
+        return mode;
     }
 
-    public void setDefaultValues(HashMap<String, Integer> defaultValues) {
-        this.defaultValues = defaultValues;
+    public static void setMode(String mode) {
+        MyApplication.mode = mode;
     }
 
     public static String getUsername() {
@@ -55,5 +46,28 @@ public class MyApplication extends Application {
 
     public static void setUsername(String username) {
         MyApplication.username = username;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        defaultValues = new HashMap<>();
+    }
+
+    public Log getLog() {
+        return log;
+    }
+
+    public void setLog(Log log) {
+        this.log = log;
+    }
+
+    public HashMap<String, Integer> getDefaultValues() {
+        return defaultValues;
+    }
+
+    public void setDefaultValues(HashMap<String, Integer> defaultValues) {
+        this.defaultValues = defaultValues;
     }
 }
