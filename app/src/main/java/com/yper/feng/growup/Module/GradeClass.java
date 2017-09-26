@@ -14,4 +14,5 @@ public class GradeClass extends TeamBase {
         super(name);
 
     }
+
 }
