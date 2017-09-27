@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,29 +40,35 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PinPhotoActivity extends ListActivity {
-    private MDBTools mdb=new MDBTools();
-
-    private List<PinAction> pinActions=new ArrayList<>();
-
     public List<PicPinAction> mypinpcs=new ArrayList<>();
-
-
     public List<Student> instudents=new ArrayList<>();
-
+    public GridView gridView;
+    private MDBTools mdb = new MDBTools();
+    private List<PinAction> pinActions = new ArrayList<>();
     private ArrayList<GradeClass> gradeClassList =new ArrayList<>();
-
     private String subjectname;
     private String subjectid;
-
     private Teacher teacher;
     private Photopic photopic;
     private Subject subject;
-    public GridView gridView;
     private ListView listalreadypin;
     private ImageLoader imageLoader;
     private RequestQueue queue;
     private NetworkImageView imageView;
     private ArrayList<HashMap<String,Object>> lstNameItem=new ArrayList<HashMap<String,Object>>();
+    private Handler myhandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    initView();
+
+                    imageView.setImageUrl(MyApplication.getInstance().Url + photopic.getPicname(), imageLoader);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -114,27 +119,13 @@ public class PinPhotoActivity extends ListActivity {
 
 
     }
-    private Handler myhandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        switch (msg.what)
-        {
-            case 1:
-                initView();
-
-                imageView.setImageUrl(MyApplication.getInstance().Url+photopic.getPicname(),imageLoader);
-                break;
-        }
-        }
-    };
 
     private void loaddata(){
         new Thread(){
             @Override
             public void run() {
                 super.run();
-                gradeClassList=mdb.getGradeClasses();
+                gradeClassList = mdb.getGradeClassesIsActive();
                 pinActions=mdb.getPinActions();
                 mypinpcs=mdb.getPicpinactions(photopic);
                 Message msg=new Message();

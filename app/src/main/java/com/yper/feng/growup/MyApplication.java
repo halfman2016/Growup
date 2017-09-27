@@ -17,7 +17,7 @@ public class MyApplication extends Application {
     private static Log log;
     private static Teacher teacher;
     // test 和 release 2 种模式
-    private static String mode = "test";
+    private static String mode = "release";
     private HashMap<String, Integer> defaultValues;
 
     public static Teacher getTeacher() {

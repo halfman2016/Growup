@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.yper.feng.growup.Util.BsonUtil.getBasicDBObject;
+
 /**
  * Created by Feng on 2016/7/17.
  */
@@ -65,12 +67,14 @@ private String mode; //test 测试 release 输出
 // private static    MongoClient mongoClient = new MongoClient(uri);
     private MongoDatabase mongoDatabase;
     private MongoCollection<Document> mongoCollection ;
+    private String DBase; // lizhi lizhitest
    public MDBTools() {
 //       credential = MongoCredential.createScramSha1Credential("halfman","lizhi","halfman21".toCharArray());
 //       mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
        final MyApplication myApplication = MyApplication.getInstance();
        mode = myApplication.getMode();
        if (mode == "test") {
+           DBase = "lizhitest";
            credential = MongoCredential.createScramSha1Credential("halfman", "lizhitest", "halfman21".toCharArray());
            mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
            mongoDatabase = mongoClient.getDatabase("lizhitest");
@@ -78,6 +82,7 @@ private String mode; //test 测试 release 输出
            credential = MongoCredential.createScramSha1Credential("halfman", "lizhi", "halfman21".toCharArray());
            mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
            mongoDatabase = mongoClient.getDatabase("lizhi");
+           DBase = "lizhi";
        }
     }
 
@@ -310,6 +315,41 @@ private String mode; //test 测试 release 输出
         gradeClass=gson.fromJson(document.toJson(),GradeClass.class);
 
         return gradeClass;
+    }
+
+    public ArrayList<GradeClass> getGradeClassesIsActive() {
+        ArrayList<GradeClass> gradeClasses = new ArrayList<>();
+        GradeClass gradeClass;
+
+        mongoCollection = mongoDatabase.getCollection("classes");
+
+        FindIterable<Document> iterable = mongoCollection.find(Filters.eq("isActive", true));
+        MongoCursor mongoCursor = iterable.iterator();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
+
+        while (mongoCursor.hasNext()) {
+            Document doc = (Document) mongoCursor.next();
+            String json = doc.toJson();
+            gradeClass = gson.fromJson(json, GradeClass.class);
+            gradeClasses.add(gradeClass);
+
+        }
+
+
+        return gradeClasses;
+    }
+
+    public GradeClass getGradeClassIsActiveByName(String classname) {
+        GradeClass gradeClass;
+        mongoCollection = mongoDatabase.getCollection("classes");
+        String sql = "{isActive:true,Name:'" + classname + "'}";
+        BasicDBObject dbObject = getBasicDBObject(sql);
+        Document document = mongoCollection.find(dbObject).first();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
+        gradeClass = gson.fromJson(document.toJson(), GradeClass.class);
+        return gradeClass;
+
+
     }
 
     public List<PinAction> getPinActions(){
@@ -607,7 +647,7 @@ private String mode; //test 测试 release 输出
     }
 
     public List getDayCheckListType(){
-        DB db=mongoClient.getDB("lizhi");
+        DB db = mongoClient.getDB(DBase);
         DBCollection collection=db.getCollection("daychecklistactions");
         List cl1=collection.distinct("actionType");
 

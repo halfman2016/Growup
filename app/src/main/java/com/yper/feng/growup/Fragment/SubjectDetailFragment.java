@@ -1,7 +1,6 @@
 package com.yper.feng.growup.Fragment;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,18 +8,14 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.yper.feng.growup.Activity.SubjectMain;
@@ -37,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,28 +40,73 @@ import java.util.Locale;
  */
 
 public class SubjectDetailFragment extends Fragment {
+    static final int DATE_DIALOG_ID = 0;
     private List<Student> allstudents =new ArrayList<>();
     private List<Student> instudents=new ArrayList<>();
     private MDBTools mdb=new MDBTools();
-
     private TextView sdate=null;
     private TextView edate=null;
     private EditText txtSubject_info;
     private EditText txtsubjectname;
-
     private int mYear;
     private int mMonth;
     private int mDay;
-
     private  int which;
-    static final int DATE_DIALOG_ID=0;
-
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     private ArrayList<GradeClass> gradeClassList =new ArrayList<>();
 
     private Subject subject;
 
     private GridView gridView;
+    Handler myhandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    final LinearLayout linearLayout = (LinearLayout) getView().findViewById(R.id.classlist);
+                    linearLayout.removeAllViews();
+
+                    for (int i = 0; i < gradeClassList.size(); i++) {
+                        TextView txt = new TextView(getContext());
+                        txt.setText(gradeClassList.get(i).getName());
+                        txt.setBackgroundColor(Color.WHITE);
+
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                        txt.setLayoutParams(lp);
+                        //  txt.setButtonDrawable(R.color.colorAccent);
+                        linearLayout.addView(txt);
+
+                        txt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TextView tmp = (TextView) v;
+                                LinearLayout layout = (LinearLayout) getView().findViewById(R.id.classlist);
+                                for (int j = 0; j < layout.getChildCount(); j++) {
+                                    layout.getChildAt(j).setBackgroundColor(Color.WHITE);
+                                }
+                                for (int i = 0; i < gradeClassList.size(); i++) {
+                                    if (gradeClassList.get(i).getName() == tmp.getText()) {
+
+                                        gridView.setAdapter(new StudentsNameAdapter(gradeClassList.get(i).getStus(), instudents, getContext()));
+                                        tmp.setBackgroundColor(Color.YELLOW);
+                                        Utils.setGridViewHeightBasedOnChildren(3, gridView);
+                                    }
+                                }
+                            }
+                        });
+
+                        gridView.setAdapter(new StudentsNameAdapter(instudents, instudents, getContext()));
+                        Utils.setGridViewHeightBasedOnChildren(3, gridView);
+
+                    }
+
+
+                    break;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -218,7 +257,6 @@ loaddata();
         return  view;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -236,65 +274,11 @@ loaddata();
             @Override
             public void run() {
                 super.run();
-                gradeClassList=mdb.getGradeClasses();
+                gradeClassList = mdb.getGradeClassesIsActive();
                 Message msg=new Message();
                 msg.what=1;
                 myhandler.sendMessage(msg);
             }
         }.start();
     }
-
-    Handler myhandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        switch (msg.what)
-        {
-            case 1:
-                final LinearLayout linearLayout= (LinearLayout) getView().findViewById(R.id.classlist);
-                linearLayout.removeAllViews();
-
-                for(int i=0;i<gradeClassList.size();i++){
-                    TextView txt = new TextView(getContext());
-                    txt.setText(gradeClassList.get(i).getName());
-                    txt.setBackgroundColor(Color.WHITE);
-
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                    txt.setLayoutParams(lp);
-                    //  txt.setButtonDrawable(R.color.colorAccent);
-                    linearLayout.addView(txt);
-
-                    txt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            TextView tmp=(TextView) v;
-                            LinearLayout layout= (LinearLayout) getView().findViewById(R.id.classlist);
-                            for(int j=0;j<layout.getChildCount();j++)
-                            { layout.getChildAt(j).setBackgroundColor(Color.WHITE);}
-                            for(int i=0;i<gradeClassList.size();i++)
-                            {
-                                if (gradeClassList.get(i).getName()==tmp.getText())
-                                {
-
-                                    gridView.setAdapter(new StudentsNameAdapter(gradeClassList.get(i).getStus(),instudents,getContext()));
-                                    tmp.setBackgroundColor(Color.YELLOW);
-                                    Utils.setGridViewHeightBasedOnChildren(3,gridView);
-                                }
-                            }
-                        }
-                    });
-
-                    gridView.setAdapter(new StudentsNameAdapter(instudents,instudents,getContext()));
-                    Utils.setGridViewHeightBasedOnChildren(3,gridView);
-
-                }
-
-
-
-
-                break;
-        }
-        }
-    };
 }
