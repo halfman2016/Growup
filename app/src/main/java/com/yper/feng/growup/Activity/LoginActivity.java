@@ -73,7 +73,7 @@ public class LoginActivity extends Activity {
                     }
                     if (thisversion == updateobj.getVersion()) {
                         //version 相等什么都不用做啊
-                    } else {
+                    } else if (thisversion < updateobj.getVersion()) {
                         //升级啊
                         update.checkUpdateInfo();
                     }
@@ -101,7 +101,11 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUidView = (AutoCompleteTextView) findViewById(R.id.uid);
-
+        try {
+            thisversion = getPackageManager().getPackageInfo("com.yper.feng.growup", 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -183,6 +187,10 @@ public class LoginActivity extends Activity {
             cancel = true;
         } else if (!isUidValid(Uid)) {
             mUidView.setError(getString(R.string.error_invalid_uid));
+            focusView = mUidView;
+            cancel = true;
+        } else if (thisversion < 8) {
+            mUidView.setError("软件版本太低，请升级到8版本即以上");
             focusView = mUidView;
             cancel = true;
         }

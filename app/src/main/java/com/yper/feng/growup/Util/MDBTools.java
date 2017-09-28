@@ -128,7 +128,7 @@ private String mode; //test 测试 release 输出
         while (cursor.hasNext()) {
 
             Document doc= (Document) cursor.next();
-            Gson gson=new GsonBuilder().create();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
             return gson.fromJson(doc.toJson(),Student.class);
 
@@ -174,7 +174,7 @@ private String mode; //test 测试 release 输出
 
             Document doc=(Document) cursor.next();
 
-            Gson gson=new GsonBuilder().create();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
             teacher=gson.fromJson(doc.toJson(),Teacher.class);
 
         }
@@ -224,7 +224,7 @@ private String mode; //test 测试 release 输出
 
     {
         mongoCollection = mongoDatabase.getCollection("teachers");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         String json=gson.toJson(tea);
         mongoCollection.insertOne(Document.parse(json));
 
@@ -237,7 +237,7 @@ private String mode; //test 测试 release 输出
         mongoCollection=mongoDatabase.getCollection("students");
         FindIterable<Document> iterator=mongoCollection.find();
         MongoCursor mongoCursor=iterator.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext())
         {
             String json;
@@ -274,7 +274,7 @@ private String mode; //test 测试 release 输出
         mongoCollection = mongoDatabase.getCollection("teachers");
         FindIterable<Document> iterable=mongoCollection.find();
         MongoCursor mongoCursor=iterable.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext()){
             Document doc= (Document) mongoCursor.next();
             String json=doc.toJson();
@@ -291,7 +291,7 @@ private String mode; //test 测试 release 输出
         mongoCollection=mongoDatabase.getCollection("classes");
         FindIterable<Document> iterable=mongoCollection.find();
         MongoCursor mongoCursor=iterable.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         while (mongoCursor.hasNext())
         {
@@ -310,7 +310,7 @@ private String mode; //test 测试 release 输出
         GradeClass gradeClass;
         mongoCollection=mongoDatabase.getCollection("classes");
         Document document=mongoCollection.find(Filters.eq("_id",uuid.toString())).first();
-       Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         gradeClass=gson.fromJson(document.toJson(),GradeClass.class);
 
@@ -373,7 +373,7 @@ private String mode; //test 测试 release 输出
         mongoCollection=mongoDatabase.getCollection("classes");
         mongoCollection.deleteMany(Filters.exists("_id"));
 
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         Document doc = new Document();
         List<Document> docs=new ArrayList<>();
         for (GradeClass temp:gradeClasses
@@ -411,14 +411,14 @@ private String mode; //test 测试 release 输出
 
         mongoCollection = mongoDatabase.getCollection("classes");
 
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         String json = gson.toJson(gc);
         mongoCollection.insertOne(Document.parse(json));
     }
 
     public void updateGradeClass(GradeClass gc){
         mongoCollection =mongoDatabase.getCollection("classes");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         Document document=Document.parse(gson.toJson(gc));
         String temp=gc.get_id().toString();
         Document update=new Document();
@@ -439,7 +439,7 @@ private String mode; //test 测试 release 输出
         FindIterable<Document> iterator=mongoCollection.find(Filters.exists("ranks"));
 
         MongoCursor mongoCursor=iterator.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         while (mongoCursor.hasNext())
         {
@@ -456,7 +456,7 @@ private String mode; //test 测试 release 输出
     public void saveRanks(Map<String,Rank> ranks){
 
         mongoCollection=mongoDatabase.getCollection("configs");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         String json=gson.toJson(ranks);
 
         Document doc=new Document().append("ranks",json);
@@ -481,7 +481,7 @@ private String mode; //test 测试 release 输出
         Map<String, Integer> map = new HashMap<>();
         mongoCollection=mongoDatabase.getCollection("configs");
         Bson doc=  Filters.exists("defaultValues");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         FindIterable<Document> docs=mongoCollection.find(doc);
         MongoCursor cur=docs.iterator();
         while (cur.hasNext())
@@ -560,7 +560,7 @@ private String mode; //test 测试 release 输出
         MongoCursor mongoCursor=mongoCollection.find(Filters.eq("picsrcid",photopic.get_id().toString())).iterator();
         while (mongoCursor.hasNext()){
             Document doc=(Document)mongoCursor.next();
-            Gson gson=new GsonBuilder().create();
+            Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
             picPinAction=gson.fromJson(doc.toJson(),PicPinAction.class);
             picPinActions.add(picPinAction);
         }
@@ -634,7 +634,7 @@ private String mode; //test 测试 release 输出
     public  List<DayCheckListAction> getDayCheckListActions(String typeName){
         List<DayCheckListAction> dayCheckListActions=new ArrayList<>();
         DayCheckListAction dayCheckListAction;
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         mongoCollection=mongoDatabase.getCollection("daychecklistactions");
         MongoCursor cursor=mongoCollection.find(Filters.eq("actionType",typeName)).iterator();
         while (cursor.hasNext())
@@ -656,7 +656,7 @@ private String mode; //test 测试 release 输出
 
     public void addDaycheckListAction(DayCheckListAction dayCheckListAction){
         mongoCollection=mongoDatabase.getCollection("daychecklistactions");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         mongoCollection.insertOne(Document.parse(gson.toJson(dayCheckListAction)));
 
     }
@@ -689,7 +689,7 @@ if(doc==null)
 }
         else
 {
-        Gson gson=new GsonBuilder().create();
+    Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         annouce=gson.fromJson(doc.toJson(),Annouce.class);
 
         return  annouce;
@@ -698,7 +698,7 @@ if(doc==null)
     public void addAnnouce(Subject subject,Annouce ann){
         mongoCollection=mongoDatabase.getCollection("annouces");
         Annouce annouce=ann;
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         ann.setBelongtoSubject(subject.get_id());
         mongoCollection.insertOne(Document.parse(gson.toJson(ann)));
     }
@@ -713,7 +713,7 @@ if(doc==null)
         dayCheckRec.setCheckedteacherid(teacher.get_id());
         mongoCollection=mongoDatabase.getCollection("daycommonactionRecs");
 
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         Document doc = new Document();
         doc=Document.parse(gson.toJson(dayCheckRec));
         mongoCollection.insertOne(doc);
@@ -729,7 +729,7 @@ if(doc==null)
 
      MongoCursor cursor= mongoCollection.find(Filters.eq("strdate",strdate)).iterator();
 
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         while (cursor.hasNext())
         {
@@ -761,7 +761,7 @@ if(doc==null)
         {  iterable=mongoCollection.find(Filters.eq("actionType",typeName));}
 
         MongoCursor mongoCursor=iterable.iterator();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
 
         while (mongoCursor.hasNext())
         {
@@ -778,7 +778,7 @@ if(doc==null)
     public void addPinAction(PinAction pinAction)
     {
          mongoCollection=mongoDatabase.getCollection("pinactions");
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         Document doc=Document.parse(gson.toJson(pinAction));
         mongoCollection.insertOne(doc);
     }
@@ -789,7 +789,7 @@ if(doc==null)
         Updateobj updateobj;
         mongoCollection=mongoDatabase.getCollection("update");
         Document doc=mongoCollection.find(Filters.eq("apkname",apkname)).first();
-        Gson gson=new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         updateobj= gson.fromJson(doc.toJson(),Updateobj.class);
         return updateobj;
     }
@@ -808,7 +808,6 @@ if(doc==null)
         mongoCollection=mongoDatabase.getCollection("photos");
         MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("picname",-1)).limit(30).iterator();
         Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
-
         while (mongoCursor.hasNext())
         {
             Document doc= (Document) mongoCursor.next();
@@ -820,7 +819,7 @@ if(doc==null)
     public  List<DayCheckRec> getTopDaychecks(){
         List<DayCheckRec> dayCheckRecs=new ArrayList<>();
         mongoCollection=mongoDatabase.getCollection("daycommonactionRecs");
-        MongoCursor mongoCursor=mongoCollection.find().sort(new BasicDBObject("strdate",1)).limit(5).iterator();
+        MongoCursor mongoCursor = mongoCollection.find().sort(new Document("strdate", 1)).limit(5).iterator();
         Gson gson=new GsonBuilder().setDateFormat("MMM d, yyyy h:mm:ss a").create();
         while (mongoCursor.hasNext())
         {
