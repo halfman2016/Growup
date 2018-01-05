@@ -13,10 +13,27 @@ public class Teacher extends People {
     private UUID OnDutyGradeClassId;
     private String dutytitle;
     private String status; // 在职，不在职 // null 自动赋值
+    private String Subject;
 
     public Teacher(String name) {
         super(name);
         status = "在职";
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSubject() {
+        return Subject;
+    }
+
+    public void setSubject(String subject) {
+        Subject = subject;
     }
 
     public String getDutytitle() {

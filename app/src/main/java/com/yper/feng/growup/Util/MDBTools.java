@@ -73,12 +73,12 @@ private String mode; //test 测试 release 输出
 //       mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017),Arrays.asList(credential));
        final MyApplication myApplication = MyApplication.getInstance();
        mode = myApplication.getMode();
-       if (mode == "test") {
+       if (mode.equals("test")) {
            DBase = "lizhitest";
            credential = MongoCredential.createScramSha1Credential("halfman", "lizhitest", "halfman21".toCharArray());
            mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
            mongoDatabase = mongoClient.getDatabase("lizhitest");
-       } else if (mode == "release") {
+       } else if (mode.equals("release")) {
            credential = MongoCredential.createScramSha1Credential("halfman", "lizhi", "halfman21".toCharArray());
            mongoClient = new MongoClient(new ServerAddress("boteteam.com", 27017), Arrays.asList(credential));
            mongoDatabase = mongoClient.getDatabase("lizhi");

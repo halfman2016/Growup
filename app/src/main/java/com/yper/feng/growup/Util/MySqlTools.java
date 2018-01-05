@@ -27,10 +27,10 @@ public class MySqlTools {
     public MySqlTools() {
         final MyApplication myApplication = MyApplication.getInstance();
         mode = myApplication.getMode();
-        if (mode == "test") {
+        if (mode.equals("test")) {
             dbUrl = "jdbc:mysql://boteteam.com:3306/lizhidytest?useUnicode=true&amp;characterEncoding=UTF-8";//根据实际情况变化
 
-        } else if (mode == "release") {
+        } else if (mode.equals("release")) {
             dbUrl = "jdbc:mysql://boteteam.com:3306/lizhidy?useUnicode=true&amp;characterEncoding=UTF-8";//根据实际情况变化
         }
     }

@@ -1,13 +1,12 @@
 package com.yper.feng.growup.Activity;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -29,37 +28,24 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class AddSubjectActivity extends AppCompatActivity {
+    String teachername, Tid;
     private TextView startDatedisplay = null;
     private TextView endDatedisplay=null;
     private Button cancel;
     private Teacher teacher;
-    String teachername,Tid;
-
     private  SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
-
-    public Handler mHandler=new Handler() {
-
-      public void handleMessage(Message msg){
-
-      }
-
+    private android.os.Handler mhandler = new android.os.Handler() {
         @Override
-        public void close() {
-
-        }
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void publish(LogRecord record) {
-
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    setResult(201);
+                    finish();
+                    break;
+            }
+            super.handleMessage(msg);
         }
     };
 
@@ -187,23 +173,6 @@ public class AddSubjectActivity extends AppCompatActivity {
         MyApplication myApplication=MyApplication.getInstance();
         teacher=myApplication.getTeacher();
     }
-
-
-
-
-    private android.os.Handler mhandler=new android.os.Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what)
-            {
-                case 1:
-                    setResult(201);
-                    finish();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 
     public void saveSubject(View view)
     {
